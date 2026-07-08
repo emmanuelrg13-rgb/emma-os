@@ -1,0 +1,925 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Emma OS — Pendientes diarios</title>
+  <link rel="manifest" href="../../manifest.webmanifest">
+  <meta name="theme-color" content="#0f172a">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="Tareas Emma">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <link rel="icon" type="image/png" sizes="192x192" href="../../icons/icon-192.png">
+  <link rel="apple-touch-icon" href="../../icons/icon-192.png">
+  <style>
+    :root {
+      --bg: #0f172a;
+      --panel: #111827;
+      --panel-2: #1f2937;
+      --card: #0b1220;
+      --text: #e5e7eb;
+      --muted: #94a3b8;
+      --line: rgba(148, 163, 184, 0.24);
+      --accent: #38bdf8;
+      --good: #34d399;
+      --warn: #fbbf24;
+      --danger: #fb7185;
+      --violet: #a78bfa;
+      --shadow: 0 18px 60px rgba(0,0,0,.35);
+      --radius: 18px;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(56,189,248,.18), transparent 34rem),
+        radial-gradient(circle at bottom right, rgba(52,211,153,.10), transparent 32rem),
+        var(--bg);
+      color: var(--text);
+    }
+    button, input, select { font: inherit; }
+    .app { width: min(100% - 28px, 1240px); margin: 0 auto; padding: 18px 0 34px; }
+    .hero {
+      background: linear-gradient(135deg, rgba(17,24,39,.96), rgba(31,41,55,.88));
+      border: 1px solid var(--line);
+      border-radius: 28px;
+      padding: 24px;
+      box-shadow: var(--shadow);
+      position: sticky;
+      top: 10px;
+      z-index: 20;
+      backdrop-filter: blur(10px);
+    }
+    .hero-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 18px; }
+    h1 { margin: 0; font-size: clamp(1.55rem, 4vw, 2.45rem); letter-spacing: -.04em; }
+    .subtitle { margin: 8px 0 0; color: var(--muted); line-height: 1.45; max-width: 830px; }
+    .date-box {
+      min-width: 230px;
+      background: rgba(15,23,42,.65);
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      padding: 12px;
+    }
+    .date-box label { display: block; color: var(--muted); font-size: .82rem; margin-bottom: 8px; }
+    .date-box input { width: 100%; color: var(--text); background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 10px; opacity: .96; }
+    .tiny { color: var(--muted); font-size: .78rem; margin-top: 8px; line-height: 1.35; }
+    .stats { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 10px; margin-top: 18px; }
+    .stat { background: rgba(15,23,42,.70); border: 1px solid var(--line); border-radius: 16px; padding: 14px; }
+    .stat .label { color: var(--muted); font-size: .75rem; text-transform: uppercase; letter-spacing: .08em; }
+    .stat .value { font-size: 1.62rem; font-weight: 850; margin-top: 4px; }
+    .progress-wrap { margin-top: 16px; }
+    .progress-meta { display: flex; justify-content: space-between; gap: 12px; color: var(--muted); font-size: .92rem; margin-bottom: 8px; }
+    .progress-bar { height: 12px; background: rgba(148,163,184,.18); border-radius: 999px; overflow: hidden; border: 1px solid var(--line); }
+    .progress-fill { height: 100%; width: 0%; background: linear-gradient(90deg, var(--accent), var(--good)); transition: width .25s ease; }
+    .panel {
+      margin-top: 14px;
+      background: rgba(17,24,39,.88);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 12px;
+      box-shadow: 0 10px 30px rgba(0,0,0,.20);
+    }
+    .lock-panel { display: none; border-color: rgba(251,191,36,.55); background: rgba(113,63,18,.22); }
+    .lock-panel.show { display: block; }
+    .lock-title { display: flex; gap: 8px; align-items: center; font-weight: 850; margin-bottom: 6px; }
+    .lock-text { color: var(--muted); line-height: 1.45; margin: 0; }
+    .lock-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+    .toolbar { display: grid; grid-template-columns: 1.4fr .8fr .9fr .8fr .9fr auto; gap: 10px; }
+    .quick-add { display: grid; grid-template-columns: 1.45fr .62fr .7fr .72fr .72fr auto; gap: 10px; }
+    .settings-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+    .switchline { display: inline-flex; gap: 8px; align-items: center; color: var(--muted); }
+    .switchline input { width: 18px; height: 18px; accent-color: var(--accent); }
+    .control, .quick-add input, .quick-add select, .task-actions select {
+      width: 100%;
+      color: var(--text);
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 11px 12px;
+      outline: none;
+    }
+    .control:focus, .quick-add input:focus, .quick-add select:focus, .task-actions select:focus { border-color: rgba(56,189,248,.72); }
+    .btn {
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 11px 13px;
+      background: rgba(31,41,55,.92);
+      color: var(--text);
+      cursor: pointer;
+      transition: transform .12s ease, border-color .12s ease, opacity .12s ease;
+      white-space: nowrap;
+    }
+    .btn:hover { transform: translateY(-1px); border-color: rgba(56,189,248,.55); }
+    .btn:disabled { opacity: .55; cursor: not-allowed; transform: none; }
+    .btn.primary { background: linear-gradient(135deg, rgba(14,165,233,.95), rgba(37,99,235,.88)); border-color: rgba(125,211,252,.55); }
+    .btn.good { background: rgba(16,185,129,.18); border-color: rgba(52,211,153,.55); }
+    .btn.warn { background: rgba(251,191,36,.14); border-color: rgba(251,191,36,.55); }
+    .btn.danger { background: rgba(251,113,133,.15); border-color: rgba(251,113,133,.55); }
+    .btn.violet { background: rgba(167,139,250,.15); border-color: rgba(167,139,250,.55); }
+    .btn.complete-one { background: rgba(52,211,153,.15); border-color: rgba(52,211,153,.55); }
+    .btn.reopen-one { background: rgba(251,191,36,.14); border-color: rgba(251,191,36,.55); }
+    .btn.postpone-one { background: rgba(167,139,250,.14); border-color: rgba(167,139,250,.55); }
+    .btn.restore-one { background: rgba(56,189,248,.14); border-color: rgba(56,189,248,.55); }
+    .btn.small { padding: 8px 10px; font-size: .88rem; }
+    .next-box { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+    .next-text { color: var(--muted); line-height: 1.4; }
+    .next-text strong { color: var(--text); }
+    .focus-strip { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+    .focus-card { background: rgba(15,23,42,.65); border: 1px solid var(--line); border-radius: 16px; padding: 12px; min-height: 78px; }
+    .focus-card .kicker { color: var(--muted); font-size: .76rem; text-transform: uppercase; letter-spacing: .07em; margin-bottom: 6px; }
+    .focus-card .focus-title { font-weight: 850; line-height: 1.3; }
+    .focus-card .focus-meta { color: var(--muted); font-size: .86rem; margin-top: 6px; }
+    .board { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; margin-top: 14px; align-items: start; }
+    .column { background: rgba(17,24,39,.72); border: 1px solid var(--line); border-radius: 22px; padding: 12px; min-height: 240px; }
+    .column-header { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 10px; padding: 4px 4px 8px; border-bottom: 1px solid var(--line); }
+    .column-title { font-weight: 850; display: flex; align-items: center; gap: 8px; }
+    .dot { width: 10px; height: 10px; border-radius: 999px; display: inline-block; }
+    .dot.high { background: var(--danger); }
+    .dot.medium { background: var(--warn); }
+    .dot.low { background: var(--good); }
+    .count-pill { color: var(--muted); border: 1px solid var(--line); border-radius: 999px; padding: 4px 9px; font-size: .82rem; }
+    .task-list { display: grid; gap: 10px; }
+    .task {
+      background: rgba(15,23,42,.92);
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      padding: 12px;
+      box-shadow: 0 10px 28px rgba(0,0,0,.20);
+    }
+    .task.completed { opacity: .66; }
+    .task.deferred { opacity: .78; border-style: dashed; border-color: rgba(167,139,250,.52); background: rgba(30, 27, 75, .36); }
+    .task.completed .task-title { text-decoration: line-through; color: var(--muted); }
+    .task.daily { border-color: rgba(167,139,250,.34); }
+    .task.deferred .task-title { color: #ddd6fe; }
+    .task-main { display: grid; grid-template-columns: auto 1fr; gap: 10px; align-items: flex-start; }
+    .task-check { width: 20px; height: 20px; margin-top: 2px; accent-color: var(--good); }
+    .task-title { font-weight: 780; line-height: 1.35; }
+    .task-meta { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 7px; }
+    .tag { border: 1px solid var(--line); color: var(--muted); border-radius: 999px; padding: 3px 8px; font-size: .76rem; }
+    .tag.effort-quick { color: #bbf7d0; border-color: rgba(52,211,153,.42); }
+    .tag.effort-medium { color: #fde68a; border-color: rgba(251,191,36,.42); }
+    .tag.effort-deep { color: #fecdd3; border-color: rgba(251,113,133,.42); }
+    .tag.daily { color: #ddd6fe; border-color: rgba(167,139,250,.48); }
+    .tag.deferred { color: #bfdbfe; border-color: rgba(56,189,248,.52); }
+    .notes { color: var(--muted); font-size: .88rem; margin-top: 8px; line-height: 1.35; }
+    .task-actions { display: grid; grid-template-columns: auto auto auto auto 1fr 1fr 1fr auto auto; gap: 7px; margin-top: 11px; align-items: center; }
+    .empty { color: var(--muted); border: 1px dashed var(--line); border-radius: 16px; padding: 18px; text-align: center; }
+    .footer-tools { display: flex; align-items: center; justify-content: space-between; gap: 12px; color: var(--muted); }
+    .tool-buttons { display: flex; flex-wrap: wrap; gap: 8px; justify-content: flex-end; }
+    .hidden-file { display: none; }
+    @media (max-width: 1120px) {
+      .toolbar { grid-template-columns: 1fr 1fr; }
+      .quick-add { grid-template-columns: 1fr 1fr; }
+      .board, .focus-strip { grid-template-columns: 1fr; }
+      .stats { grid-template-columns: repeat(2, 1fr); }
+      .hero-top, .next-box, .footer-tools { flex-direction: column; align-items: stretch; }
+      .date-box { min-width: 0; }
+    }
+    @media (max-width: 620px) {
+      .app { width: min(100% - 18px, 1220px); padding-top: 10px; }
+      .hero { padding: 18px; border-radius: 22px; position: static; }
+      .toolbar, .quick-add, .stats { grid-template-columns: 1fr; }
+      .progress-meta { flex-direction: column; }
+      .task-actions { grid-template-columns: 1fr 1fr; }
+      .task-actions select, .task-actions .edit-task, .task-actions .delete-task, .task-actions .complete-task, .task-actions .postpone-task { grid-column: span 2; }
+    }
+  
+    .emmaos-back{position:fixed;left:14px;bottom:14px;z-index:80;display:inline-flex;align-items:center;gap:8px;text-decoration:none;background:rgba(15,23,42,.92);color:#e5e7eb;border:1px solid rgba(148,163,184,.35);border-radius:999px;padding:10px 13px;font-weight:850;box-shadow:0 14px 34px rgba(0,0,0,.35);backdrop-filter:blur(10px)}
+    .emmaos-back:hover{filter:brightness(1.12)}
+  </style>
+</head>
+<body>
+  <a class="emmaos-back" href="../../index.html">← Emma OS</a>
+  <div class="app">
+    <header class="hero">
+      <div class="hero-top">
+        <div>
+          <h1>Checklist diario de pendientes</h1>
+          <p class="subtitle">Prioridad + esfuerzo + tareas recurrentes. Versión preparada como app instalable: funciona offline cuando está publicada como PWA y mantiene tu progreso localmente.</p>
+        </div>
+        <div class="date-box">
+          <label for="dayInput">Día activo</label>
+          <input id="dayInput" type="date" disabled />
+          <div class="tiny" id="dateHint">El día se abre automáticamente sólo cuando el anterior queda cerrado.</div>
+        </div>
+      </div>
+      <section class="stats" aria-label="Resumen de avance">
+        <div class="stat"><div class="label">Avance</div><div class="value" id="statPercent">0%</div></div>
+        <div class="stat"><div class="label">Avance por esfuerzo</div><div class="value" id="statEffortPercent">0%</div></div>
+        <div class="stat"><div class="label">Completadas</div><div class="value" id="statDone">0</div></div>
+        <div class="stat"><div class="label">Pendientes</div><div class="value" id="statPending">0</div></div>
+        <div class="stat"><div class="label">Diarias pendientes</div><div class="value" id="statDailyPending">0</div></div>
+        <div class="stat"><div class="label">Carga pendiente</div><div class="value" id="statLoad">0 pts</div></div>
+      </section>
+      <div class="progress-wrap">
+        <div class="progress-meta">
+          <span id="progressPhrase">Aún no hay tareas completadas.</span>
+          <span id="storageNote">Guardado automático activado</span>
+        </div>
+        <div class="progress-bar" aria-label="Barra de progreso"><div class="progress-fill" id="progressFill"></div></div>
+      </div>
+    </header>
+
+    <section class="panel lock-panel" id="lockPanel">
+      <div class="lock-title">🔒 Día bloqueado</div>
+      <p class="lock-text" id="lockText">Todavía quedan tareas pendientes del día activo.</p>
+      <div class="lock-actions">
+        <button id="openTodayBtn" class="btn good" type="button">Abrir día actual</button>
+        <button id="goNextLockedBtn" class="btn primary" type="button">Ir a siguiente pendiente</button>
+      </div>
+    </section>
+
+    <section class="panel settings-row">
+      <label class="switchline"><input id="strictLockToggle" type="checkbox" checked /> Bloqueo estricto: no abrir un nuevo día con pendientes</label>
+      <div class="tool-buttons">
+        <button id="openTodayBtn2" class="btn good" type="button">Abrir día actual</button>
+        <button id="hideDoneBtn" class="btn" type="button">Ocultar completadas</button>
+        <button id="showDoneBtn" class="btn" type="button">Mostrar completadas</button>
+        <button id="installBtn" class="btn primary" type="button" style="display:none">Instalar app</button>
+      </div>
+    </section>
+
+    <div class="toolbar" role="region" aria-label="Filtros">
+      <input id="searchInput" class="control" type="search" placeholder="Buscar tarea, nota o categoría..." />
+      <select id="statusFilter" class="control">
+        <option value="all">Todas</option>
+        <option value="pending">Sólo pendientes</option>
+        <option value="done">Sólo completadas</option>
+        <option value="deferred">Sólo movidas a mañana</option>
+      </select>
+      <select id="categoryFilter" class="control"><option value="all">Todas las categorías</option></select>
+      <select id="effortFilter" class="control">
+        <option value="all">Todo esfuerzo</option>
+        <option value="quick">Cortas / livianas</option>
+        <option value="medium">Medias</option>
+        <option value="deep">Largas / pesadas</option>
+      </select>
+      <select id="recurrenceFilter" class="control">
+        <option value="all">Todas</option>
+        <option value="daily">Sólo diarias</option>
+        <option value="none">Sólo no recurrentes</option>
+      </select>
+      <button id="nextBtn" class="btn primary" type="button">Ir a siguiente pendiente</button>
+    </div>
+
+    <form class="quick-add" id="addForm">
+      <input id="newTitle" type="text" placeholder="Añadir nueva tarea..." autocomplete="off" required />
+      <select id="newPriority">
+        <option value="high">Alta</option>
+        <option value="medium" selected>Media</option>
+        <option value="low">Baja</option>
+      </select>
+      <select id="newEffort">
+        <option value="quick">Corta / liviana</option>
+        <option value="medium" selected>Media</option>
+        <option value="deep">Larga / pesada</option>
+      </select>
+      <select id="newRecurrence">
+        <option value="none" selected>Sólo hoy</option>
+        <option value="daily">Diaria</option>
+      </select>
+      <input id="newCategory" type="text" placeholder="Categoría" value="General" />
+      <button class="btn good" type="submit">Añadir</button>
+    </form>
+
+    <section class="panel next-box">
+      <div class="next-text" id="nextTaskText">No hay tareas pendientes.</div>
+      <button id="completeNextBtn" class="btn good" type="button">Completar siguiente</button>
+    </section>
+
+    <section class="panel focus-strip" aria-label="Bloques de enfoque">
+      <div class="focus-card">
+        <div class="kicker">Ganancia rápida</div>
+        <div class="focus-title" id="quickWinTitle">Sin tareas cortas pendientes</div>
+        <div class="focus-meta" id="quickWinMeta">—</div>
+      </div>
+      <div class="focus-card">
+        <div class="kicker">Trabajo profundo</div>
+        <div class="focus-title" id="deepWorkTitle">Sin tareas pesadas pendientes</div>
+        <div class="focus-meta" id="deepWorkMeta">—</div>
+      </div>
+      <div class="focus-card">
+        <div class="kicker">Rutina diaria</div>
+        <div class="focus-title" id="dailyTitle">Sin diarias pendientes</div>
+        <div class="focus-meta" id="dailyMeta">—</div>
+      </div>
+    </section>
+
+    <main class="board" id="board" aria-live="polite"></main>
+
+    <section class="panel footer-tools">
+      <div>
+        <strong>Respaldo:</strong> exporta tu progreso si vas a cambiar de navegador, celular o archivo.
+      </div>
+      <div class="tool-buttons">
+        <button id="exportBtn" class="btn" type="button">Exportar JSON</button>
+        <button id="importBtn" class="btn" type="button">Importar JSON</button>
+        <button id="resetBtn" class="btn danger" type="button">Reiniciar</button>
+        <input id="importFile" class="hidden-file" type="file" accept="application/json,.json" />
+      </div>
+    </section>
+  </div>
+
+  <script>
+  const STORAGE_KEY = 'emmaos_pendientes_v1';
+  const LEGACY_STORAGE_KEYS = ['emma_checklist_diario_v1'];
+  const PRIORITIES = [
+    { id: 'high', label: 'Alta prioridad', short: 'Alta', dot: 'high' },
+    { id: 'medium', label: 'Prioridad media', short: 'Media', dot: 'medium' },
+    { id: 'low', label: 'Baja prioridad', short: 'Baja', dot: 'low' },
+  ];
+  const EFFORTS = [
+    { id: 'quick', label: 'Corta / liviana', short: 'Corta', points: 1, hint: '5–15 min' },
+    { id: 'medium', label: 'Media', short: 'Media', points: 2, hint: '15–45 min' },
+    { id: 'deep', label: 'Larga / pesada', short: 'Pesada', points: 3, hint: '45+ min' },
+  ];
+  const RECURRENCES = [
+    { id: 'none', label: 'Sólo hoy', short: 'No recurrente' },
+    { id: 'daily', label: 'Diaria', short: 'Diaria' },
+  ];
+
+  const initialTasks = [
+    { title: 'Dar comida a Jack', priority: 'high', effort: 'quick', recurrence: 'daily', category: 'Mascotas', completed: false, notes: 'Tarea diaria: se vuelve a desmarcar al abrir un nuevo día.' },
+    { title: 'Cambiarse de ropa por algo limpio', priority: 'high', effort: 'quick', recurrence: 'none', category: 'Personal', completed: false, notes: '' },
+    { title: 'Limpiar baño', priority: 'medium', effort: 'medium', recurrence: 'none', category: 'Casa', completed: true, notes: 'Aparecía tachada en la foto; desmárcala si aún falta.' },
+    { title: 'Sacar loza de la mesa y llevarla a la cocina', priority: 'high', effort: 'quick', recurrence: 'none', category: 'Casa', completed: true, notes: 'Aparecía tachada en la foto; desmárcala si aún falta.' },
+    { title: 'Hacer desayuno y comer', priority: 'high', effort: 'medium', recurrence: 'none', category: 'Comida', completed: false, notes: '' },
+    { title: 'Lavar loza', priority: 'high', effort: 'medium', recurrence: 'none', category: 'Casa', completed: false, notes: 'Antes: sacar loza limpia y guardar.' },
+    { title: 'Ir al 2.º piso y tomar ropa sucia para lavar', priority: 'medium', effort: 'medium', recurrence: 'none', category: 'Casa', completed: false, notes: '' },
+    { title: 'Hacer mi cama', priority: 'medium', effort: 'quick', recurrence: 'none', category: 'Casa', completed: false, notes: '' },
+    { title: 'Encender notebook tras baño', priority: 'medium', effort: 'quick', recurrence: 'none', category: 'Trabajo', completed: false, notes: '' },
+    { title: 'Resolver pendiente de oficina', priority: 'high', effort: 'medium', recurrence: 'none', category: 'Trabajo', completed: false, notes: 'Texto de la foto: “impresiones” o similar; editable.' },
+    { title: 'Certificado FITO-5019', priority: 'high', effort: 'medium', recurrence: 'none', category: 'Trabajo', completed: false, notes: '' },
+    { title: 'Certificado FITO-5020', priority: 'high', effort: 'medium', recurrence: 'none', category: 'Trabajo', completed: false, notes: '' },
+    { title: 'Ordenar ropa tirada en living', priority: 'medium', effort: 'medium', recurrence: 'none', category: 'Casa', completed: false, notes: '' },
+    { title: 'Cortar pollo en 4 partes', priority: 'medium', effort: 'medium', recurrence: 'none', category: 'Comida', completed: false, notes: '' },
+    { title: 'Cocinar 2 tazas de arroz', priority: 'medium', effort: 'medium', recurrence: 'none', category: 'Comida', completed: false, notes: 'Calentar agua antes.' },
+    { title: 'Cargar TX y RX iglesia', priority: 'medium', effort: 'quick', recurrence: 'none', category: 'Iglesia', completed: false, notes: '' },
+    { title: 'Comprar alimento Jack', priority: 'high', effort: 'medium', recurrence: 'none', category: 'Compras', completed: false, notes: '$5.000 aprox.' },
+    { title: 'Comprar alimento Grey', priority: 'high', effort: 'medium', recurrence: 'none', category: 'Compras', completed: false, notes: '$5.000 aprox.' },
+    { title: 'Comprar arena Grey', priority: 'high', effort: 'medium', recurrence: 'none', category: 'Compras', completed: false, notes: '$4.000 aprox.' },
+    { title: 'Revisar tarea final relacionada con arena Grey', priority: 'low', effort: 'quick', recurrence: 'none', category: 'Casa', completed: false, notes: 'La última línea de la foto no se lee con total seguridad. Déjala, edítala o elimínala.' },
+  ].map((task, index) => ({ ...task, id: cryptoRandomId(), order: index, createdAt: new Date().toISOString(), completedAt: task.completed ? new Date().toISOString() : null }));
+
+  let state = loadState();
+  let hideDoneTemp = false;
+
+  const els = {
+    board: document.getElementById('board'), dayInput: document.getElementById('dayInput'), dateHint: document.getElementById('dateHint'),
+    lockPanel: document.getElementById('lockPanel'), lockText: document.getElementById('lockText'), openTodayBtn: document.getElementById('openTodayBtn'), openTodayBtn2: document.getElementById('openTodayBtn2'), goNextLockedBtn: document.getElementById('goNextLockedBtn'), strictLockToggle: document.getElementById('strictLockToggle'),
+    searchInput: document.getElementById('searchInput'), statusFilter: document.getElementById('statusFilter'), categoryFilter: document.getElementById('categoryFilter'), effortFilter: document.getElementById('effortFilter'), recurrenceFilter: document.getElementById('recurrenceFilter'),
+    addForm: document.getElementById('addForm'), newTitle: document.getElementById('newTitle'), newPriority: document.getElementById('newPriority'), newEffort: document.getElementById('newEffort'), newRecurrence: document.getElementById('newRecurrence'), newCategory: document.getElementById('newCategory'),
+    statPercent: document.getElementById('statPercent'), statEffortPercent: document.getElementById('statEffortPercent'), statDone: document.getElementById('statDone'), statPending: document.getElementById('statPending'), statDailyPending: document.getElementById('statDailyPending'), statLoad: document.getElementById('statLoad'),
+    progressFill: document.getElementById('progressFill'), progressPhrase: document.getElementById('progressPhrase'), storageNote: document.getElementById('storageNote'),
+    nextTaskText: document.getElementById('nextTaskText'), nextBtn: document.getElementById('nextBtn'), completeNextBtn: document.getElementById('completeNextBtn'),
+    quickWinTitle: document.getElementById('quickWinTitle'), quickWinMeta: document.getElementById('quickWinMeta'), deepWorkTitle: document.getElementById('deepWorkTitle'), deepWorkMeta: document.getElementById('deepWorkMeta'), dailyTitle: document.getElementById('dailyTitle'), dailyMeta: document.getElementById('dailyMeta'),
+    exportBtn: document.getElementById('exportBtn'), importBtn: document.getElementById('importBtn'), importFile: document.getElementById('importFile'), resetBtn: document.getElementById('resetBtn'), hideDoneBtn: document.getElementById('hideDoneBtn'), showDoneBtn: document.getElementById('showDoneBtn'), installBtn: document.getElementById('installBtn'),
+  };
+
+  boot();
+
+  function boot() {
+    maybeHandleDateRollover();
+    bindEvents();
+    registerPwa();
+    render();
+  }
+
+
+  let deferredInstallPrompt = null;
+  function registerPwa() {
+    if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost' || location.hostname === '127.0.0.1')) {
+      navigator.serviceWorker.register('../../sw.js').catch(() => {
+        console.warn('No se pudo registrar el service worker. La app seguirá funcionando como web local.');
+      });
+    }
+    window.addEventListener('beforeinstallprompt', (event) => {
+      event.preventDefault();
+      deferredInstallPrompt = event;
+      if (els.installBtn) els.installBtn.style.display = 'inline-flex';
+    });
+    window.addEventListener('appinstalled', () => {
+      deferredInstallPrompt = null;
+      if (els.installBtn) els.installBtn.style.display = 'none';
+      flashStorage('App instalada en el dispositivo.');
+    });
+    if (els.installBtn) {
+      els.installBtn.addEventListener('click', async () => {
+        if (!deferredInstallPrompt) {
+          alert('Para instalarla como app, abre esta versión desde una URL HTTPS o localhost. Si ya está publicada, usa el menú del navegador y elige “Añadir a pantalla principal” o “Instalar app”.');
+          return;
+        }
+        deferredInstallPrompt.prompt();
+        await deferredInstallPrompt.userChoice;
+        deferredInstallPrompt = null;
+        els.installBtn.style.display = 'none';
+      });
+    }
+  }
+
+  function cryptoRandomId() { if (window.crypto?.randomUUID) return crypto.randomUUID(); return 'id-' + Date.now() + '-' + Math.random().toString(16).slice(2); }
+  function todayISO() { const d = new Date(); const local = new Date(d.getTime() - d.getTimezoneOffset() * 60000); return local.toISOString().slice(0, 10); }
+  function nowISO() { return new Date().toISOString(); }
+  function isValidDate(s) { return /^\d{4}-\d{2}-\d{2}$/.test(String(s || '')); }
+  function dateLabel(iso) {
+    try { return new Date(iso + 'T12:00:00').toLocaleDateString('es-CL', { weekday: 'long', day: '2-digit', month: 'long', year: 'numeric' }); }
+    catch { return iso; }
+  }
+  function isOlderThanToday() { return state.date < todayISO(); }
+  function isTodayActive() { return state.date === todayISO(); }
+  function tomorrowISO(base = state.date) {
+    const d = new Date(base + 'T12:00:00');
+    d.setDate(d.getDate() + 1);
+    const local = new Date(d.getTime() - d.getTimezoneOffset() * 60000);
+    return local.toISOString().slice(0, 10);
+  }
+  function isDeferred(task) { return Boolean(task.deferredUntil && task.deferredUntil > state.date); }
+  function activeTasks(tasks = state.tasks) { return tasks.filter(t => !isDeferred(t)); }
+  function deferredTasks(tasks = state.tasks) { return tasks.filter(t => isDeferred(t)); }
+  function hasPending() { return activeTasks().some(t => !t.completed); }
+  function pendingTasks() { return activeTasks().filter(t => !t.completed); }
+
+  function inferEffort(task) {
+    const t = (task.title || '').toLowerCase();
+    if (t.includes('jack') && (t.includes('comida') || t.includes('alimento'))) return 'quick';
+    if (t.includes('cambiarse') || t.includes('cama') || t.includes('encender') || t.includes('cargar') || t.includes('revisar') || t.includes('sacar loza')) return 'quick';
+    if (t.includes('limpiar baño') || t.includes('lavar') || t.includes('cocinar') || t.includes('certificado') || t.includes('comprar') || t.includes('pollo') || t.includes('ropa')) return 'medium';
+    return 'medium';
+  }
+  function inferRecurrence(task) {
+    const t = (task.title || '').toLowerCase();
+    if (t.includes('dar comida a jack')) return 'daily';
+    return 'none';
+  }
+  function normalizeTasks(tasks) {
+    return tasks.map((task, index) => {
+      const recurrence = RECURRENCES.some(r => r.id === task.recurrence) ? task.recurrence : inferRecurrence(task);
+      return {
+        id: task.id || cryptoRandomId(),
+        title: task.title || 'Tarea sin título',
+        priority: PRIORITIES.some(p => p.id === task.priority) ? task.priority : 'medium',
+        effort: EFFORTS.some(e => e.id === task.effort) ? task.effort : inferEffort(task),
+        recurrence,
+        category: task.category || 'Sin categoría',
+        completed: Boolean(task.completed),
+        notes: task.notes || '',
+        order: Number.isFinite(task.order) ? task.order : index,
+        createdAt: task.createdAt || nowISO(),
+        completedAt: task.completedAt || (task.completed ? nowISO() : null),
+        lastResetDate: task.lastResetDate || null,
+        deferredUntil: isValidDate(task.deferredUntil) ? task.deferredUntil : null,
+        deferredAt: task.deferredAt || null,
+      };
+    });
+  }
+  function ensureDailyJackTask(tasks) {
+    const hasJack = tasks.some(t => /dar\s+comida\s+a\s+jack/i.test(t.title || ''));
+    if (!hasJack) {
+      tasks.unshift({
+        id: cryptoRandomId(), title: 'Dar comida a Jack', priority: 'high', effort: 'quick', recurrence: 'daily', category: 'Mascotas', completed: false,
+        notes: 'Tarea diaria: se vuelve a desmarcar al abrir un nuevo día.', order: -1, createdAt: nowISO(), completedAt: null, lastResetDate: null,
+      });
+      tasks.forEach((task, index) => { task.order = index; });
+    }
+    return tasks;
+  }
+  function loadState() {
+    try {
+      let raw = localStorage.getItem(STORAGE_KEY);
+      if (!raw) {
+        for (const legacyKey of LEGACY_STORAGE_KEYS) {
+          const legacy = localStorage.getItem(legacyKey);
+          if (legacy) { raw = legacy; localStorage.setItem(STORAGE_KEY, legacy); break; }
+        }
+      }
+      if (!raw) return { version: 7, date: todayISO(), strictLock: true, tasks: initialTasks };
+      const parsed = JSON.parse(raw);
+      if (!parsed.tasks || !Array.isArray(parsed.tasks)) throw new Error('Formato inválido');
+      const normalized = normalizeTasks(parsed.tasks);
+      return {
+        version: 7,
+        date: isValidDate(parsed.date) ? parsed.date : todayISO(),
+        strictLock: typeof parsed.strictLock === 'boolean' ? parsed.strictLock : true,
+        tasks: ensureDailyJackTask(normalized),
+      };
+    } catch (error) {
+      console.warn('No se pudo leer el progreso guardado. Se cargará la lista inicial.', error);
+      return { version: 7, date: todayISO(), strictLock: true, tasks: initialTasks };
+    }
+  }
+  function saveState() { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); }
+  function maybeHandleDateRollover() {
+    const today = todayISO();
+    if (state.date > today) state.date = today;
+    if (state.date < today && (!state.strictLock || !hasPending())) {
+      advanceToDate(today, { silent: true });
+    } else {
+      saveState();
+    }
+  }
+  function advanceToDate(date, options = {}) {
+    const previous = state.date;
+    let reactivated = 0;
+    state.date = date;
+    state.tasks = state.tasks.map(task => {
+      let updated = { ...task };
+      if (updated.recurrence === 'daily' && previous !== date) {
+        updated = { ...updated, completed: false, completedAt: null, lastResetDate: date };
+      }
+      if (updated.deferredUntil && updated.deferredUntil <= date) {
+        updated = { ...updated, completed: false, completedAt: null, deferredUntil: null, deferredAt: null };
+        reactivated += 1;
+      }
+      return updated;
+    });
+    saveState();
+    if (!options.silent) {
+      const extra = reactivated ? ` ${reactivated} tarea(s) movida(s) volvieron a pendientes.` : '';
+      flashStorage('Nuevo día abierto. Las tareas diarias se reiniciaron.' + extra);
+    }
+    render();
+  }
+  function tryOpenToday() {
+    const today = todayISO();
+    if (state.date === today) { flashStorage('Ya estás en el día actual.'); return; }
+    if (state.strictLock && hasPending()) {
+      alert('Aún quedan tareas pendientes activas del día. Puedes completarlas o moverlas a mañana si dependen de factores externos.');
+      render();
+      return;
+    }
+    advanceToDate(today);
+  }
+
+  function priorityRank(priority) { const n = PRIORITIES.findIndex(p => p.id === priority); return n < 0 ? 1 : n; }
+  function effortRank(effort) { const n = EFFORTS.findIndex(e => e.id === effort); return n < 0 ? 1 : n; }
+  function effortPoints(effort) { return EFFORTS.find(e => e.id === effort)?.points || 2; }
+  function priorityLabel(priority) { return PRIORITIES.find(p => p.id === priority)?.short || priority; }
+  function effortLabel(effort) { const e = EFFORTS.find(x => x.id === effort); return e ? `${e.short} · ${e.hint}` : effort; }
+  function effortShort(effort) { return EFFORTS.find(e => e.id === effort)?.short || effort; }
+  function recurrenceLabel(recurrence) { return RECURRENCES.find(r => r.id === recurrence)?.label || 'Sólo hoy'; }
+  function sortedTasks(tasks = state.tasks) {
+    return [...tasks].sort((a, b) =>
+      priorityRank(a.priority) - priorityRank(b.priority) ||
+      Number(isDeferred(a)) - Number(isDeferred(b)) ||
+      Number(a.completed) - Number(b.completed) ||
+      effortRank(a.effort) - effortRank(b.effort) ||
+      (a.order ?? 0) - (b.order ?? 0)
+    );
+  }
+  function getFilteredTasks() {
+    const q = els.searchInput.value.trim().toLowerCase();
+    const status = els.statusFilter.value;
+    const category = els.categoryFilter.value;
+    const effort = els.effortFilter.value;
+    const recurrence = els.recurrenceFilter.value;
+    return sortedTasks().filter(task => {
+      const deferred = isDeferred(task);
+      if (hideDoneTemp && task.completed) return false;
+      if (status === 'pending' && (task.completed || deferred)) return false;
+      if (status === 'done' && !task.completed) return false;
+      if (status === 'deferred' && !deferred) return false;
+      if (category !== 'all' && task.category !== category) return false;
+      if (effort !== 'all' && task.effort !== effort) return false;
+      if (recurrence !== 'all' && task.recurrence !== recurrence) return false;
+      if (!q) return true;
+      return [task.title, task.category, task.notes, priorityLabel(task.priority), effortLabel(task.effort), recurrenceLabel(task.recurrence)].join(' ').toLowerCase().includes(q);
+    });
+  }
+  function updateCategoryFilter() {
+    const current = els.categoryFilter.value;
+    const categories = [...new Set(state.tasks.map(t => t.category || 'Sin categoría'))].sort((a,b) => a.localeCompare(b, 'es'));
+    els.categoryFilter.innerHTML = '<option value="all">Todas las categorías</option>' + categories.map(cat => `<option value="${escapeAttr(cat)}">${escapeHtml(cat)}</option>`).join('');
+    els.categoryFilter.value = categories.includes(current) ? current : 'all';
+  }
+  function updateStats() {
+    const active = activeTasks();
+    const deferredCount = deferredTasks().length;
+    const total = active.length;
+    const done = active.filter(t => t.completed).length;
+    const pending = total - done;
+    const percent = total ? Math.round(done / total * 100) : 0;
+    const totalEffort = active.reduce((sum, t) => sum + effortPoints(t.effort), 0);
+    const doneEffort = active.filter(t => t.completed).reduce((sum, t) => sum + effortPoints(t.effort), 0);
+    const pendingEffort = totalEffort - doneEffort;
+    const effortPercent = totalEffort ? Math.round(doneEffort / totalEffort * 100) : 0;
+    const dailyPending = active.filter(t => t.recurrence === 'daily' && !t.completed).length;
+    els.statPercent.textContent = percent + '%';
+    els.statEffortPercent.textContent = effortPercent + '%';
+    els.statDone.textContent = done;
+    els.statPending.textContent = pending;
+    els.statDailyPending.textContent = dailyPending;
+    els.statLoad.textContent = pendingEffort + ' pts';
+    els.progressFill.style.width = percent + '%';
+    const deferredText = deferredCount ? ` · ${deferredCount} movida(s) a mañana` : '';
+    if (!total) els.progressPhrase.textContent = 'Aún no hay tareas activas para este día.' + deferredText;
+    else if (pending === 0) els.progressPhrase.textContent = `Día cerrado: ${done}/${total} tareas activas completas${deferredText}.`;
+    else els.progressPhrase.textContent = `${done}/${total} tareas activas completas · ${pending} pendientes · ${pendingEffort} puntos de carga${deferredText}.`;
+  }
+  function updateLockUI() {
+    const locked = state.strictLock && isOlderThanToday() && hasPending();
+    const older = isOlderThanToday();
+    els.lockPanel.classList.toggle('show', older);
+    els.dayInput.value = state.date;
+    els.strictLockToggle.checked = state.strictLock;
+    if (locked) {
+      els.lockText.textContent = `El día activo es ${dateLabel(state.date)}. No se abrirá ${dateLabel(todayISO())} hasta completar o mover las ${pendingTasks().length} tareas pendientes activas.`;
+      els.dateHint.textContent = 'Bloqueo activo: completa o mueve a mañana lo pendiente para avanzar.';
+    } else if (older && !hasPending()) {
+      els.lockText.textContent = `El día ${dateLabel(state.date)} está cerrado. Ya puedes abrir ${dateLabel(todayISO())}.`;
+      els.dateHint.textContent = 'Día anterior completado. Puedes abrir el día actual.';
+    } else {
+      els.dateHint.textContent = state.strictLock ? 'Bloqueo estricto activado.' : 'Bloqueo estricto desactivado.';
+    }
+    const canOpenToday = state.date !== todayISO() && (!state.strictLock || !hasPending());
+    els.openTodayBtn.disabled = !canOpenToday;
+    els.openTodayBtn2.disabled = !canOpenToday;
+  }
+  function updateFocusCards() {
+    const pending = sortedTasks(activeTasks()).filter(t => !t.completed);
+    const quick = pending.find(t => t.effort === 'quick') || null;
+    const deep = pending.find(t => t.effort === 'deep') || null;
+    const daily = pending.find(t => t.recurrence === 'daily') || null;
+    setFocus(els.quickWinTitle, els.quickWinMeta, quick, 'Sin tareas cortas pendientes');
+    setFocus(els.deepWorkTitle, els.deepWorkMeta, deep, 'Sin tareas pesadas pendientes');
+    setFocus(els.dailyTitle, els.dailyMeta, daily, 'Sin diarias pendientes');
+  }
+  function setFocus(titleEl, metaEl, task, emptyText) {
+    if (!task) { titleEl.textContent = emptyText; metaEl.textContent = '—'; return; }
+    titleEl.textContent = task.title;
+    metaEl.textContent = `${priorityLabel(task.priority)} · ${effortLabel(task.effort)} · ${task.category}`;
+  }
+  function getNextPendingTask() { return sortedTasks(activeTasks()).find(t => !t.completed) || null; }
+  function updateNextBox() {
+    const task = getNextPendingTask();
+    if (!task) {
+      els.nextTaskText.innerHTML = '<strong>Sin pendientes.</strong> Puedes cerrar el día o preparar nuevas tareas.';
+      els.completeNextBtn.disabled = true;
+      els.nextBtn.disabled = true;
+      els.goNextLockedBtn.disabled = true;
+      return;
+    }
+    els.nextTaskText.innerHTML = `Siguiente sugerida: <strong>${escapeHtml(task.title)}</strong><br>${priorityLabel(task.priority)} prioridad · ${effortLabel(task.effort)} · ${recurrenceLabel(task.recurrence)} · ${escapeHtml(task.category)}`;
+    els.completeNextBtn.disabled = false;
+    els.nextBtn.disabled = false;
+    els.goNextLockedBtn.disabled = false;
+  }
+  function renderBoard() {
+    const filtered = getFilteredTasks();
+    els.board.innerHTML = PRIORITIES.map(priority => {
+      const tasks = filtered.filter(t => t.priority === priority.id);
+      return `<section class="column" data-priority="${priority.id}">
+        <div class="column-header">
+          <div class="column-title"><span class="dot ${priority.dot}"></span>${priority.label}</div>
+          <div class="count-pill">${tasks.length}</div>
+        </div>
+        <div class="task-list">
+          ${tasks.length ? tasks.map(renderTask).join('') : '<div class="empty">Sin tareas visibles aquí.</div>'}
+        </div>
+      </section>`;
+    }).join('');
+  }
+  function renderTask(task) {
+    const effortClass = task.effort === 'quick' ? 'effort-quick' : task.effort === 'deep' ? 'effort-deep' : 'effort-medium';
+    const recurringTag = task.recurrence === 'daily' ? '<span class="tag daily">🔁 Diaria</span>' : '<span class="tag">Sólo hoy</span>';
+    const deferred = isDeferred(task);
+    const deferredTag = deferred ? `<span class="tag deferred">↪ Mañana: ${escapeHtml(dateLabel(task.deferredUntil))}</span>` : '';
+    const postponeButton = deferred
+      ? `<button class="btn small restore-one postpone-task" type="button" data-action="restoreToday" data-id="${task.id}">Traer hoy</button>`
+      : `<button class="btn small postpone-one postpone-task" type="button" data-action="postpone" data-id="${task.id}" ${task.completed ? 'disabled' : ''}>Mover a mañana</button>`;
+    return `<article class="task ${task.completed ? 'completed' : ''} ${task.recurrence === 'daily' ? 'daily' : ''} ${deferred ? 'deferred' : ''}" id="task-${task.id}">
+      <div class="task-main">
+        <input class="task-check" type="checkbox" data-action="toggle" data-id="${task.id}" ${task.completed ? 'checked' : ''} ${deferred ? 'disabled' : ''} aria-label="Marcar tarea" />
+        <div>
+          <div class="task-title">${escapeHtml(task.title)}</div>
+          <div class="task-meta">
+            <span class="tag ${effortClass}">${escapeHtml(effortLabel(task.effort))}</span>
+            ${recurringTag}
+            ${deferredTag}
+            <span class="tag">${escapeHtml(task.category)}</span>
+          </div>
+          ${task.notes ? `<div class="notes">${escapeHtml(task.notes)}</div>` : ''}
+        </div>
+      </div>
+      <div class="task-actions">
+        <button class="btn small" type="button" data-action="up" data-id="${task.id}">↑</button>
+        <button class="btn small" type="button" data-action="down" data-id="${task.id}">↓</button>
+        <button class="btn small complete-task ${task.completed ? 'reopen-one' : 'complete-one'}" type="button" data-action="completeOne" data-id="${task.id}" ${deferred ? 'disabled' : ''}>${task.completed ? 'Reabrir' : 'Completar'}</button>
+        ${postponeButton}
+        <select data-action="priority" data-id="${task.id}" aria-label="Cambiar prioridad">
+          ${PRIORITIES.map(p => `<option value="${p.id}" ${p.id === task.priority ? 'selected' : ''}>${p.short}</option>`).join('')}
+        </select>
+        <select data-action="effort" data-id="${task.id}" aria-label="Cambiar esfuerzo">
+          ${EFFORTS.map(e => `<option value="${e.id}" ${e.id === task.effort ? 'selected' : ''}>${e.short}</option>`).join('')}
+        </select>
+        <select data-action="recurrence" data-id="${task.id}" aria-label="Cambiar recurrencia">
+          ${RECURRENCES.map(r => `<option value="${r.id}" ${r.id === task.recurrence ? 'selected' : ''}>${r.label}</option>`).join('')}
+        </select>
+        <button class="btn small edit-task" type="button" data-action="edit" data-id="${task.id}">Editar</button>
+        <button class="btn small danger delete-task" type="button" data-action="delete" data-id="${task.id}">Borrar</button>
+      </div>
+    </article>`;
+  }
+  function render() {
+    state.tasks = ensureDailyJackTask(normalizeTasks(state.tasks));
+    updateCategoryFilter();
+    updateStats();
+    updateLockUI();
+    updateNextBox();
+    updateFocusCards();
+    renderBoard();
+  }
+
+  function bindEvents() {
+    ['input', 'change'].forEach(evt => {
+      els.searchInput.addEventListener(evt, renderBoard);
+      els.statusFilter.addEventListener(evt, renderBoard);
+      els.categoryFilter.addEventListener(evt, renderBoard);
+      els.effortFilter.addEventListener(evt, renderBoard);
+      els.recurrenceFilter.addEventListener(evt, renderBoard);
+    });
+    els.addForm.addEventListener('submit', event => {
+      event.preventDefault();
+      const title = els.newTitle.value.trim();
+      if (!title) return;
+      const maxOrder = state.tasks.reduce((max, task) => Math.max(max, task.order ?? 0), 0);
+      state.tasks.push({
+        id: cryptoRandomId(), title, priority: els.newPriority.value, effort: els.newEffort.value, recurrence: els.newRecurrence.value,
+        category: els.newCategory.value.trim() || 'General', completed: false, notes: '', order: maxOrder + 1, createdAt: nowISO(), completedAt: null, lastResetDate: null,
+      });
+      els.newTitle.value = '';
+      saveState();
+      flashStorage('Tarea añadida.');
+      render();
+    });
+    els.board.addEventListener('click', event => {
+      const btn = event.target.closest('[data-action]');
+      if (!btn || ['priority','effort','recurrence','toggle'].includes(btn.dataset.action)) return;
+      handleTaskAction(btn.dataset.action, btn.dataset.id);
+    });
+    els.board.addEventListener('change', event => {
+      const target = event.target.closest('[data-action]');
+      if (!target) return;
+      handleTaskAction(target.dataset.action, target.dataset.id, target.value, target.checked);
+    });
+    els.nextBtn.addEventListener('click', scrollToNext);
+    els.goNextLockedBtn.addEventListener('click', scrollToNext);
+    els.completeNextBtn.addEventListener('click', () => {
+      const task = getNextPendingTask();
+      if (!task) return;
+      task.completed = true;
+      task.completedAt = nowISO();
+      saveState();
+      flashStorage('Siguiente tarea completada.');
+      render();
+    });
+    els.hideDoneBtn.addEventListener('click', () => { hideDoneTemp = true; els.statusFilter.value = 'all'; renderBoard(); flashStorage('Completadas ocultas.'); });
+    els.showDoneBtn.addEventListener('click', () => { hideDoneTemp = false; renderBoard(); flashStorage('Completadas visibles.'); });
+    els.strictLockToggle.addEventListener('change', () => {
+      state.strictLock = els.strictLockToggle.checked;
+      saveState();
+      maybeHandleDateRollover();
+      render();
+      flashStorage(state.strictLock ? 'Bloqueo estricto activado.' : 'Bloqueo estricto desactivado.');
+    });
+    els.openTodayBtn.addEventListener('click', tryOpenToday);
+    els.openTodayBtn2.addEventListener('click', tryOpenToday);
+    els.exportBtn.addEventListener('click', exportJson);
+    els.importBtn.addEventListener('click', () => els.importFile.click());
+    els.importFile.addEventListener('change', importJson);
+    els.resetBtn.addEventListener('click', () => {
+      if (!confirm('¿Seguro que quieres reiniciar el checklist? Esto borrará el progreso guardado de esta app.')) return;
+      state = { version: 7, date: todayISO(), strictLock: true, tasks: initialTasks.map((t, index) => ({ ...t, id: cryptoRandomId(), order: index })) };
+      hideDoneTemp = false;
+      saveState();
+      flashStorage('Checklist reiniciado.');
+      render();
+    });
+  }
+  function handleTaskAction(action, id, value, checked) {
+    const task = state.tasks.find(t => t.id === id);
+    if (!task) return;
+    if ((action === 'toggle' || action === 'completeOne') && isDeferred(task)) {
+      alert('Esta tarea está movida a mañana. Primero usa “Traer hoy” si quieres completarla ahora.');
+      render();
+      return;
+    }
+    if (action === 'toggle') { task.completed = Boolean(checked); task.completedAt = task.completed ? nowISO() : null; flashStorage(task.completed ? 'Tarea completada.' : 'Tarea reabierta.'); }
+    if (action === 'completeOne') { task.completed = !task.completed; task.completedAt = task.completed ? nowISO() : null; flashStorage(task.completed ? 'Tarea completada sin cambiar prioridad.' : 'Tarea reabierta.'); }
+    if (action === 'postpone') { postponeTask(task); }
+    if (action === 'restoreToday') { restoreTaskToday(task); }
+    if (action === 'priority') task.priority = value;
+    if (action === 'effort') task.effort = value;
+    if (action === 'recurrence') task.recurrence = value;
+    if (action === 'delete') {
+      if (!confirm(`¿Borrar la tarea “${task.title}”?`)) return;
+      state.tasks = state.tasks.filter(t => t.id !== id);
+    }
+    if (action === 'edit') editTask(task);
+    if (action === 'up') moveTask(task, -1);
+    if (action === 'down') moveTask(task, 1);
+    saveState();
+    render();
+  }
+  function postponeTask(task) {
+    if (task.completed) {
+      alert('La tarea ya está completada. Reábrela primero si realmente necesitas moverla a mañana.');
+      return;
+    }
+    const target = tomorrowISO(state.date);
+    const ok = confirm(`¿Mover “${task.title}” a ${dateLabel(target)}? No contará como pendiente para cerrar el día actual.`);
+    if (!ok) return;
+    task.deferredUntil = target;
+    task.deferredAt = nowISO();
+    task.completed = false;
+    task.completedAt = null;
+    flashStorage('Tarea movida a mañana.');
+  }
+  function restoreTaskToday(task) {
+    task.deferredUntil = null;
+    task.deferredAt = null;
+    task.completed = false;
+    task.completedAt = null;
+    flashStorage('Tarea devuelta al día actual.');
+  }
+  function editTask(task) {
+    const title = prompt('Editar tarea:', task.title);
+    if (title === null) return;
+    const trimmed = title.trim();
+    if (!trimmed) return;
+    const category = prompt('Categoría:', task.category || 'General');
+    if (category === null) return;
+    const notes = prompt('Notas:', task.notes || '');
+    if (notes === null) return;
+    task.title = trimmed;
+    task.category = category.trim() || 'General';
+    task.notes = notes.trim();
+  }
+  function moveTask(task, direction) {
+    const samePriority = sortedTasks(state.tasks.filter(t => t.priority === task.priority));
+    const index = samePriority.findIndex(t => t.id === task.id);
+    const swap = samePriority[index + direction];
+    if (!swap) return;
+    const temp = task.order;
+    task.order = swap.order;
+    swap.order = temp;
+  }
+  function scrollToNext() {
+    const task = getNextPendingTask();
+    if (!task) return;
+    const node = document.getElementById('task-' + task.id);
+    if (node) node.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }
+  function exportJson() {
+    const payload = JSON.stringify({ ...state, exportedAt: nowISO(), app: 'checklist-diario-v7-pwa' }, null, 2);
+    const blob = new Blob([payload], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `checklist-diario-${state.date}.json`;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    URL.revokeObjectURL(url);
+    flashStorage('JSON exportado.');
+  }
+  function importJson(event) {
+    const file = event.target.files?.[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = () => {
+      try {
+        const parsed = JSON.parse(reader.result);
+        if (!Array.isArray(parsed.tasks)) throw new Error('El archivo no contiene tareas.');
+        state = {
+          version: 7,
+          date: isValidDate(parsed.date) ? parsed.date : todayISO(),
+          strictLock: typeof parsed.strictLock === 'boolean' ? parsed.strictLock : true,
+          tasks: ensureDailyJackTask(normalizeTasks(parsed.tasks)),
+        };
+        maybeHandleDateRollover();
+        flashStorage('JSON importado.');
+        render();
+      } catch (error) {
+        alert('No se pudo importar el archivo JSON: ' + error.message);
+      } finally {
+        els.importFile.value = '';
+      }
+    };
+    reader.readAsText(file);
+  }
+  function flashStorage(message) {
+    els.storageNote.textContent = message;
+    window.clearTimeout(flashStorage._t);
+    flashStorage._t = window.setTimeout(() => { els.storageNote.textContent = 'Guardado automático activado'; }, 2200);
+  }
+  function escapeHtml(value) {
+    return String(value ?? '').replace(/[&<>"]/g, char => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[char]));
+  }
+  function escapeAttr(value) { return escapeHtml(value).replace(/'/g, '&#039;'); }
+  </script>
+</body>
+</html>

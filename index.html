@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Emma OS v1</title>
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#111827">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Emma OS">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png">
+<link rel="apple-touch-icon" href="icons/icon-192.png">
+<style>
+:root{--bg:#0d1324;--panel:#121a2f;--panel2:#17223d;--card:#0f172a;--text:#e5e7eb;--muted:#9ca3af;--line:rgba(148,163,184,.24);--accent:#38bdf8;--good:#34d399;--warn:#fbbf24;--violet:#a78bfa;--rose:#fb7185;--shadow:0 24px 70px rgba(0,0,0,.36);--radius:22px}
+*{box-sizing:border-box}body{margin:0;min-height:100vh;font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:radial-gradient(circle at top left,rgba(56,189,248,.22),transparent 34rem),radial-gradient(circle at bottom right,rgba(167,139,250,.12),transparent 32rem),var(--bg);color:var(--text)}a{color:inherit}.wrap{width:min(100% - 28px,1180px);margin:0 auto;padding:22px 0 42px}.hero{background:linear-gradient(135deg,rgba(18,26,47,.96),rgba(23,34,61,.78));border:1px solid var(--line);border-radius:30px;padding:26px;box-shadow:var(--shadow);position:relative;overflow:hidden}.hero:after{content:"";position:absolute;inset:auto -80px -120px auto;width:300px;height:300px;background:radial-gradient(circle,rgba(56,189,248,.18),transparent 60%)}.eyebrow{color:var(--accent);font-weight:850;text-transform:uppercase;letter-spacing:.16em;font-size:.76rem}h1{margin:.35rem 0 .5rem;font-size:clamp(2rem,7vw,4.2rem);letter-spacing:-.07em}.subtitle{max-width:820px;color:var(--muted);font-size:1.05rem;line-height:1.55;margin:0}.hero-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}.btn{display:inline-flex;align-items:center;gap:8px;text-decoration:none;border:1px solid var(--line);background:var(--panel2);border-radius:999px;padding:11px 14px;font-weight:850}.btn.primary{background:linear-gradient(135deg,var(--accent),var(--good));color:#04111e;border:0}.btn:hover{filter:brightness(1.12)}.grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin-top:16px}.module{display:flex;flex-direction:column;gap:14px;text-decoration:none;background:rgba(18,26,47,.88);border:1px solid var(--line);border-radius:var(--radius);padding:18px;box-shadow:0 14px 40px rgba(0,0,0,.24);min-height:230px}.module:hover{transform:translateY(-2px);filter:brightness(1.06)}.module .top{display:flex;justify-content:space-between;gap:12px}.icon{width:48px;height:48px;border-radius:16px;display:grid;place-items:center;font-size:1.4rem;background:rgba(255,255,255,.08);border:1px solid var(--line)}.tag{height:max-content;font-size:.78rem;color:var(--muted);border:1px solid var(--line);border-radius:999px;padding:6px 9px}.module h2{margin:0;font-size:1.35rem}.module p{color:var(--muted);margin:0;line-height:1.45}.meter{margin-top:auto}.meter-row{display:flex;justify-content:space-between;color:var(--muted);font-size:.88rem;margin-bottom:8px}.bar{height:10px;background:rgba(148,163,184,.18);border:1px solid var(--line);border-radius:999px;overflow:hidden}.bar span{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--accent),var(--good));transition:.25s}.panel{margin-top:16px;background:rgba(18,26,47,.72);border:1px solid var(--line);border-radius:var(--radius);padding:18px}.panel h2{margin:0 0 8px}.panel p,.panel li{color:var(--muted);line-height:1.55}.mini{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-top:14px}.stat{background:rgba(15,23,42,.74);border:1px solid var(--line);border-radius:16px;padding:13px}.stat strong{display:block;font-size:1.35rem}.stat span{color:var(--muted);font-size:.82rem}footer{color:var(--muted);text-align:center;margin-top:24px;font-size:.9rem}@media(max-width:900px){.grid,.mini{grid-template-columns:1fr}.hero{padding:22px}.module{min-height:auto}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <section class="hero">
+    <div class="eyebrow">Emma OS v1</div>
+    <h1>Centro de control personal</h1>
+    <p class="subtitle">Tres módulos unidos en un solo lugar: pendientes diarios, orden cronológico del Arrowverso y rutina atómica. Cada módulo guarda sus datos aparte en este navegador.</p>
+    <div class="hero-actions"><a class="btn primary" href="apps/pendientes/">Abrir pendientes</a><a class="btn" href="apps/arrowverse/">Arrowverso</a><a class="btn" href="apps/rutina-atomica/">Rutina atómica</a><button class="btn" id="installBtn" type="button">Instalar app</button></div>
+  </section>
+
+  <section class="mini" id="globalStats">
+    <div class="stat"><strong id="totalProgress">0%</strong><span>avance promedio</span></div>
+    <div class="stat"><strong id="pendingToday">—</strong><span>pendientes activos</span></div>
+    <div class="stat"><strong id="arrowProgress">—</strong><span>Arrowverso visto</span></div>
+    <div class="stat"><strong id="routineProgress">—</strong><span>Rutina atómica</span></div>
+  </section>
+
+  <section class="grid">
+    <a class="module" href="apps/pendientes/"><div class="top"><div class="icon">✓</div><span class="tag">Productividad</span></div><div><h2>Pendientes diarios</h2><p>Prioridad, esfuerzo, tareas recurrentes, bloqueo de día y mover tareas a mañana.</p></div><div class="meter"><div class="meter-row"><span id="pendSummary">Sin datos aún</span><span id="pendPct">0%</span></div><div class="bar"><span id="pendBar"></span></div></div></a>
+    <a class="module" href="apps/arrowverse/"><div class="top"><div class="icon">⚡</div><span class="tag">Checklist</span></div><div><h2>Arrowverso</h2><p>Lista cronológica completa con filtros, buscador, siguiente episodio y exportación JSON.</p></div><div class="meter"><div class="meter-row"><span id="arrowSummary">0/1012</span><span id="arrowPct">0%</span></div><div class="bar"><span id="arrowBar"></span></div></div></a>
+    <a class="module" href="apps/rutina-atomica/"><div class="top"><div class="icon">🌱</div><span class="tag">Salud</span></div><div><h2>Rutina atómica</h2><p>Semana 0: desayuno compatible, cena compatible, 1 sentadilla y status honesto.</p></div><div class="meter"><div class="meter-row"><span id="routineSummary">0/26</span><span id="routinePct">0%</span></div><div class="bar"><span id="routineBar"></span></div></div></a>
+  </section>
+
+  <section class="panel">
+    <h2>Notas de la v1</h2>
+    <ul>
+      <li>Esto está listo para subir completo a GitHub Pages: el <code>index.html</code> principal debe quedar en la raíz del repositorio.</li>
+      <li>Los datos no se suben a GitHub; quedan en <code>localStorage</code> del navegador/dispositivo.</li>
+      <li>Cada módulo usa claves separadas: <code>emmaos_pendientes_v1</code>, <code>emmaos_arrowverse_v1</code> y <code>emmaos_rutina_atomica_v1</code>.</li>
+      <li>Al migrar desde las apps sueltas, se intenta leer automáticamente las claves antiguas cuando existen en el mismo navegador.</li>
+    </ul>
+  </section>
+  <footer>Emma OS v1 · webapp local/PWA sin backend</footer>
+</div>
+<script>
+const MODULES={pendientes:{key:'emmaos_pendientes_v1',legacy:['emma_checklist_diario_v1']},arrow:{key:'emmaos_arrowverse_v1',legacy:['arrowverseChecklist.v1'],total:1012},routine:{key:'emmaos_rutina_atomica_v1',legacy:[],total:26}};
+function readJson(key){try{const raw=localStorage.getItem(key);return raw?JSON.parse(raw):null}catch{return null}}
+function firstData(config){let data=readJson(config.key);if(data)return data;for(const k of config.legacy||[]){data=readJson(k);if(data){try{localStorage.setItem(config.key,JSON.stringify(data));}catch{} return data;}}return null;}
+function pct(done,total){return total?Math.round(done/total*100):0}
+function setMeter(prefix,done,total,summary){const p=pct(done,total);document.getElementById(prefix+'Pct').textContent=p+'%';document.getElementById(prefix+'Bar').style.width=p+'%';document.getElementById(prefix+'Summary').textContent=summary||`${done}/${total}`;return p;}
+function renderStats(){let scores=[];const pData=firstData(MODULES.pendientes);let active=0,done=0,pending=0;if(pData&&Array.isArray(pData.tasks)){active=pData.tasks.filter(t=>!(t.deferredUntil&&t.deferredUntil>pData.date));done=active.filter(t=>t.completed).length;pending=active.length-done;active=active.length;} else {active=0;done=0;pending='—';} const pp=setMeter('pend',done,active,active?`${done}/${active} activas`:'Sin datos aún');if(active)scores.push(pp);document.getElementById('pendingToday').textContent=pending;
+const aData=firstData(MODULES.arrow);const aDone=Array.isArray(aData?.checked)?aData.checked.length:12;const ap=setMeter('arrow',aDone,MODULES.arrow.total,`${aDone}/${MODULES.arrow.total}`);scores.push(ap);document.getElementById('arrowProgress').textContent=ap+'%';
+const rData=firstData(MODULES.routine);const rDone=rData?.checked?Object.values(rData.checked).filter(Boolean).length:0;const rp=setMeter('routine',rDone,MODULES.routine.total,`${rDone}/${MODULES.routine.total}`);scores.push(rp);document.getElementById('routineProgress').textContent=rp+'%';
+document.getElementById('totalProgress').textContent=Math.round(scores.reduce((a,b)=>a+b,0)/(scores.length||1))+'%';}
+let deferredInstallPrompt=null;function registerPwa(){if('serviceWorker'in navigator&&(location.protocol==='https:'||location.hostname==='localhost'||location.hostname==='127.0.0.1')){navigator.serviceWorker.register('./sw.js').catch(()=>{});}window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();deferredInstallPrompt=e;});document.getElementById('installBtn').addEventListener('click',async()=>{if(!deferredInstallPrompt){alert('Cuando esté publicado en GitHub Pages, abre el menú del navegador y elige “Instalar app” o “Agregar a pantalla principal”.');return;}deferredInstallPrompt.prompt();await deferredInstallPrompt.userChoice;deferredInstallPrompt=null;});}
+renderStats();registerPwa();
+</script>
+</body>
+</html>
