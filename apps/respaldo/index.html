@@ -4,13 +4,23 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Centro de respaldos · Emma OS</title>
-<meta name="theme-color" content="#111827">
+<meta name="theme-color" content="#0d1324">
 <style>
 :root{--bg:#0d1324;--panel:#121a2f;--panel2:#17223d;--card:#0f172a;--text:#e5e7eb;--muted:#9ca3af;--line:rgba(148,163,184,.24);--accent:#38bdf8;--good:#34d399;--warn:#fbbf24;--violet:#a78bfa;--rose:#fb7185;--shadow:0 24px 70px rgba(0,0,0,.36);--radius:22px}
 *{box-sizing:border-box}body{margin:0;min-height:100vh;font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:radial-gradient(circle at top left,rgba(56,189,248,.22),transparent 34rem),radial-gradient(circle at bottom right,rgba(167,139,250,.12),transparent 32rem),var(--bg);color:var(--text)}a{color:inherit}.wrap{width:min(100% - 28px,1100px);margin:0 auto;padding:20px 0 44px}.topbar{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:14px}.brand{font-weight:900;color:var(--accent);letter-spacing:.12em;text-transform:uppercase;font-size:.78rem}.btn{display:inline-flex;align-items:center;gap:8px;text-decoration:none;border:1px solid var(--line);background:var(--panel2);color:var(--text);border-radius:999px;padding:11px 14px;font-weight:850;cursor:pointer;font:inherit}.btn.primary{background:linear-gradient(135deg,var(--accent),var(--good));color:#04111e;border:0}.btn.warn{background:rgba(251,191,36,.16);border-color:rgba(251,191,36,.32)}.btn.rose{background:rgba(251,113,133,.16);border-color:rgba(251,113,133,.32)}.btn:hover{filter:brightness(1.12)}.hero{background:linear-gradient(135deg,rgba(18,26,47,.96),rgba(23,34,61,.78));border:1px solid var(--line);border-radius:30px;padding:26px;box-shadow:var(--shadow)}h1{margin:.25rem 0 .5rem;font-size:clamp(2rem,6vw,3.6rem);letter-spacing:-.06em}.subtitle{max-width:800px;color:var(--muted);font-size:1.04rem;line-height:1.55;margin:0}.actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}.grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin-top:16px}.card,.panel{background:rgba(18,26,47,.82);border:1px solid var(--line);border-radius:var(--radius);padding:18px;box-shadow:0 14px 40px rgba(0,0,0,.20)}.card h2,.panel h2{margin:0 0 8px}.card p,.panel p,.panel li{color:var(--muted);line-height:1.55}.stat{font-size:2rem;font-weight:900}.tag{display:inline-flex;border:1px solid var(--line);border-radius:999px;padding:6px 9px;color:var(--muted);font-size:.82rem}.ok{color:var(--good)}.no{color:var(--warn)}.mono{font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono",monospace}.modules{display:grid;gap:10px}.module-row{display:flex;justify-content:space-between;align-items:center;gap:12px;background:rgba(15,23,42,.55);border:1px solid var(--line);border-radius:16px;padding:12px}.module-row small{color:var(--muted)}.log{min-height:42px;background:rgba(15,23,42,.65);border:1px solid var(--line);border-radius:16px;padding:12px;color:var(--muted);white-space:pre-wrap}.hidden-input{display:none}.steps{display:grid;gap:10px}.step{display:flex;gap:10px;align-items:flex-start;background:rgba(15,23,42,.48);border:1px solid var(--line);border-radius:16px;padding:12px}.dot{width:28px;height:28px;border-radius:999px;display:grid;place-items:center;flex:0 0 auto;background:linear-gradient(135deg,var(--accent),var(--violet));color:#06111f;font-weight:900}footer{color:var(--muted);text-align:center;margin-top:24px;font-size:.9rem}@media(max-width:860px){.grid{grid-template-columns:1fr}.module-row{align-items:flex-start;flex-direction:column}.topbar{flex-direction:column;align-items:flex-start}.hero{padding:22px}}
 </style>
+<link rel="stylesheet" href="../../emma-theme.css">
 </head>
-<body>
+<body class="emma-module emma-module-respaldo">
+<header class="emma-system-bar" role="banner">
+  <a class="emma-system-brand" href="../../index.html" aria-label="Volver a Emma OS">
+    <span class="emma-mark">E</span>
+    <span><b>Emma OS</b><small>v1.2 · Centro de respaldos</small></span>
+  </a>
+  <nav class="emma-system-nav" aria-label="Navegación principal Emma OS"><a href="../../index.html" class="">Inicio</a><a href="../pendientes/" class="">Pendientes</a><a href="../arrowverse/" class="">Arrowverso</a><a href="../rutina-atomica/" class="">Rutina</a><a href="../respaldo/" class="active">Respaldos</a></nav>
+</header>
+<div class="emma-module-note">Estándar visual Emma OS v1.2 · datos locales separados por módulo.</div>
+
 <div class="wrap">
   <div class="topbar">
     <div class="brand">Emma OS · Centro de respaldos</div>
@@ -18,7 +28,7 @@
   </div>
 
   <section class="hero">
-    <span class="tag">Emma OS v1.1</span>
+    <span class="tag">Emma OS v1.2</span>
     <h1>Respaldos y actualización</h1>
     <p class="subtitle">Desde aquí puedes exportar todo Emma OS en un solo archivo JSON, importar una copia anterior y revisar qué módulos tienen datos guardados en este dispositivo.</p>
     <div class="actions">
@@ -32,7 +42,7 @@
   <section class="grid">
     <div class="card"><h2>Último respaldo</h2><div class="stat" id="lastBackup">—</div><p>Se actualiza cuando exportas un respaldo global desde esta pantalla.</p></div>
     <div class="card"><h2>Módulos con datos</h2><div class="stat" id="modulesWithData">0/3</div><p>Cuenta los módulos que tienen información guardada en localStorage.</p></div>
-    <div class="card"><h2>Versión del sistema</h2><div class="stat">v1.1</div><p>Base estable: dashboard, módulos y centro de respaldo.</p></div>
+    <div class="card"><h2>Versión del sistema</h2><div class="stat">v1.2</div><p>Base estable: dashboard, módulos y centro de respaldo.</p></div>
   </section>
 
   <section class="panel">
@@ -56,11 +66,11 @@
     <div class="log" id="log">Listo para respaldar.</div>
   </section>
 
-  <footer>Emma OS v1.1 · los respaldos son archivos JSON locales</footer>
+  <footer>Emma OS v1.2 · los respaldos son archivos JSON locales</footer>
 </div>
 
 <script>
-const VERSION='1.1';
+const VERSION='1.2';
 const MODULES=[
   {id:'pendientes',name:'Pendientes diarios',key:'emmaos_pendientes_v1',url:'../pendientes/'},
   {id:'arrowverse',name:'Arrowverso',key:'emmaos_arrowverse_v1',url:'../arrowverse/'},

@@ -1,7 +1,8 @@
-const CACHE_NAME = 'emma-os-v1-1-cache-001';
+const CACHE_NAME = 'emma-os-v1-2-cache-001';
 const ASSETS = [
   './',
   './index.html',
+  './emma-theme.css',
   './manifest.webmanifest',
   './apps/pendientes/',
   './apps/pendientes/index.html',

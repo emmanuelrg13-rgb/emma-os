@@ -1,12 +1,12 @@
 {
-  "name": "Emma OS v1.1",
+  "name": "Emma OS v1.2",
   "short_name": "Emma OS",
-  "description": "Centro de control personal con pendientes, Arrowverso, rutina atómica y respaldos.",
+  "description": "Centro de control personal con módulos visualmente unificados, pendientes, Arrowverso, rutina atómica y respaldos.",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
   "background_color": "#0d1324",
-  "theme_color": "#111827",
+  "theme_color": "#0d1324",
   "orientation": "portrait-primary",
   "icons": [
     {

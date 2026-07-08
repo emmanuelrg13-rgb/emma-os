@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Emma OS — Arrowverso</title>
   <link rel="manifest" href="../../manifest.webmanifest">
-  <meta name="theme-color" content="#0b1020">
+  <meta name="theme-color" content="#0d1324">
   <link rel="icon" type="image/png" sizes="192x192" href="../../icons/icon-192.png">
   <link rel="apple-touch-icon" href="../../icons/icon-192.png">
   <style>
@@ -110,8 +110,18 @@
     .emmaos-back{position:fixed;left:14px;bottom:14px;z-index:80;display:inline-flex;align-items:center;gap:8px;text-decoration:none;background:rgba(11,16,32,.92);color:#edf2ff;border:1px solid rgba(255,255,255,.18);border-radius:999px;padding:10px 13px;font-weight:850;box-shadow:0 14px 34px rgba(0,0,0,.35);backdrop-filter:blur(10px)}
     .emmaos-back:hover{filter:brightness(1.12)}
   </style>
+<link rel="stylesheet" href="../../emma-theme.css">
 </head>
-<body>
+<body class="emma-module emma-module-arrowverse">
+<header class="emma-system-bar" role="banner">
+  <a class="emma-system-brand" href="../../index.html" aria-label="Volver a Emma OS">
+    <span class="emma-mark">E</span>
+    <span><b>Emma OS</b><small>v1.2 · Arrowverso</small></span>
+  </a>
+  <nav class="emma-system-nav" aria-label="Navegación principal Emma OS"><a href="../../index.html" class="">Inicio</a><a href="../pendientes/" class="">Pendientes</a><a href="../arrowverse/" class="active">Arrowverso</a><a href="../rutina-atomica/" class="">Rutina</a><a href="../respaldo/" class="">Respaldos</a></nav>
+</header>
+<div class="emma-module-note">Estándar visual Emma OS v1.2 · datos locales separados por módulo.</div>
+
   <a class="emmaos-back" href="../../index.html">← Emma OS</a>
   <header>
     <section class="hero">

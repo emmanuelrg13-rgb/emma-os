@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Emma OS — Rutina Atómica</title>
 <link rel="manifest" href="../../manifest.webmanifest">
-<meta name="theme-color" content="#3f6848">
+<meta name="theme-color" content="#0d1324">
 <link rel="icon" type="image/png" sizes="192x192" href="../../icons/icon-192.png">
 <link rel="apple-touch-icon" href="../../icons/icon-192.png">
 <style>
@@ -17,8 +17,18 @@ nav{display:flex;gap:8px;overflow:auto;margin:12px 0}nav a{background:#fff;borde
 @media(max-width:760px){.grid,.stats{grid-template-columns:1fr}.wrap{padding:12px}.head{align-items:center}.hero{position:relative;top:0}}
 @media print{nav,.buttons,.emmaos-back{display:none}.hero,.card,.note{box-shadow:none;break-inside:avoid}body{background:white}}
 </style>
+<link rel="stylesheet" href="../../emma-theme.css">
 </head>
-<body>
+<body class="emma-module emma-module-rutina">
+<header class="emma-system-bar" role="banner">
+  <a class="emma-system-brand" href="../../index.html" aria-label="Volver a Emma OS">
+    <span class="emma-mark">E</span>
+    <span><b>Emma OS</b><small>v1.2 · Rutina atómica</small></span>
+  </a>
+  <nav class="emma-system-nav" aria-label="Navegación principal Emma OS"><a href="../../index.html" class="">Inicio</a><a href="../pendientes/" class="">Pendientes</a><a href="../arrowverse/" class="">Arrowverso</a><a href="../rutina-atomica/" class="active">Rutina</a><a href="../respaldo/" class="">Respaldos</a></nav>
+</header>
+<div class="emma-module-note">Estándar visual Emma OS v1.2 · datos locales separados por módulo.</div>
+
 <a class="emmaos-back" href="../../index.html">← Emma OS</a>
 <div class="wrap">
   <section class="hero">

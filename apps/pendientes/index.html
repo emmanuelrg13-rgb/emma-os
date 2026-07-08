@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Emma OS — Pendientes diarios</title>
   <link rel="manifest" href="../../manifest.webmanifest">
-  <meta name="theme-color" content="#0f172a">
+  <meta name="theme-color" content="#0d1324">
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-title" content="Tareas Emma">
@@ -191,8 +191,18 @@
     .emmaos-back{position:fixed;left:14px;bottom:14px;z-index:80;display:inline-flex;align-items:center;gap:8px;text-decoration:none;background:rgba(15,23,42,.92);color:#e5e7eb;border:1px solid rgba(148,163,184,.35);border-radius:999px;padding:10px 13px;font-weight:850;box-shadow:0 14px 34px rgba(0,0,0,.35);backdrop-filter:blur(10px)}
     .emmaos-back:hover{filter:brightness(1.12)}
   </style>
+<link rel="stylesheet" href="../../emma-theme.css">
 </head>
-<body>
+<body class="emma-module emma-module-pendientes">
+<header class="emma-system-bar" role="banner">
+  <a class="emma-system-brand" href="../../index.html" aria-label="Volver a Emma OS">
+    <span class="emma-mark">E</span>
+    <span><b>Emma OS</b><small>v1.2 · Pendientes diarios</small></span>
+  </a>
+  <nav class="emma-system-nav" aria-label="Navegación principal Emma OS"><a href="../../index.html" class="">Inicio</a><a href="../pendientes/" class="active">Pendientes</a><a href="../arrowverse/" class="">Arrowverso</a><a href="../rutina-atomica/" class="">Rutina</a><a href="../respaldo/" class="">Respaldos</a></nav>
+</header>
+<div class="emma-module-note">Estándar visual Emma OS v1.2 · datos locales separados por módulo.</div>
+
   <a class="emmaos-back" href="../../index.html">← Emma OS</a>
   <div class="app">
     <header class="hero">
