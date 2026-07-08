@@ -1,0 +1,140 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Emma OS · Botiquín</title>
+<meta name="theme-color" content="#0d1324">
+<style>
+:root{--bg:#0d1324;--panel:#121a2f;--panel2:#17223d;--card:#0f172a;--text:#e5e7eb;--muted:#9ca3af;--line:rgba(148,163,184,.24);--accent:#fbbf24;--accent2:#fb7185;--good:#34d399;--cyan:#38bdf8;--shadow:0 22px 65px rgba(0,0,0,.34);--radius:22px}
+*{box-sizing:border-box}body{margin:0;min-height:100vh;font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:radial-gradient(circle at top left,rgba(251,191,36,.18),transparent 32rem),radial-gradient(circle at bottom right,rgba(251,113,133,.12),transparent 32rem),var(--bg);color:var(--text)}a{color:inherit}.wrap{width:min(100% - 28px,1180px);margin:0 auto;padding:22px 0 42px}.topbar{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:14px}.brand{font-weight:950;letter-spacing:-.03em}.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;text-decoration:none;border:1px solid var(--line);background:var(--panel2);color:var(--text);border-radius:999px;padding:10px 13px;font-weight:850;cursor:pointer;font:inherit}.btn.primary{background:linear-gradient(135deg,var(--accent),var(--good));color:#06111f;border:0}.btn.danger{background:rgba(251,113,133,.12);border-color:rgba(251,113,133,.35)}.btn.small{padding:7px 9px;font-size:.84rem}.btn:hover{filter:brightness(1.12)}.hero{background:linear-gradient(135deg,rgba(18,26,47,.96),rgba(23,34,61,.78));border:1px solid var(--line);border-radius:30px;padding:26px;box-shadow:var(--shadow);position:relative;overflow:hidden}.hero:after{content:"";position:absolute;inset:auto -80px -120px auto;width:300px;height:300px;background:radial-gradient(circle,rgba(251,191,36,.16),transparent 60%)}.tag{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line);border-radius:999px;padding:6px 10px;color:var(--muted);font-size:.82rem}.tag.alert{color:#fecdd3;border-color:rgba(251,113,133,.36);background:rgba(251,113,133,.10)}h1{margin:.35rem 0 .5rem;font-size:clamp(2rem,6vw,3.5rem);letter-spacing:-.06em}.subtitle{max-width:820px;color:var(--muted);font-size:1.04rem;line-height:1.55;margin:0}.actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}.stats{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px;margin:14px 0}.stat,.panel,.card{background:rgba(18,26,47,.82);border:1px solid var(--line);border-radius:var(--radius);padding:16px;box-shadow:0 14px 40px rgba(0,0,0,.18)}.stat strong{display:block;font-size:1.45rem}.stat span,.panel p,.panel li,.card p{color:var(--muted);line-height:1.5}.bar{height:10px;background:rgba(148,163,184,.18);border:1px solid var(--line);border-radius:999px;overflow:hidden;margin-top:10px}.bar span{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--accent),var(--good));transition:.2s}.layout{display:grid;grid-template-columns:.85fr 1.45fr;gap:14px}.form{display:grid;gap:10px}.field{display:grid;gap:6px}.field label{color:var(--muted);font-weight:800;font-size:.84rem}input,select,textarea{width:100%;border:1px solid var(--line);border-radius:14px;background:rgba(15,23,42,.74);color:var(--text);padding:10px 11px;font:inherit}textarea{min-height:86px;resize:vertical}.two{display:grid;grid-template-columns:1fr 1fr;gap:10px}.toolbar{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:12px}.toolbar input{flex:1;min-width:180px}.items{display:grid;gap:10px}.item{display:grid;gap:10px;background:rgba(15,23,42,.62);border:1px solid var(--line);border-radius:18px;padding:13px}.item-top{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}.item h3{margin:0;font-size:1.05rem}.meta{display:flex;gap:6px;flex-wrap:wrap}.pill{border:1px solid var(--line);border-radius:999px;padding:4px 8px;color:var(--muted);font-size:.78rem}.pill.good{color:#bbf7d0;border-color:rgba(52,211,153,.35);background:rgba(52,211,153,.09)}.pill.warn{color:#fde68a;border-color:rgba(251,191,36,.38);background:rgba(251,191,36,.10)}.pill.bad{color:#fecdd3;border-color:rgba(251,113,133,.38);background:rgba(251,113,133,.10)}.pill.blue{color:#bae6fd;border-color:rgba(56,189,248,.36);background:rgba(56,189,248,.10)}.item-actions{display:flex;gap:7px;flex-wrap:wrap}.empty{text-align:center;color:var(--muted);padding:26px;border:1px dashed var(--line);border-radius:18px}.hidden-input{display:none}.alertbox{border-color:rgba(251,113,133,.36);background:linear-gradient(135deg,rgba(251,113,133,.12),rgba(18,26,47,.78))}.money{color:#fde68a}.small-note{font-size:.88rem;color:var(--muted)}footer{text-align:center;color:var(--muted);font-size:.88rem;margin-top:24px}@media(max-width:980px){.layout,.stats{grid-template-columns:1fr}.two{grid-template-columns:1fr}.topbar{flex-direction:column;align-items:flex-start}.hero{padding:22px}}
+</style>
+<link rel="stylesheet" href="../../emma-theme.css">
+<script src="../../emma-shell.js" data-base="../../" data-current="botiquin" data-version="v1.3" defer></script>
+</head>
+<body class="emma-module emma-module-botiquin">
+<header class="emma-system-bar" role="banner"><a class="emma-system-brand" href="../../index.html"><span class="emma-mark">E</span><span><b>Emma OS</b><small>v1.3 · Botiquín</small></span></a></header>
+<div class="emma-module-note">Emma OS v1.3 · inventario local del botiquín · no registra dosis ni reemplaza indicaciones médicas.</div>
+<div class="wrap">
+  <div class="topbar"><div class="brand">Emma OS · Botiquín</div><a class="btn" href="../../">← Volver al inicio</a></div>
+
+  <section class="hero">
+    <span class="tag alert">⚠ Alergia registrada: dipirona / metamizol</span>
+    <h1>Botiquín doméstico</h1>
+    <p class="subtitle">Inventario simple para saber qué tienes, qué falta, qué comprar este mes y qué elementos vencen pronto. Los datos quedan guardados sólo en este dispositivo.</p>
+    <div class="actions">
+      <button class="btn primary" id="quickBuy" type="button">Ver compras pendientes</button>
+      <button class="btn" id="quickMissing" type="button">Ver faltantes</button>
+      <button class="btn" id="exportBtn" type="button">Exportar JSON</button>
+      <button class="btn" id="importBtn" type="button">Importar JSON</button>
+      <input id="fileInput" class="hidden-input" type="file" accept="application/json,.json">
+    </div>
+  </section>
+
+  <section class="stats">
+    <div class="stat"><strong id="coverageStat">0%</strong><span>cobertura</span><div class="bar"><span id="coverageBar"></span></div></div>
+    <div class="stat"><strong id="availableStat">0</strong><span>disponibles</span></div>
+    <div class="stat"><strong id="missingStat">0</strong><span>faltantes</span></div>
+    <div class="stat"><strong id="buyStat">0</strong><span>comprar este mes</span></div>
+    <div class="stat"><strong id="moneyStat">$0</strong><span>estimado pendiente</span></div>
+  </section>
+
+  <section class="layout">
+    <aside class="panel alertbox">
+      <h2>Alerta fija</h2>
+      <p><strong>No comprar ni usar medicamentos que contengan dipirona/metamizol.</strong></p>
+      <p class="small-note">Este módulo está pensado para inventario y compras. Para dosis, reemplazos o indicaciones médicas, usar siempre indicación profesional o información oficial del producto.</p>
+      <hr style="border:0;border-top:1px solid var(--line);margin:14px 0">
+      <h2 id="formTitle">Añadir ítem</h2>
+      <form class="form" id="itemForm">
+        <input type="hidden" id="editId">
+        <div class="field"><label>Nombre</label><input id="name" required placeholder="Ej: Gasas estériles"></div>
+        <div class="two">
+          <div class="field"><label>Categoría</label><select id="category"><option>Medicamentos básicos</option><option>Curaciones</option><option>Higiene / protección</option><option>Herramientas</option><option>Documentos / alertas</option><option>Pendientes de compra</option></select></div>
+          <div class="field"><label>Estado</label><select id="status"><option value="disponible">Disponible</option><option value="falta">Falta</option><option value="comprar">Comprar este mes</option><option value="postergado">Postergado</option></select></div>
+        </div>
+        <div class="two">
+          <div class="field"><label>Cantidad</label><input id="quantity" type="number" min="0" step="1" value="1"></div>
+          <div class="field"><label>Unidad</label><input id="unit" placeholder="caja, unidad, paquete"></div>
+        </div>
+        <div class="two">
+          <div class="field"><label>Prioridad</label><select id="priority"><option value="alta">Alta</option><option value="media" selected>Media</option><option value="baja">Baja</option></select></div>
+          <div class="field"><label>Vencimiento</label><input id="expiry" type="date"></div>
+        </div>
+        <div class="field"><label>Estimado CLP</label><input id="estimated" type="number" min="0" step="100" placeholder="Ej: 3500"></div>
+        <div class="field"><label>Notas</label><textarea id="notes" placeholder="Observaciones, marca, ubicación, etc."></textarea></div>
+        <div class="actions"><button class="btn primary" type="submit">Guardar ítem</button><button class="btn" id="cancelEdit" type="button">Limpiar</button></div>
+      </form>
+    </aside>
+
+    <main class="panel">
+      <div class="toolbar">
+        <input id="search" placeholder="Buscar en botiquín...">
+        <select id="filter">
+          <option value="todos">Todos</option>
+          <option value="disponible">Disponibles</option>
+          <option value="falta">Faltantes</option>
+          <option value="comprar">Comprar este mes</option>
+          <option value="vence">Vencen pronto</option>
+          <option value="vencido">Vencidos</option>
+          <option value="alta">Alta prioridad</option>
+        </select>
+        <select id="sort">
+          <option value="priority">Prioridad</option>
+          <option value="status">Estado</option>
+          <option value="expiry">Vencimiento</option>
+          <option value="name">Nombre</option>
+        </select>
+      </div>
+      <div class="items" id="items"></div>
+    </main>
+  </section>
+
+  <footer>Emma OS v1.3 · Botiquín guardado en <code>emmaos_botiquin_v1</code></footer>
+</div>
+
+<script>
+const STORAGE_KEY='emmaos_botiquin_v1';
+const DEFAULT_ITEMS=[
+  {name:'Advertencia impresa de alergia a dipirona/metamizol',category:'Documentos / alertas',status:'disponible',quantity:1,unit:'hoja',priority:'alta',expiry:'',estimated:0,notes:'Mantener visible dentro del botiquín.'},
+  {name:'Recipiente del botiquín',category:'Herramientas',status:'disponible',quantity:1,unit:'unidad',priority:'media',expiry:'',estimated:0,notes:'Ubicación ya definida.'},
+  {name:'Paracetamol',category:'Medicamentos básicos',status:'comprar',quantity:0,unit:'caja',priority:'alta',expiry:'',estimated:3000,notes:'Comprar sólo si es compatible contigo y revisar componentes.'},
+  {name:'Suero fisiológico',category:'Curaciones',status:'comprar',quantity:0,unit:'unidad',priority:'alta',expiry:'',estimated:2500,notes:''},
+  {name:'Gasas estériles',category:'Curaciones',status:'comprar',quantity:0,unit:'paquete',priority:'alta',expiry:'',estimated:2500,notes:''},
+  {name:'Parches curita',category:'Curaciones',status:'comprar',quantity:0,unit:'caja',priority:'media',expiry:'',estimated:2000,notes:''},
+  {name:'Alcohol gel o antiséptico',category:'Higiene / protección',status:'falta',quantity:0,unit:'unidad',priority:'media',expiry:'',estimated:2500,notes:''},
+  {name:'Guantes desechables',category:'Higiene / protección',status:'falta',quantity:0,unit:'caja/par',priority:'media',expiry:'',estimated:2500,notes:''},
+  {name:'Termómetro',category:'Herramientas',status:'postergado',quantity:0,unit:'unidad',priority:'media',expiry:'',estimated:5000,notes:''},
+  {name:'Tijeras pequeñas',category:'Herramientas',status:'postergado',quantity:0,unit:'unidad',priority:'baja',expiry:'',estimated:2500,notes:''}
+];
+let state=load();
+if(!localStorage.getItem(STORAGE_KEY)) localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+function uid(){return Math.random().toString(36).slice(2,10)+Date.now().toString(36).slice(-4)}
+function normalizeItem(item){return {id:item.id||uid(),name:item.name||'',category:item.category||'Pendientes de compra',status:item.status||'falta',quantity:Number(item.quantity||0),unit:item.unit||'',priority:item.priority||'media',expiry:item.expiry||'',estimated:Number(item.estimated||0),notes:item.notes||'',createdAt:item.createdAt||new Date().toISOString(),updatedAt:item.updatedAt||new Date().toISOString()}}
+function load(){try{const raw=localStorage.getItem(STORAGE_KEY);if(raw){const parsed=JSON.parse(raw);return {...parsed,items:(parsed.items||[]).map(normalizeItem)}}}catch{} return {version:1,createdAt:new Date().toISOString(),updatedAt:new Date().toISOString(),budgetMin:15000,budgetMax:20000,items:DEFAULT_ITEMS.map(normalizeItem)}}
+function save(){state.updatedAt=new Date().toISOString();localStorage.setItem(STORAGE_KEY,JSON.stringify(state));render();}
+function peso(n){return '$'+Number(n||0).toLocaleString('es-CL')}
+function daysUntil(date){if(!date)return null;const today=new Date();today.setHours(0,0,0,0);const d=new Date(date+'T00:00:00');return Math.ceil((d-today)/86400000)}
+function expiryState(item){const days=daysUntil(item.expiry);if(days===null)return 'sin';if(days<0)return 'vencido';if(days<=45)return 'vence';return 'ok'}
+function priorityWeight(p){return p==='alta'?0:p==='media'?1:2}
+function statusLabel(s){return {disponible:'Disponible',falta:'Falta',comprar:'Comprar este mes',postergado:'Postergado'}[s]||s}
+function statusClass(s){return s==='disponible'?'good':s==='comprar'?'warn':s==='falta'?'bad':'blue'}
+function filtered(){const q=document.getElementById('search').value.trim().toLowerCase();const f=document.getElementById('filter').value;const sort=document.getElementById('sort').value;let arr=[...state.items];if(q) arr=arr.filter(i=>[i.name,i.category,i.status,i.priority,i.notes].join(' ').toLowerCase().includes(q));if(f==='disponible') arr=arr.filter(i=>i.status==='disponible');if(f==='falta') arr=arr.filter(i=>i.status==='falta');if(f==='comprar') arr=arr.filter(i=>i.status==='comprar');if(f==='vence') arr=arr.filter(i=>expiryState(i)==='vence');if(f==='vencido') arr=arr.filter(i=>expiryState(i)==='vencido');if(f==='alta') arr=arr.filter(i=>i.priority==='alta');arr.sort((a,b)=>{if(sort==='priority')return priorityWeight(a.priority)-priorityWeight(b.priority)||a.name.localeCompare(b.name);if(sort==='status')return a.status.localeCompare(b.status)||priorityWeight(a.priority)-priorityWeight(b.priority);if(sort==='expiry')return (a.expiry||'9999-12-31').localeCompare(b.expiry||'9999-12-31');return a.name.localeCompare(b.name)});return arr;}
+function renderStats(){const total=state.items.length;const available=state.items.filter(i=>i.status==='disponible').length;const missing=state.items.filter(i=>i.status==='falta').length;const buying=state.items.filter(i=>i.status==='comprar').length;const estimate=state.items.filter(i=>i.status==='comprar'||i.status==='falta').reduce((a,i)=>a+Number(i.estimated||0),0);const coverage=total?Math.round(available/total*100):0;document.getElementById('coverageStat').textContent=coverage+'%';document.getElementById('coverageBar').style.width=coverage+'%';document.getElementById('availableStat').textContent=available;document.getElementById('missingStat').textContent=missing;document.getElementById('buyStat').textContent=buying;document.getElementById('moneyStat').textContent=peso(estimate);}
+function renderItems(){const list=filtered();const box=document.getElementById('items');if(!list.length){box.innerHTML='<div class="empty">No hay ítems para este filtro.</div>';return;}box.innerHTML=list.map(i=>{const exp=expiryState(i);const expPill=exp==='vencido'?'<span class="pill bad">Vencido</span>':exp==='vence'?'<span class="pill warn">Vence pronto</span>':i.expiry?'<span class="pill good">Vigente</span>':'<span class="pill">Sin vencimiento</span>';return `<article class="item"><div class="item-top"><div><h3>${escapeHtml(i.name)}</h3><div class="meta"><span class="pill ${statusClass(i.status)}">${statusLabel(i.status)}</span><span class="pill">${escapeHtml(i.category)}</span><span class="pill ${i.priority==='alta'?'bad':i.priority==='media'?'warn':'blue'}">Prioridad ${i.priority}</span>${expPill}</div></div><div class="money">${i.estimated?peso(i.estimated):''}</div></div><p class="small-note">Cantidad: <strong>${i.quantity||0}</strong> ${escapeHtml(i.unit||'')} ${i.expiry?'· vence: '+i.expiry:''}</p>${i.notes?`<p>${escapeHtml(i.notes)}</p>`:''}<div class="item-actions"><button class="btn small" onclick="setStatus('${i.id}','disponible')">Tengo</button><button class="btn small" onclick="setStatus('${i.id}','falta')">Falta</button><button class="btn small" onclick="setStatus('${i.id}','comprar')">Comprar</button><button class="btn small" onclick="markBought('${i.id}')">Comprado</button><button class="btn small" onclick="editItem('${i.id}')">Editar</button><button class="btn small danger" onclick="deleteItem('${i.id}')">Eliminar</button></div></article>`}).join('');}
+function escapeHtml(str){return String(str||'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]));}
+function render(){renderStats();renderItems();}
+window.setStatus=function(id,status){const item=state.items.find(i=>i.id===id);if(!item)return;item.status=status;item.updatedAt=new Date().toISOString();if(status==='disponible'&&item.quantity===0)item.quantity=1;save();}
+window.markBought=function(id){const item=state.items.find(i=>i.id===id);if(!item)return;item.status='disponible';if(item.quantity===0)item.quantity=1;item.updatedAt=new Date().toISOString();save();}
+window.deleteItem=function(id){if(!confirm('¿Eliminar este ítem del botiquín?'))return;state.items=state.items.filter(i=>i.id!==id);save();}
+window.editItem=function(id){const i=state.items.find(x=>x.id===id);if(!i)return;document.getElementById('formTitle').textContent='Editar ítem';document.getElementById('editId').value=i.id;document.getElementById('name').value=i.name;document.getElementById('category').value=i.category;document.getElementById('status').value=i.status;document.getElementById('quantity').value=i.quantity;document.getElementById('unit').value=i.unit;document.getElementById('priority').value=i.priority;document.getElementById('expiry').value=i.expiry;document.getElementById('estimated').value=i.estimated||'';document.getElementById('notes').value=i.notes;window.scrollTo({top:0,behavior:'smooth'});}
+function clearForm(){document.getElementById('formTitle').textContent='Añadir ítem';document.getElementById('itemForm').reset();document.getElementById('editId').value='';document.getElementById('quantity').value=1;document.getElementById('priority').value='media';}
+document.getElementById('itemForm').addEventListener('submit',e=>{e.preventDefault();const id=document.getElementById('editId').value;const data=normalizeItem({id,name:document.getElementById('name').value.trim(),category:document.getElementById('category').value,status:document.getElementById('status').value,quantity:document.getElementById('quantity').value,unit:document.getElementById('unit').value.trim(),priority:document.getElementById('priority').value,expiry:document.getElementById('expiry').value,estimated:document.getElementById('estimated').value,notes:document.getElementById('notes').value.trim()});if(!data.name)return;if(id){const idx=state.items.findIndex(i=>i.id===id);if(idx>=0)state.items[idx]={...state.items[idx],...data,updatedAt:new Date().toISOString()};}else{state.items.push(data);}clearForm();save();});
+document.getElementById('cancelEdit').addEventListener('click',clearForm);document.getElementById('search').addEventListener('input',renderItems);document.getElementById('filter').addEventListener('change',renderItems);document.getElementById('sort').addEventListener('change',renderItems);document.getElementById('quickBuy').addEventListener('click',()=>{document.getElementById('filter').value='comprar';renderItems();});document.getElementById('quickMissing').addEventListener('click',()=>{document.getElementById('filter').value='falta';renderItems();});
+function filenameDate(){const d=new Date();const p=n=>String(n).padStart(2,'0');return `${d.getFullYear()}-${p(d.getMonth()+1)}-${p(d.getDate())}_${p(d.getHours())}-${p(d.getMinutes())}`}
+document.getElementById('exportBtn').addEventListener('click',()=>{const blob=new Blob([JSON.stringify(state,null,2)],{type:'application/json'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download=`emma-os-botiquin-${filenameDate()}.json`;document.body.appendChild(a);a.click();a.remove();URL.revokeObjectURL(url);});
+document.getElementById('importBtn').addEventListener('click',()=>document.getElementById('fileInput').click());document.getElementById('fileInput').addEventListener('change',async e=>{const file=e.target.files?.[0];if(!file)return;try{const parsed=JSON.parse(await file.text());const items=Array.isArray(parsed.items)?parsed.items:Array.isArray(parsed)?parsed:null;if(!items){alert('El archivo no parece ser un respaldo de botiquín.');return;}if(!confirm('Esto reemplazará el botiquín local por el archivo importado. ¿Continuar?'))return;state={version:1,createdAt:parsed.createdAt||new Date().toISOString(),updatedAt:new Date().toISOString(),budgetMin:parsed.budgetMin||15000,budgetMax:parsed.budgetMax||20000,items:items.map(normalizeItem)};save();}catch{alert('No pude importar el JSON.');}e.target.value='';});
+render();
+</script>
+</body>
+</html>

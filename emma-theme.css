@@ -1,4 +1,4 @@
-/* Emma OS v1.2 — estándar visual global */
+/* Emma OS v1.3 — estándar visual global + navegación lateral */
 :root{
   color-scheme: dark;
   --emma-bg:#0d1324;
@@ -248,3 +248,22 @@ body.emma-module footer{color:var(--emma-muted)!important}
   body.emma-module .wrap{padding-top:12px!important}
 }
 @media print{.emma-system-bar,.emma-module-note{display:none!important}}
+
+
+/* Emma OS v1.3 — navegación lateral desplegable */
+.emma-system-bar{display:none!important}
+.emma-module-note{margin-left:76px;margin-right:14px}
+.emma-shell-toggle{position:fixed;top:14px;left:14px;z-index:1001;display:inline-flex;align-items:center;gap:9px;border:1px solid var(--emma-line);background:rgba(17,24,39,.82);backdrop-filter:blur(16px);color:var(--emma-text);border-radius:999px;padding:10px 13px;font-weight:900;box-shadow:0 14px 45px rgba(0,0,0,.30);cursor:pointer;font:inherit}
+.emma-shell-toggle span{font-size:1.15rem;line-height:1}.emma-shell-toggle:hover{filter:brightness(1.12)}
+.emma-shell-overlay{position:fixed;inset:0;background:rgba(2,6,23,.58);backdrop-filter:blur(3px);z-index:1002;opacity:0;pointer-events:none;transition:.18s}
+.emma-shell-drawer{position:fixed;inset:0 auto 0 0;width:min(390px,calc(100vw - 30px));z-index:1003;background:linear-gradient(180deg,rgba(18,26,47,.98),rgba(10,15,29,.98));border-right:1px solid var(--emma-line);box-shadow:24px 0 70px rgba(0,0,0,.45);transform:translateX(-104%);transition:transform .22s ease;display:flex;flex-direction:column;color:var(--emma-text)}
+.emma-shell-open .emma-shell-overlay{opacity:1;pointer-events:auto}.emma-shell-open .emma-shell-drawer{transform:translateX(0)}
+.emma-shell-head{display:grid;grid-template-columns:48px 1fr auto;gap:12px;align-items:center;padding:18px;border-bottom:1px solid var(--emma-line)}
+.emma-shell-logo{width:48px;height:48px;border-radius:17px;display:grid;place-items:center;background:linear-gradient(135deg,var(--emma-cyan),var(--emma-violet));color:#06111f;font-weight:950;font-size:1.35rem;box-shadow:0 16px 35px rgba(56,189,248,.16)}
+.emma-shell-head strong{display:block;font-size:1.15rem}.emma-shell-head small,.emma-shell-item small{display:block;color:var(--emma-muted);line-height:1.35}.emma-shell-close{width:38px;height:38px;border-radius:999px;border:1px solid var(--emma-line);background:rgba(255,255,255,.06);color:var(--emma-text);font-size:1.4rem;cursor:pointer}.emma-shell-close:hover{filter:brightness(1.15)}
+.emma-shell-list{padding:12px;display:grid;gap:9px;overflow:auto}.emma-shell-item{display:grid;grid-template-columns:44px 1fr;gap:11px;align-items:center;text-decoration:none;color:var(--emma-text);background:rgba(15,23,42,.55);border:1px solid var(--emma-line);border-radius:18px;padding:11px;transition:.15s}.emma-shell-item:hover{transform:translateX(2px);filter:brightness(1.1)}.emma-shell-item.active{background:linear-gradient(135deg,rgba(56,189,248,.16),rgba(167,139,250,.10));border-color:rgba(56,189,248,.42)}
+.emma-shell-icon{width:44px;height:44px;border-radius:15px;display:grid;place-items:center;background:rgba(255,255,255,.08);border:1px solid var(--emma-line);font-size:1.22rem}.emma-shell-item[data-accent="amber"] .emma-shell-icon{background:rgba(251,191,36,.13);border-color:rgba(251,191,36,.35)}.emma-shell-item[data-accent="green"] .emma-shell-icon{background:rgba(52,211,153,.12);border-color:rgba(52,211,153,.34)}.emma-shell-item[data-accent="violet"] .emma-shell-icon{background:rgba(167,139,250,.12);border-color:rgba(167,139,250,.35)}
+.emma-shell-foot{margin-top:auto;border-top:1px solid var(--emma-line);padding:14px 18px;display:flex;justify-content:space-between;gap:12px;color:var(--emma-muted);font-size:.82rem}
+.emma-module-botiquin{--app-accent:#fbbf24;--app-accent-2:#fb7185;--app-good:#34d399;--accent:#fbbf24;--good:#34d399;--warn:#fb7185}
+@media(max-width:720px){.emma-shell-toggle{top:10px;left:10px;padding:9px 11px}.emma-shell-toggle b{display:none}.emma-module-note{margin-left:58px}.emma-shell-drawer{width:min(360px,calc(100vw - 20px))}}
+.emma-home .grid{grid-template-columns:repeat(auto-fit,minmax(220px,1fr))!important}
