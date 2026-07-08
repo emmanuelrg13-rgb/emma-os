@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Centro de respaldos · Emma OS</title>
+<meta name="theme-color" content="#111827">
+<style>
+:root{--bg:#0d1324;--panel:#121a2f;--panel2:#17223d;--card:#0f172a;--text:#e5e7eb;--muted:#9ca3af;--line:rgba(148,163,184,.24);--accent:#38bdf8;--good:#34d399;--warn:#fbbf24;--violet:#a78bfa;--rose:#fb7185;--shadow:0 24px 70px rgba(0,0,0,.36);--radius:22px}
+*{box-sizing:border-box}body{margin:0;min-height:100vh;font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:radial-gradient(circle at top left,rgba(56,189,248,.22),transparent 34rem),radial-gradient(circle at bottom right,rgba(167,139,250,.12),transparent 32rem),var(--bg);color:var(--text)}a{color:inherit}.wrap{width:min(100% - 28px,1100px);margin:0 auto;padding:20px 0 44px}.topbar{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:14px}.brand{font-weight:900;color:var(--accent);letter-spacing:.12em;text-transform:uppercase;font-size:.78rem}.btn{display:inline-flex;align-items:center;gap:8px;text-decoration:none;border:1px solid var(--line);background:var(--panel2);color:var(--text);border-radius:999px;padding:11px 14px;font-weight:850;cursor:pointer;font:inherit}.btn.primary{background:linear-gradient(135deg,var(--accent),var(--good));color:#04111e;border:0}.btn.warn{background:rgba(251,191,36,.16);border-color:rgba(251,191,36,.32)}.btn.rose{background:rgba(251,113,133,.16);border-color:rgba(251,113,133,.32)}.btn:hover{filter:brightness(1.12)}.hero{background:linear-gradient(135deg,rgba(18,26,47,.96),rgba(23,34,61,.78));border:1px solid var(--line);border-radius:30px;padding:26px;box-shadow:var(--shadow)}h1{margin:.25rem 0 .5rem;font-size:clamp(2rem,6vw,3.6rem);letter-spacing:-.06em}.subtitle{max-width:800px;color:var(--muted);font-size:1.04rem;line-height:1.55;margin:0}.actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}.grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin-top:16px}.card,.panel{background:rgba(18,26,47,.82);border:1px solid var(--line);border-radius:var(--radius);padding:18px;box-shadow:0 14px 40px rgba(0,0,0,.20)}.card h2,.panel h2{margin:0 0 8px}.card p,.panel p,.panel li{color:var(--muted);line-height:1.55}.stat{font-size:2rem;font-weight:900}.tag{display:inline-flex;border:1px solid var(--line);border-radius:999px;padding:6px 9px;color:var(--muted);font-size:.82rem}.ok{color:var(--good)}.no{color:var(--warn)}.mono{font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono",monospace}.modules{display:grid;gap:10px}.module-row{display:flex;justify-content:space-between;align-items:center;gap:12px;background:rgba(15,23,42,.55);border:1px solid var(--line);border-radius:16px;padding:12px}.module-row small{color:var(--muted)}.log{min-height:42px;background:rgba(15,23,42,.65);border:1px solid var(--line);border-radius:16px;padding:12px;color:var(--muted);white-space:pre-wrap}.hidden-input{display:none}.steps{display:grid;gap:10px}.step{display:flex;gap:10px;align-items:flex-start;background:rgba(15,23,42,.48);border:1px solid var(--line);border-radius:16px;padding:12px}.dot{width:28px;height:28px;border-radius:999px;display:grid;place-items:center;flex:0 0 auto;background:linear-gradient(135deg,var(--accent),var(--violet));color:#06111f;font-weight:900}footer{color:var(--muted);text-align:center;margin-top:24px;font-size:.9rem}@media(max-width:860px){.grid{grid-template-columns:1fr}.module-row{align-items:flex-start;flex-direction:column}.topbar{flex-direction:column;align-items:flex-start}.hero{padding:22px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="topbar">
+    <div class="brand">Emma OS · Centro de respaldos</div>
+    <a class="btn" href="../../">← Volver al inicio</a>
+  </div>
+
+  <section class="hero">
+    <span class="tag">Emma OS v1.1</span>
+    <h1>Respaldos y actualización</h1>
+    <p class="subtitle">Desde aquí puedes exportar todo Emma OS en un solo archivo JSON, importar una copia anterior y revisar qué módulos tienen datos guardados en este dispositivo.</p>
+    <div class="actions">
+      <button class="btn primary" id="exportAll" type="button">Exportar respaldo global</button>
+      <button class="btn" id="importAll" type="button">Importar respaldo global</button>
+      <input class="hidden-input" id="fileInput" type="file" accept="application/json,.json">
+      <button class="btn" id="refresh" type="button">Actualizar estado</button>
+    </div>
+  </section>
+
+  <section class="grid">
+    <div class="card"><h2>Último respaldo</h2><div class="stat" id="lastBackup">—</div><p>Se actualiza cuando exportas un respaldo global desde esta pantalla.</p></div>
+    <div class="card"><h2>Módulos con datos</h2><div class="stat" id="modulesWithData">0/3</div><p>Cuenta los módulos que tienen información guardada en localStorage.</p></div>
+    <div class="card"><h2>Versión del sistema</h2><div class="stat">v1.1</div><p>Base estable: dashboard, módulos y centro de respaldo.</p></div>
+  </section>
+
+  <section class="panel">
+    <h2>Estado de módulos</h2>
+    <div class="modules" id="moduleStatus"></div>
+  </section>
+
+  <section class="panel">
+    <h2>Protocolo antes de subir una versión nueva</h2>
+    <div class="steps">
+      <div class="step"><div class="dot">1</div><div><strong>Exporta respaldo global</strong><br><span>Guarda el archivo JSON en una carpeta segura, Drive o tu computador.</span></div></div>
+      <div class="step"><div class="dot">2</div><div><strong>Actualiza GitHub Pages</strong><br><span>Sube los archivos nuevos del ZIP al repositorio y haz commit.</span></div></div>
+      <div class="step"><div class="dot">3</div><div><strong>Prueba en computador</strong><br><span>Abre la portada y entra a cada módulo. Verifica que tus datos sigan ahí.</span></div></div>
+      <div class="step"><div class="dot">4</div><div><strong>Prueba en teléfono</strong><br><span>Abre la app instalada. Si el navegador quedó con versión antigua, cierra y reabre la app.</span></div></div>
+      <div class="step"><div class="dot">5</div><div><strong>Importa sólo si hace falta</strong><br><span>Si algo no aparece, importa el respaldo global desde esta misma pantalla.</span></div></div>
+    </div>
+  </section>
+
+  <section class="panel">
+    <h2>Resultado</h2>
+    <div class="log" id="log">Listo para respaldar.</div>
+  </section>
+
+  <footer>Emma OS v1.1 · los respaldos son archivos JSON locales</footer>
+</div>
+
+<script>
+const VERSION='1.1';
+const MODULES=[
+  {id:'pendientes',name:'Pendientes diarios',key:'emmaos_pendientes_v1',url:'../pendientes/'},
+  {id:'arrowverse',name:'Arrowverso',key:'emmaos_arrowverse_v1',url:'../arrowverse/'},
+  {id:'rutina_atomica',name:'Rutina atómica',key:'emmaos_rutina_atomica_v1',url:'../rutina-atomica/'}
+];
+const logEl=document.getElementById('log');
+function log(msg){logEl.textContent=msg;}
+function safeParse(raw){try{return raw?JSON.parse(raw):null}catch{return null}}
+function friendlyDate(iso){if(!iso)return 'Sin respaldo';try{return new Date(iso).toLocaleString('es-CL',{dateStyle:'short',timeStyle:'short'});}catch{return 'Sin respaldo'}}
+function byteSize(str){return new Blob([str||'']).size;}
+function formatBytes(bytes){if(!bytes)return '0 B'; if(bytes<1024)return bytes+' B'; if(bytes<1024*1024)return (bytes/1024).toFixed(1)+' KB'; return (bytes/1024/1024).toFixed(2)+' MB';}
+function filenameDate(){const d=new Date();const pad=n=>String(n).padStart(2,'0');return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}_${pad(d.getHours())}-${pad(d.getMinutes())}`;}
+function collectBackup(){const modules={};for(const mod of MODULES){const raw=localStorage.getItem(mod.key);modules[mod.id]={name:mod.name,key:mod.key,raw:raw,data:safeParse(raw),sizeBytes:byteSize(raw)};}return {app:'Emma OS',backupVersion:1,emmaOsVersion:VERSION,exportedAt:new Date().toISOString(),origin:location.origin,modules};}
+function downloadJson(obj){const text=JSON.stringify(obj,null,2);const blob=new Blob([text],{type:'application/json'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download=`emma-os-respaldo-${filenameDate()}.json`;document.body.appendChild(a);a.click();a.remove();URL.revokeObjectURL(url);localStorage.setItem('emmaos_last_backup_at',obj.exportedAt);render();log('Respaldo global exportado correctamente. Guarda ese JSON como copia de seguridad.');}
+function render(){const last=localStorage.getItem('emmaos_last_backup_at');document.getElementById('lastBackup').textContent=friendlyDate(last);let count=0;const rows=MODULES.map(mod=>{const raw=localStorage.getItem(mod.key);const has=!!raw; if(has)count++; const parsed=safeParse(raw); let detail=has?`${formatBytes(byteSize(raw))} guardados`:'sin datos'; if(parsed?.updatedAt) detail+=` · actualizado ${friendlyDate(parsed.updatedAt)}`; if(parsed?.date) detail+=` · día ${parsed.date}`; return `<div class="module-row"><div><strong>${mod.name}</strong><br><small class="mono">${mod.key}</small><br><small>${detail}</small></div><div><span class="tag ${has?'ok':'no'}">${has?'Con datos':'Sin datos'}</span> <a class="btn" href="${mod.url}">Abrir</a></div></div>`;}).join('');document.getElementById('moduleStatus').innerHTML=rows;document.getElementById('modulesWithData').textContent=`${count}/${MODULES.length}`;}
+async function importFile(file){try{const text=await file.text();const json=JSON.parse(text);if(!json.modules){log('El archivo no parece ser un respaldo global de Emma OS. Usa el respaldo exportado desde esta pantalla.');return;}const available=MODULES.filter(mod=>json.modules[mod.id]);if(!available.length){log('El respaldo no contiene módulos reconocidos.');return;}const names=available.map(m=>m.name).join(', ');const ok=confirm(`Esto reemplazará los datos locales de: ${names}.\n\n¿Quieres continuar?`);if(!ok){log('Importación cancelada.');return;}for(const mod of available){const entry=json.modules[mod.id];if(entry.raw){localStorage.setItem(mod.key,entry.raw);}else if(entry.data!==undefined&&entry.data!==null){localStorage.setItem(mod.key,JSON.stringify(entry.data));}}
+localStorage.setItem('emmaos_last_import_at',new Date().toISOString());render();log(`Respaldo importado correctamente: ${names}. Revisa cada módulo para confirmar que todo esté bien.`);}catch(err){log('No pude importar el archivo. Revisa que sea un JSON válido de Emma OS.');}}
+document.getElementById('exportAll').addEventListener('click',()=>downloadJson(collectBackup()));
+document.getElementById('importAll').addEventListener('click',()=>document.getElementById('fileInput').click());
+document.getElementById('fileInput').addEventListener('change',e=>{const file=e.target.files?.[0]; if(file) importFile(file); e.target.value='';});
+document.getElementById('refresh').addEventListener('click',()=>{render();log('Estado actualizado.');});
+render();
+</script>
+</body>
+</html>

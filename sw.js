@@ -1,4 +1,4 @@
-const CACHE_NAME = 'emma-os-v1-cache-001';
+const CACHE_NAME = 'emma-os-v1-1-cache-001';
 const ASSETS = [
   './',
   './index.html',
@@ -9,6 +9,8 @@ const ASSETS = [
   './apps/arrowverse/index.html',
   './apps/rutina-atomica/',
   './apps/rutina-atomica/index.html',
+  './apps/respaldo/',
+  './apps/respaldo/index.html',
   './icons/icon-192.png',
   './icons/icon-512.png'
 ];

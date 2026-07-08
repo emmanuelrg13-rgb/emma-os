@@ -1,7 +1,7 @@
 {
-  "name": "Emma OS v1",
+  "name": "Emma OS v1.1",
   "short_name": "Emma OS",
-  "description": "Centro de control personal con pendientes, Arrowverso y rutina atómica.",
+  "description": "Centro de control personal con pendientes, Arrowverso, rutina atómica y respaldos.",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
