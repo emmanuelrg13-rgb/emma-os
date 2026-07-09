@@ -1,0 +1,148 @@
+const SHEET_NAME = 'EmmaOS_Backups';
+const SECRET = 'CAMBIA_ESTA_CLAVE';
+
+function doGet(e) {
+  try {
+    const req = Object.assign({}, e.parameter || {});
+    const callback = req.callback || '';
+    delete req.callback;
+    const out = handle_(req);
+    return jsonp_(out, callback);
+  } catch (err) {
+    return jsonp_({ ok: false, error: String(err && err.message ? err.message : err) }, e && e.parameter ? e.parameter.callback : '');
+  }
+}
+
+function doPost(e) {
+  try {
+    const req = parsePost_(e);
+    const out = handle_(req);
+    return json_(out);
+  } catch (err) {
+    return json_({ ok: false, error: String(err && err.message ? err.message : err) });
+  }
+}
+
+function parsePost_(e) {
+  const params = (e && e.parameter) ? e.parameter : {};
+
+  // v1.5.2: Emma OS now submits through a hidden HTML form to avoid mobile/CORS issues.
+  // The full request is stored in the payload field.
+  if (params.payload) {
+    return JSON.parse(params.payload);
+  }
+
+  // Compatibility with older/simple form posts.
+  if (params.action) {
+    const req = Object.assign({}, params);
+    if (typeof req.backup === 'string') req.backup = JSON.parse(req.backup);
+    return req;
+  }
+
+  // Compatibility with JSON POST from older builds.
+  const body = (e && e.postData && e.postData.contents) ? e.postData.contents : '';
+  if (body) return JSON.parse(body);
+
+  return {};
+}
+
+function handle_(req) {
+  if (SECRET && req.secret !== SECRET) {
+    return { ok: false, error: 'Clave de sincronización inválida.' };
+  }
+  if (req.action === 'test') {
+    getSheet_();
+    return { ok: true, message: 'Conexión OK', now: new Date().toISOString() };
+  }
+  if (req.action === 'saveBackup') {
+    return saveBackup_(req.backup);
+  }
+  if (req.action === 'loadLatest') {
+    return loadLatest_();
+  }
+  return { ok: false, error: 'Acción no reconocida.' };
+}
+
+function getSheet_() {
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  let sh = ss.getSheetByName(SHEET_NAME);
+  if (!sh) {
+    sh = ss.insertSheet(SHEET_NAME);
+    sh.appendRow(['backupId','exportedAt','emmaOsVersion','moduleId','moduleName','key','rawJson']);
+  }
+  return sh;
+}
+
+function saveBackup_(backup) {
+  if (!backup || !backup.modules) return { ok: false, error: 'Respaldo vacío o inválido.' };
+  const sh = getSheet_();
+  const backupId = Utilities.getUuid();
+  const exportedAt = backup.exportedAt || new Date().toISOString();
+  const version = backup.emmaOsVersion || '';
+  let count = 0;
+  Object.keys(backup.modules).forEach(moduleId => {
+    const m = backup.modules[moduleId];
+    if (!m) return;
+    const raw = m.raw || (m.data !== undefined && m.data !== null ? JSON.stringify(m.data) : '');
+    if (!raw) return;
+    sh.appendRow([backupId, exportedAt, version, moduleId, m.name || '', m.key || '', raw]);
+    count++;
+  });
+  if (!count) return { ok: false, error: 'No había módulos con datos para guardar.' };
+  PropertiesService.getDocumentProperties().setProperty('latestBackupId', backupId);
+  return { ok: true, backupId, moduleCount: count, exportedAt, version };
+}
+
+function loadLatest_() {
+  const sh = getSheet_();
+  const values = sh.getDataRange().getValues();
+  if (values.length < 2) return { ok: false, error: 'No hay respaldos guardados todavía.' };
+  const latestFromProps = PropertiesService.getDocumentProperties().getProperty('latestBackupId');
+  const backupId = latestFromProps || values[values.length - 1][0];
+  const modules = {};
+  let exportedAt = '';
+  let version = '';
+  for (let i = 1; i < values.length; i++) {
+    const row = values[i];
+    if (row[0] !== backupId) continue;
+    const moduleId = row[3];
+    exportedAt = row[1] || exportedAt;
+    version = row[2] || version;
+    modules[moduleId] = {
+      id: moduleId,
+      name: row[4] || moduleId,
+      key: row[5] || '',
+      raw: row[6] || '',
+      data: null
+    };
+  }
+  if (!Object.keys(modules).length) return { ok: false, error: 'No se encontraron módulos para el último respaldo.' };
+  return {
+    ok: true,
+    backupId,
+    backup: {
+      app: 'Emma OS',
+      backupType: 'emma-os-sheets-latest',
+      schemaVersion: 2,
+      emmaOsVersion: version || 'v1.5.2',
+      exportedAt,
+      modules
+    }
+  };
+}
+
+function json_(obj) {
+  return ContentService
+    .createTextOutput(JSON.stringify(obj))
+    .setMimeType(ContentService.MimeType.JSON);
+}
+
+function jsonp_(obj, callback) {
+  const payload = JSON.stringify(obj);
+  if (callback && /^[A-Za-z_$][0-9A-Za-z_$]*$/.test(callback)) {
+    return ContentService
+      .createTextOutput(callback + '(' + payload + ');')
+      .setMimeType(ContentService.MimeType.JAVASCRIPT);
+  }
+  return json_(obj);
+}
