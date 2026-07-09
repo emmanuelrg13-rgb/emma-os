@@ -3,47 +3,49 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Centro de respaldos · Emma OS</title>
+<title>Centro de respaldos externos · Emma OS</title>
 <meta name="theme-color" content="#0d1324">
 <style>
-:root{--bg:#0d1324;--panel:#121a2f;--panel2:#17223d;--card:#0f172a;--text:#e5e7eb;--muted:#9ca3af;--line:rgba(148,163,184,.24);--accent:#38bdf8;--good:#34d399;--warn:#fbbf24;--violet:#a78bfa;--rose:#fb7185;--shadow:0 24px 70px rgba(0,0,0,.36);--radius:22px}
-*{box-sizing:border-box}body{margin:0;min-height:100vh;font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:radial-gradient(circle at top left,rgba(56,189,248,.22),transparent 34rem),radial-gradient(circle at bottom right,rgba(167,139,250,.12),transparent 32rem),var(--bg);color:var(--text)}a{color:inherit}.wrap{width:min(100% - 28px,1100px);margin:0 auto;padding:20px 0 44px}.topbar{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:14px}.brand{font-weight:900;color:var(--accent);letter-spacing:.12em;text-transform:uppercase;font-size:.78rem}.btn{display:inline-flex;align-items:center;gap:8px;text-decoration:none;border:1px solid var(--line);background:var(--panel2);color:var(--text);border-radius:999px;padding:11px 14px;font-weight:850;cursor:pointer;font:inherit}.btn.primary{background:linear-gradient(135deg,var(--accent),var(--good));color:#04111e;border:0}.btn.warn{background:rgba(251,191,36,.16);border-color:rgba(251,191,36,.32)}.btn.rose{background:rgba(251,113,133,.16);border-color:rgba(251,113,133,.32)}.btn:hover{filter:brightness(1.12)}.hero{background:linear-gradient(135deg,rgba(18,26,47,.96),rgba(23,34,61,.78));border:1px solid var(--line);border-radius:30px;padding:26px;box-shadow:var(--shadow)}h1{margin:.25rem 0 .5rem;font-size:clamp(2rem,6vw,3.6rem);letter-spacing:-.06em}.subtitle{max-width:800px;color:var(--muted);font-size:1.04rem;line-height:1.55;margin:0}.actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}.grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin-top:16px}.card,.panel{background:rgba(18,26,47,.82);border:1px solid var(--line);border-radius:var(--radius);padding:18px;box-shadow:0 14px 40px rgba(0,0,0,.20)}.card h2,.panel h2{margin:0 0 8px}.card p,.panel p,.panel li{color:var(--muted);line-height:1.55}.stat{font-size:2rem;font-weight:900}.tag{display:inline-flex;border:1px solid var(--line);border-radius:999px;padding:6px 9px;color:var(--muted);font-size:.82rem}.ok{color:var(--good)}.no{color:var(--warn)}.mono{font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono",monospace}.modules{display:grid;gap:10px}.module-row{display:flex;justify-content:space-between;align-items:center;gap:12px;background:rgba(15,23,42,.55);border:1px solid var(--line);border-radius:16px;padding:12px}.module-row small{color:var(--muted)}.log{min-height:42px;background:rgba(15,23,42,.65);border:1px solid var(--line);border-radius:16px;padding:12px;color:var(--muted);white-space:pre-wrap}.hidden-input{display:none}.steps{display:grid;gap:10px}.step{display:flex;gap:10px;align-items:flex-start;background:rgba(15,23,42,.48);border:1px solid var(--line);border-radius:16px;padding:12px}.dot{width:28px;height:28px;border-radius:999px;display:grid;place-items:center;flex:0 0 auto;background:linear-gradient(135deg,var(--accent),var(--violet));color:#06111f;font-weight:900}footer{color:var(--muted);text-align:center;margin-top:24px;font-size:.9rem}@media(max-width:860px){.grid{grid-template-columns:1fr}.module-row{align-items:flex-start;flex-direction:column}.topbar{flex-direction:column;align-items:flex-start}.hero{padding:22px}}
+:root{--bg:#0d1324;--panel:#121a2f;--panel2:#17223d;--card:#0f172a;--text:#e5e7eb;--muted:#9ca3af;--line:rgba(148,163,184,.24);--accent:#fbbf24;--accent2:#38bdf8;--good:#34d399;--warn:#fbbf24;--violet:#a78bfa;--rose:#fb7185;--shadow:0 24px 70px rgba(0,0,0,.36);--radius:22px}
+*{box-sizing:border-box}body{margin:0;min-height:100vh;font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:radial-gradient(circle at top left,rgba(251,191,36,.18),transparent 34rem),radial-gradient(circle at bottom right,rgba(56,189,248,.14),transparent 32rem),var(--bg);color:var(--text)}a{color:inherit}.wrap{width:min(100% - 28px,1120px);margin:0 auto;padding:20px 0 44px}.topbar{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:14px}.brand{font-weight:900;color:var(--accent);letter-spacing:.12em;text-transform:uppercase;font-size:.78rem}.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;text-decoration:none;border:1px solid var(--line);background:var(--panel2);color:var(--text);border-radius:999px;padding:11px 14px;font-weight:850;cursor:pointer;font:inherit}.btn.primary{background:linear-gradient(135deg,var(--accent),var(--accent2));color:#04111e;border:0}.btn.good{background:rgba(52,211,153,.16);border-color:rgba(52,211,153,.35);color:#bbf7d0}.btn.warn{background:rgba(251,191,36,.16);border-color:rgba(251,191,36,.35);color:#fde68a}.btn.rose{background:rgba(251,113,133,.16);border-color:rgba(251,113,133,.32);color:#fecdd3}.btn:hover{filter:brightness(1.12)}.hero{background:linear-gradient(135deg,rgba(18,26,47,.96),rgba(23,34,61,.78));border:1px solid var(--line);border-radius:30px;padding:26px;box-shadow:var(--shadow);position:relative;overflow:hidden}.hero:after{content:"";position:absolute;inset:auto -70px -100px auto;width:280px;height:280px;background:radial-gradient(circle,rgba(251,191,36,.20),transparent 62%);pointer-events:none}h1{margin:.25rem 0 .5rem;font-size:clamp(2rem,6vw,3.6rem);letter-spacing:-.06em}.subtitle{max-width:850px;color:var(--muted);font-size:1.04rem;line-height:1.55;margin:0}.actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}.grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px;margin-top:16px}.card,.panel{background:rgba(18,26,47,.82);border:1px solid var(--line);border-radius:var(--radius);padding:18px;box-shadow:0 14px 40px rgba(0,0,0,.20)}.card h2,.panel h2{margin:0 0 8px}.card p,.panel p,.panel li{color:var(--muted);line-height:1.55}.stat{font-size:1.65rem;font-weight:900}.tag{display:inline-flex;border:1px solid var(--line);border-radius:999px;padding:6px 9px;color:var(--muted);font-size:.82rem}.ok{color:var(--good)}.no{color:var(--warn)}.mono{font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono",monospace}.modules{display:grid;gap:10px}.module-row{display:grid;grid-template-columns:1.2fr .8fr auto;gap:12px;align-items:center;background:rgba(15,23,42,.55);border:1px solid var(--line);border-radius:16px;padding:12px}.module-row small{color:var(--muted)}.log{min-height:42px;background:rgba(15,23,42,.65);border:1px solid var(--line);border-radius:16px;padding:12px;color:var(--muted);white-space:pre-wrap}.hidden-input{display:none}.steps{display:grid;gap:10px}.step{display:flex;gap:10px;align-items:flex-start;background:rgba(15,23,42,.48);border:1px solid var(--line);border-radius:16px;padding:12px}.dot{width:28px;height:28px;border-radius:999px;display:grid;place-items:center;flex:0 0 auto;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#06111f;font-weight:900}.split{display:grid;grid-template-columns:1fr 1fr;gap:14px}.history{display:grid;gap:9px}.history-row{display:grid;grid-template-columns:1fr auto;gap:8px;align-items:center;background:rgba(15,23,42,.52);border:1px solid var(--line);border-radius:14px;padding:11px}.preview{display:none}.preview.show{display:block}.preview-box{background:rgba(15,23,42,.65);border:1px solid var(--line);border-radius:16px;padding:13px;margin-top:10px}.preview-list{display:grid;gap:8px;margin-top:10px}.preview-item{display:flex;justify-content:space-between;gap:10px;border:1px solid var(--line);border-radius:14px;padding:9px;background:rgba(255,255,255,.035)}.notice{border:1px solid rgba(251,191,36,.35);background:rgba(251,191,36,.09);border-radius:18px;padding:14px;color:#fde68a}.notice strong{color:#fef3c7}footer{color:var(--muted);text-align:center;margin-top:24px;font-size:.9rem}@media(max-width:980px){.grid{grid-template-columns:repeat(2,minmax(0,1fr))}.module-row{grid-template-columns:1fr}.split{grid-template-columns:1fr}}@media(max-width:620px){.grid{grid-template-columns:1fr}.hero{padding:22px}.actions .btn{width:100%}}
 </style>
 <link rel="stylesheet" href="../../emma-theme.css">
-<script src="../../emma-shell.js" data-base="../../" data-current="respaldo" data-version="v1.3" defer></script>
+<script src="../../emma-shell.js" data-base="../../" data-current="respaldo" data-version="v1.4" defer></script>
 </head>
 <body class="emma-module emma-module-respaldo">
 <header class="emma-system-bar" role="banner">
   <a class="emma-system-brand" href="../../index.html" aria-label="Volver a Emma OS">
     <span class="emma-mark">E</span>
-    <span><b>Emma OS</b><small>v1.3 · Centro de respaldos</small></span>
+    <span><b>Emma OS</b><small>v1.4 · Respaldos externos</small></span>
   </a>
-  <nav class="emma-system-nav" aria-label="Navegación principal Emma OS"><a href="../../index.html" class="">Inicio</a><a href="../pendientes/" class="">Pendientes</a><a href="../arrowverse/" class="">Arrowverso</a><a href="../rutina-atomica/" class="">Rutina</a><a href="../botiquin/" class="">Botiquín</a><a href="../respaldo/" class="active">Respaldos</a></nav>
 </header>
-<div class="emma-module-note">Estándar visual Emma OS v1.3 · datos locales separados por módulo.</div>
+<div class="emma-module-note">Emma OS v1.4 · respaldo global preparado para Google Drive · datos locales separados por módulo.</div>
 
 <div class="wrap">
   <div class="topbar">
-    <div class="brand">Emma OS · Centro de respaldos</div>
+    <div class="brand">Emma OS · Centro de respaldos externos</div>
     <a class="btn" href="../../">← Volver al inicio</a>
   </div>
 
   <section class="hero">
-    <span class="tag">Emma OS v1.3</span>
-    <h1>Respaldos y actualización</h1>
-    <p class="subtitle">Desde aquí puedes exportar todo Emma OS en un solo archivo JSON, importar una copia anterior y revisar qué módulos tienen datos guardados en este dispositivo.</p>
+    <span class="tag">Emma OS v1.4</span>
+    <h1>Respaldo externo para Drive</h1>
+    <p class="subtitle">Emma OS sigue usando almacenamiento local para funcionar rápido, pero ahora puedes generar un respaldo global pensado para guardarlo manualmente en Google Drive y restaurarlo si cambias de equipo, teléfono o se limpia el navegador.</p>
     <div class="actions">
-      <button class="btn primary" id="exportAll" type="button">Exportar respaldo global</button>
-      <button class="btn" id="importAll" type="button">Importar respaldo global</button>
+      <button class="btn primary" id="exportDrive" type="button">Exportar respaldo para Drive</button>
+      <button class="btn" id="importAll" type="button">Importar respaldo</button>
       <input class="hidden-input" id="fileInput" type="file" accept="application/json,.json">
+      <button class="btn" id="exportCsv" type="button">Exportar índice CSV</button>
+      <button class="btn good" id="markDrive" type="button">Ya lo guardé en Drive</button>
       <button class="btn" id="refresh" type="button">Actualizar estado</button>
     </div>
   </section>
 
   <section class="grid">
-    <div class="card"><h2>Último respaldo</h2><div class="stat" id="lastBackup">—</div><p>Se actualiza cuando exportas un respaldo global desde esta pantalla.</p></div>
-    <div class="card"><h2>Módulos con datos</h2><div class="stat" id="modulesWithData">0/4</div><p>Cuenta los módulos que tienen información guardada en localStorage.</p></div>
-    <div class="card"><h2>Versión del sistema</h2><div class="stat">v1.3</div><p>Botiquín, navegación lateral, dashboard, módulos y centro de respaldo.</p></div>
+    <div class="card"><h2>Último respaldo generado</h2><div class="stat" id="lastBackup">—</div><p>Fecha del último JSON exportado desde esta pantalla.</p></div>
+    <div class="card"><h2>Último guardado en Drive</h2><div class="stat" id="lastDrive">—</div><p>Marca manual para recordar cuándo subiste el JSON a Drive.</p></div>
+    <div class="card"><h2>Módulos con datos</h2><div class="stat" id="modulesWithData">0/4</div><p>Cuenta los módulos que tienen información guardada en este dispositivo.</p></div>
+    <div class="card"><h2>Versión</h2><div class="stat">v1.4</div><p>Capa de respaldo externo, validación e historial local.</p></div>
   </section>
 
   <section class="panel">
@@ -51,15 +53,36 @@
     <div class="modules" id="moduleStatus"></div>
   </section>
 
-  <section class="panel">
-    <h2>Protocolo antes de subir una versión nueva</h2>
-    <div class="steps">
-      <div class="step"><div class="dot">1</div><div><strong>Exporta respaldo global</strong><br><span>Guarda el archivo JSON en una carpeta segura, Drive o tu computador.</span></div></div>
-      <div class="step"><div class="dot">2</div><div><strong>Actualiza GitHub Pages</strong><br><span>Sube los archivos nuevos del ZIP al repositorio y haz commit.</span></div></div>
-      <div class="step"><div class="dot">3</div><div><strong>Prueba en computador</strong><br><span>Abre la portada y entra a cada módulo. Verifica que tus datos sigan ahí.</span></div></div>
-      <div class="step"><div class="dot">4</div><div><strong>Prueba en teléfono</strong><br><span>Abre la app instalada. Si el navegador quedó con versión antigua, cierra y reabre la app.</span></div></div>
-      <div class="step"><div class="dot">5</div><div><strong>Importa sólo si hace falta</strong><br><span>Si algo no aparece, importa el respaldo global desde esta misma pantalla.</span></div></div>
+  <section class="panel preview" id="previewPanel">
+    <h2>Previsualización del respaldo</h2>
+    <p>Revisa el contenido antes de aplicar la importación. Esta acción reemplazará los datos locales de los módulos incluidos.</p>
+    <div class="preview-box" id="previewBox"></div>
+    <div class="actions">
+      <button class="btn primary" id="applyImport" type="button">Aplicar importación</button>
+      <button class="btn" id="cancelImport" type="button">Cancelar</button>
     </div>
+  </section>
+
+  <section class="split">
+    <div class="panel">
+      <h2>Flujo recomendado con Google Drive</h2>
+      <div class="steps">
+        <div class="step"><div class="dot">1</div><div><strong>Exporta respaldo para Drive</strong><br><span>Se descargará un archivo JSON con todos los módulos actuales.</span></div></div>
+        <div class="step"><div class="dot">2</div><div><strong>Guárdalo en Drive</strong><br><span>Carpeta sugerida: <span class="mono">Emma OS / Respaldos</span>.</span></div></div>
+        <div class="step"><div class="dot">3</div><div><strong>Marca “Ya lo guardé en Drive”</strong><br><span>La app guardará la fecha de respaldo externo como recordatorio.</span></div></div>
+        <div class="step"><div class="dot">4</div><div><strong>Restaura si algo falla</strong><br><span>Si localStorage se borra, importa el último JSON desde Drive.</span></div></div>
+      </div>
+    </div>
+    <div class="panel">
+      <h2>Historial local</h2>
+      <p>Este historial no guarda el archivo completo; sólo recuerda los respaldos generados en este dispositivo.</p>
+      <div class="history" id="historyList"></div>
+    </div>
+  </section>
+
+  <section class="panel">
+    <h2>Nota técnica</h2>
+    <div class="notice"><strong>v1.4 no sincroniza automáticamente con Drive todavía.</strong><br>Esta versión crea un respaldo robusto y validado para guardarlo manualmente. La sincronización con Google Sheets o Drive API queda mejor para una versión posterior, cuando queramos configurar permisos y evitar exponer credenciales en GitHub Pages.</div>
   </section>
 
   <section class="panel">
@@ -67,33 +90,113 @@
     <div class="log" id="log">Listo para respaldar.</div>
   </section>
 
-  <footer>Emma OS v1.3 · los respaldos son archivos JSON locales</footer>
+  <footer>Emma OS v1.4 · respaldo externo manual + localStorage</footer>
 </div>
 
 <script>
-const VERSION='1.3';
+const VERSION='1.4';
+const BACKUP_HISTORY_KEY='emmaos_backup_history_v1';
+const LAST_BACKUP_KEY='emmaos_last_backup_at';
+const LAST_DRIVE_KEY='emmaos_last_drive_backup_at';
 const MODULES=[
   {id:'pendientes',name:'Pendientes diarios',key:'emmaos_pendientes_v1',url:'../pendientes/'},
   {id:'arrowverse',name:'Arrowverso',key:'emmaos_arrowverse_v1',url:'../arrowverse/'},
   {id:'rutina_atomica',name:'Rutina atómica',key:'emmaos_rutina_atomica_v1',url:'../rutina-atomica/'},
   {id:'botiquin',name:'Botiquín',key:'emmaos_botiquin_v1',url:'../botiquin/'}
 ];
+let pendingImport=null;
 const logEl=document.getElementById('log');
 function log(msg){logEl.textContent=msg;}
 function safeParse(raw){try{return raw?JSON.parse(raw):null}catch{return null}}
-function friendlyDate(iso){if(!iso)return 'Sin respaldo';try{return new Date(iso).toLocaleString('es-CL',{dateStyle:'short',timeStyle:'short'});}catch{return 'Sin respaldo'}}
+function friendlyDate(iso){if(!iso)return '—';try{return new Date(iso).toLocaleString('es-CL',{dateStyle:'short',timeStyle:'short'});}catch{return '—'}}
 function byteSize(str){return new Blob([str||'']).size;}
 function formatBytes(bytes){if(!bytes)return '0 B'; if(bytes<1024)return bytes+' B'; if(bytes<1024*1024)return (bytes/1024).toFixed(1)+' KB'; return (bytes/1024/1024).toFixed(2)+' MB';}
 function filenameDate(){const d=new Date();const pad=n=>String(n).padStart(2,'0');return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}_${pad(d.getHours())}-${pad(d.getMinutes())}`;}
-function collectBackup(){const modules={};for(const mod of MODULES){const raw=localStorage.getItem(mod.key);modules[mod.id]={name:mod.name,key:mod.key,raw:raw,data:safeParse(raw),sizeBytes:byteSize(raw)};}return {app:'Emma OS',backupVersion:1,emmaOsVersion:VERSION,exportedAt:new Date().toISOString(),origin:location.origin,modules};}
-function downloadJson(obj){const text=JSON.stringify(obj,null,2);const blob=new Blob([text],{type:'application/json'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download=`emma-os-respaldo-${filenameDate()}.json`;document.body.appendChild(a);a.click();a.remove();URL.revokeObjectURL(url);localStorage.setItem('emmaos_last_backup_at',obj.exportedAt);render();log('Respaldo global exportado correctamente. Guarda ese JSON como copia de seguridad.');}
-function render(){const last=localStorage.getItem('emmaos_last_backup_at');document.getElementById('lastBackup').textContent=friendlyDate(last);let count=0;const rows=MODULES.map(mod=>{const raw=localStorage.getItem(mod.key);const has=!!raw; if(has)count++; const parsed=safeParse(raw); let detail=has?`${formatBytes(byteSize(raw))} guardados`:'sin datos'; if(parsed?.updatedAt) detail+=` · actualizado ${friendlyDate(parsed.updatedAt)}`; if(parsed?.date) detail+=` · día ${parsed.date}`; return `<div class="module-row"><div><strong>${mod.name}</strong><br><small class="mono">${mod.key}</small><br><small>${detail}</small></div><div><span class="tag ${has?'ok':'no'}">${has?'Con datos':'Sin datos'}</span> <a class="btn" href="${mod.url}">Abrir</a></div></div>`;}).join('');document.getElementById('moduleStatus').innerHTML=rows;document.getElementById('modulesWithData').textContent=`${count}/${MODULES.length}`;}
-async function importFile(file){try{const text=await file.text();const json=JSON.parse(text);if(!json.modules){log('El archivo no parece ser un respaldo global de Emma OS. Usa el respaldo exportado desde esta pantalla.');return;}const available=MODULES.filter(mod=>json.modules[mod.id]);if(!available.length){log('El respaldo no contiene módulos reconocidos.');return;}const names=available.map(m=>m.name).join(', ');const ok=confirm(`Esto reemplazará los datos locales de: ${names}.\n\n¿Quieres continuar?`);if(!ok){log('Importación cancelada.');return;}for(const mod of available){const entry=json.modules[mod.id];if(entry.raw){localStorage.setItem(mod.key,entry.raw);}else if(entry.data!==undefined&&entry.data!==null){localStorage.setItem(mod.key,JSON.stringify(entry.data));}}
-localStorage.setItem('emmaos_last_import_at',new Date().toISOString());render();log(`Respaldo importado correctamente: ${names}. Revisa cada módulo para confirmar que todo esté bien.`);}catch(err){log('No pude importar el archivo. Revisa que sea un JSON válido de Emma OS.');}}
-document.getElementById('exportAll').addEventListener('click',()=>downloadJson(collectBackup()));
+function readHistory(){return safeParse(localStorage.getItem(BACKUP_HISTORY_KEY))||[]}
+function writeHistory(history){localStorage.setItem(BACKUP_HISTORY_KEY,JSON.stringify(history.slice(0,12)));}
+function moduleSummary(mod, raw, data){
+  if(!raw) return {detail:'sin datos', records:'—', updated:'—'};
+  let records='—';
+  if(Array.isArray(data?.tasks)) records=`${data.tasks.length} tareas`;
+  else if(Array.isArray(data?.checked)) records=`${data.checked.length} marcadas`;
+  else if(data?.checked && typeof data.checked==='object') records=`${Object.values(data.checked).filter(Boolean).length} checks`;
+  else if(Array.isArray(data?.items)) records=`${data.items.length} ítems`;
+  const updated=data?.updatedAt||data?.date||data?.createdAt||'';
+  return {detail:`${formatBytes(byteSize(raw))} · ${records}`, records, updated:friendlyDate(updated)};
+}
+function collectBackup(){
+  const modules={};
+  for(const mod of MODULES){
+    const raw=localStorage.getItem(mod.key);
+    const data=safeParse(raw);
+    modules[mod.id]={id:mod.id,name:mod.name,key:mod.key,raw:raw,data:data,sizeBytes:byteSize(raw),summary:moduleSummary(mod,raw,data)};
+  }
+  return {app:'Emma OS',backupType:'emma-os-global-drive-ready',schemaVersion:2,emmaOsVersion:VERSION,exportedAt:new Date().toISOString(),origin:location.origin,modules};
+}
+function downloadText(filename,text,type='application/json'){
+  const blob=new Blob([text],{type});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download=filename;document.body.appendChild(a);a.click();a.remove();URL.revokeObjectURL(url);return byteSize(text);
+}
+function exportDriveBackup(){
+  const backup=collectBackup();const text=JSON.stringify(backup,null,2);const filename=`emma-os-drive-backup-${filenameDate()}.json`;const size=downloadText(filename,text,'application/json');
+  localStorage.setItem(LAST_BACKUP_KEY,backup.exportedAt);
+  const withData=Object.values(backup.modules).filter(m=>m.raw).length;
+  const history=readHistory();history.unshift({filename,exportedAt:backup.exportedAt,sizeBytes:size,modulesWithData:withData,version:VERSION});writeHistory(history);
+  render();log(`Respaldo generado: ${filename}\nAhora guárdalo en Google Drive. Cuando lo hagas, pulsa “Ya lo guardé en Drive”.`);
+}
+function escapeCsv(value){const s=String(value??'');return '"'+s.replace(/"/g,'""')+'"';}
+function exportCsvIndex(){
+  const backup=collectBackup();
+  const rows=[['Modulo','Clave','Tiene datos','Tamaño','Registros','Actualizado','Version Emma OS','Exportado']];
+  for(const mod of MODULES){const m=backup.modules[mod.id];rows.push([m.name,m.key,m.raw?'Sí':'No',formatBytes(m.sizeBytes),m.summary.records,m.summary.updated,VERSION,friendlyDate(backup.exportedAt)]);}
+  const csv=rows.map(r=>r.map(escapeCsv).join(',')).join('\n');
+  const filename=`emma-os-indice-${filenameDate()}.csv`;downloadText(filename,csv,'text/csv;charset=utf-8');
+  log(`Índice CSV exportado: ${filename}\nPuedes abrirlo con Excel o Google Sheets para revisar un resumen, pero el respaldo restaurable es el JSON.`);
+}
+function render(){
+  document.getElementById('lastBackup').textContent=friendlyDate(localStorage.getItem(LAST_BACKUP_KEY));
+  document.getElementById('lastDrive').textContent=friendlyDate(localStorage.getItem(LAST_DRIVE_KEY));
+  let count=0;
+  const rows=MODULES.map(mod=>{const raw=localStorage.getItem(mod.key);const has=!!raw;if(has)count++;const parsed=safeParse(raw);const summary=moduleSummary(mod,raw,parsed);return `<div class="module-row"><div><strong>${mod.name}</strong><br><small class="mono">${mod.key}</small></div><div><small>${summary.detail}</small><br><small>Actualizado: ${summary.updated}</small></div><div><span class="tag ${has?'ok':'no'}">${has?'Con datos':'Sin datos'}</span> <a class="btn" href="${mod.url}">Abrir</a></div></div>`;}).join('');
+  document.getElementById('moduleStatus').innerHTML=rows;document.getElementById('modulesWithData').textContent=`${count}/${MODULES.length}`;
+  const history=readHistory();
+  document.getElementById('historyList').innerHTML=history.length?history.map(h=>`<div class="history-row"><div><strong>${h.filename}</strong><br><small>${friendlyDate(h.exportedAt)} · ${h.modulesWithData}/${MODULES.length} módulos · ${formatBytes(h.sizeBytes)}</small></div><span class="tag">${h.version||'—'}</span></div>`).join(''):'<p>No hay respaldos generados en este dispositivo todavía.</p>';
+}
+function validateBackup(json){
+  const errors=[];
+  if(!json || typeof json!=='object') errors.push('El archivo no contiene un objeto JSON válido.');
+  if(json.app!=='Emma OS') errors.push('No se detectó la marca app: Emma OS.');
+  if(!json.modules || typeof json.modules!=='object') errors.push('No se encontró la sección modules.');
+  const available=MODULES.filter(mod=>json.modules && json.modules[mod.id]);
+  if(!available.length) errors.push('No contiene módulos reconocidos por Emma OS.');
+  return {ok:errors.length===0,errors,available};
+}
+function showPreview(json,fileName){
+  const validation=validateBackup(json);const panel=document.getElementById('previewPanel');const box=document.getElementById('previewBox');panel.classList.add('show');
+  if(!validation.ok){pendingImport=null;box.innerHTML=`<p class="no"><strong>No se puede importar este archivo.</strong></p><ul>${validation.errors.map(e=>`<li>${e}</li>`).join('')}</ul>`;document.getElementById('applyImport').disabled=true;log('Archivo revisado, pero no es un respaldo válido de Emma OS.');return;}
+  pendingImport={json,fileName,available:validation.available};document.getElementById('applyImport').disabled=false;
+  const rows=validation.available.map(mod=>{const entry=json.modules[mod.id];const raw=entry.raw || (entry.data!==undefined&&entry.data!==null?JSON.stringify(entry.data):'');const summary=moduleSummary(mod,raw,entry.data||safeParse(raw));return `<div class="preview-item"><span><strong>${mod.name}</strong><br><small>${summary.detail}</small></span><span class="tag">incluido</span></div>`;}).join('');
+  box.innerHTML=`<p><strong>Archivo:</strong> ${fileName}</p><p><strong>Exportado:</strong> ${friendlyDate(json.exportedAt)} · <strong>Versión:</strong> ${json.emmaOsVersion||'—'} · <strong>Tipo:</strong> ${json.backupType||'respaldo global'}</p><div class="preview-list">${rows}</div>`;
+  log('Respaldo previsualizado. Revísalo y pulsa “Aplicar importación” si corresponde.');
+}
+async function importFile(file){try{const text=await file.text();const json=JSON.parse(text);showPreview(json,file.name);}catch(err){pendingImport=null;document.getElementById('previewPanel').classList.add('show');document.getElementById('previewBox').innerHTML='<p class="no"><strong>No pude leer este archivo.</strong></p><p>Revisa que sea un JSON exportado desde Emma OS.</p>';document.getElementById('applyImport').disabled=true;log('No pude importar el archivo.');}}
+function applyImport(){
+  if(!pendingImport) return;
+  const names=pendingImport.available.map(m=>m.name).join(', ');
+  const ok=confirm(`Esto reemplazará los datos locales de: ${names}.\n\n¿Quieres continuar?`);
+  if(!ok){log('Importación cancelada.');return;}
+  for(const mod of pendingImport.available){const entry=pendingImport.json.modules[mod.id];if(entry.raw){localStorage.setItem(mod.key,entry.raw);}else if(entry.data!==undefined&&entry.data!==null){localStorage.setItem(mod.key,JSON.stringify(entry.data));}}
+  localStorage.setItem('emmaos_last_import_at',new Date().toISOString());
+  log(`Respaldo importado correctamente: ${names}. Revisa cada módulo para confirmar que todo esté bien.`);
+  pendingImport=null;document.getElementById('previewPanel').classList.remove('show');render();
+}
+document.getElementById('exportDrive').addEventListener('click',exportDriveBackup);
+document.getElementById('exportCsv').addEventListener('click',exportCsvIndex);
 document.getElementById('importAll').addEventListener('click',()=>document.getElementById('fileInput').click());
 document.getElementById('fileInput').addEventListener('change',e=>{const file=e.target.files?.[0]; if(file) importFile(file); e.target.value='';});
+document.getElementById('applyImport').addEventListener('click',applyImport);
+document.getElementById('cancelImport').addEventListener('click',()=>{pendingImport=null;document.getElementById('previewPanel').classList.remove('show');log('Importación cancelada.');});
 document.getElementById('refresh').addEventListener('click',()=>{render();log('Estado actualizado.');});
+document.getElementById('markDrive').addEventListener('click',()=>{const now=new Date().toISOString();localStorage.setItem(LAST_DRIVE_KEY,now);render();log('Fecha de guardado externo actualizada. Esto no sube el archivo por sí solo; confirma que ya lo guardaste en Drive.');});
 render();
 </script>
 </body>

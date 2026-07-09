@@ -1,4 +1,4 @@
-const CACHE_NAME = 'emma-os-v1-3-cache-001';
+const CACHE_NAME = 'emma-os-v1-4-cache-001';
 const ASSETS = [
   './',
   './index.html',
