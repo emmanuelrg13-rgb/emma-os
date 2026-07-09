@@ -1,4 +1,4 @@
-const CACHE_NAME = 'emma-os-v1-4-cache-001';
+const CACHE_NAME = 'emma-os-v1-5-cache-001';
 const ASSETS = [
   './',
   './index.html',
@@ -15,6 +15,9 @@ const ASSETS = [
   './apps/botiquin/index.html',
   './apps/respaldo/',
   './apps/respaldo/index.html',
+  './apps/sheets-sync/',
+  './apps/sheets-sync/index.html',
+  './apps/sheets-sync/emma-os-apps-script-v1-5.gs.txt',
   './icons/icon-192.png',
   './icons/icon-512.png'
 ];

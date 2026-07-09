@@ -1,0 +1,255 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Emma OS · Sync Sheets</title>
+<meta name="theme-color" content="#0d1324">
+<style>
+:root{--bg:#0d1324;--panel:#121a2f;--panel2:#17223d;--card:#0f172a;--text:#e5e7eb;--muted:#9ca3af;--line:rgba(148,163,184,.24);--accent:#38bdf8;--accent2:#a78bfa;--good:#34d399;--warn:#fbbf24;--bad:#fb7185;--shadow:0 22px 65px rgba(0,0,0,.34);--radius:22px}
+*{box-sizing:border-box}body{margin:0;min-height:100vh;font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:radial-gradient(circle at top left,rgba(56,189,248,.18),transparent 32rem),radial-gradient(circle at bottom right,rgba(167,139,250,.14),transparent 32rem),var(--bg);color:var(--text)}a{color:inherit}.wrap{width:min(100% - 28px,1180px);margin:0 auto;padding:22px 0 42px}.topbar{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:14px}.brand{font-weight:950;letter-spacing:-.03em}.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;text-decoration:none;border:1px solid var(--line);background:var(--panel2);color:var(--text);border-radius:999px;padding:10px 13px;font-weight:850;cursor:pointer;font:inherit}.btn.primary{background:linear-gradient(135deg,var(--accent),var(--good));color:#04111e;border:0}.btn.warn{background:rgba(251,191,36,.12);border-color:rgba(251,191,36,.35)}.btn.danger{background:rgba(251,113,133,.12);border-color:rgba(251,113,133,.35)}.btn.small{padding:7px 9px;font-size:.84rem}.btn:hover{filter:brightness(1.12)}.btn:disabled{opacity:.5;cursor:not-allowed}.hero{background:linear-gradient(135deg,rgba(18,26,47,.96),rgba(23,34,61,.78));border:1px solid var(--line);border-radius:30px;padding:26px;box-shadow:var(--shadow);position:relative;overflow:hidden}.hero:after{content:"";position:absolute;inset:auto -80px -120px auto;width:300px;height:300px;background:radial-gradient(circle,rgba(56,189,248,.16),transparent 60%)}.tag{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line);border-radius:999px;padding:6px 10px;color:var(--muted);font-size:.82rem}.tag.ok{color:#bbf7d0;border-color:rgba(52,211,153,.35);background:rgba(52,211,153,.09)}.tag.warn{color:#fde68a;border-color:rgba(251,191,36,.38);background:rgba(251,191,36,.10)}.tag.bad{color:#fecdd3;border-color:rgba(251,113,133,.38);background:rgba(251,113,133,.10)}h1{margin:.35rem 0 .5rem;font-size:clamp(2rem,6vw,3.5rem);letter-spacing:-.06em}.subtitle{max-width:860px;color:var(--muted);font-size:1.04rem;line-height:1.55;margin:0}.actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}.stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin:14px 0}.stat,.panel,.card{background:rgba(18,26,47,.82);border:1px solid var(--line);border-radius:var(--radius);padding:16px;box-shadow:0 14px 40px rgba(0,0,0,.18)}.stat strong{display:block;font-size:1.25rem;word-break:break-word}.stat span,.panel p,.panel li,.card p{color:var(--muted);line-height:1.5}.layout{display:grid;grid-template-columns:.85fr 1.25fr;gap:14px}.form{display:grid;gap:10px}.field{display:grid;gap:6px}.field label{color:var(--muted);font-weight:800;font-size:.84rem}input,textarea{width:100%;border:1px solid var(--line);border-radius:14px;background:rgba(15,23,42,.74);color:var(--text);padding:10px 11px;font:inherit}textarea{min-height:120px;resize:vertical}.mono{font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono",monospace;font-size:.84rem}.log{white-space:pre-wrap;background:rgba(15,23,42,.72);border:1px solid var(--line);border-radius:16px;padding:14px;color:#dbeafe;min-height:118px}.steps{display:grid;gap:10px}.step{display:flex;gap:10px;align-items:flex-start;background:rgba(15,23,42,.48);border:1px solid var(--line);border-radius:16px;padding:12px}.dot{width:28px;height:28px;border-radius:999px;display:grid;place-items:center;flex:0 0 auto;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#06111f;font-weight:900}.module-row,.preview-item{display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center;background:rgba(15,23,42,.48);border:1px solid var(--line);border-radius:16px;padding:12px;margin-top:9px}.preview{display:none}.preview.show{display:block}.codebox{position:relative}.codebox textarea{min-height:320px;font-size:.78rem;line-height:1.4}.notice{border:1px solid rgba(251,191,36,.38);background:rgba(251,191,36,.08);border-radius:16px;padding:14px;color:#fde68a}.success{border:1px solid rgba(52,211,153,.35);background:rgba(52,211,153,.08);border-radius:16px;padding:14px;color:#bbf7d0}.dangerbox{border:1px solid rgba(251,113,133,.38);background:rgba(251,113,133,.08);border-radius:16px;padding:14px;color:#fecdd3}footer{text-align:center;color:var(--muted);font-size:.88rem;margin-top:24px}@media(max-width:980px){.layout,.stats{grid-template-columns:1fr}.topbar{flex-direction:column;align-items:flex-start}.hero{padding:22px}.module-row,.preview-item{grid-template-columns:1fr}}
+</style>
+<link rel="stylesheet" href="../../emma-theme.css">
+<script src="../../emma-shell.js" data-base="../../" data-current="sheets" data-version="v1.5" defer></script>
+</head>
+<body class="emma-module emma-module-sync">
+<header class="emma-system-bar" role="banner"><a class="emma-system-brand" href="../../index.html"><span class="emma-mark">E</span><span><b>Emma OS</b><small>v1.5 · Sync Sheets</small></span></a></header>
+<div class="emma-module-note">Emma OS v1.5 · sincronización experimental con Google Sheets vía Apps Script · localStorage sigue siendo la copia rápida.</div>
+<div class="wrap">
+  <div class="topbar"><div class="brand">Emma OS · Sync Sheets</div><a class="btn" href="../../">← Volver al inicio</a></div>
+
+  <section class="hero">
+    <span class="tag warn">☁ Capa experimental</span>
+    <h1>Sincronización con Google Sheets</h1>
+    <p class="subtitle">Conecta Emma OS a una planilla de Google Sheets usando Apps Script. La app mantiene tus datos locales, pero puede subir un respaldo global y restaurar el último respaldo desde Sheets.</p>
+    <div class="actions">
+      <button class="btn primary" id="testBtn" type="button">Probar conexión</button>
+      <button class="btn" id="uploadBtn" type="button">Subir respaldo a Sheets</button>
+      <button class="btn" id="loadBtn" type="button">Traer último respaldo</button>
+      <button class="btn" id="downloadScriptBtn" type="button">Descargar Apps Script</button>
+    </div>
+  </section>
+
+  <section class="stats">
+    <div class="stat"><strong id="configuredStat">No</strong><span>conector configurado</span></div>
+    <div class="stat"><strong id="lastUploadStat">—</strong><span>última subida</span></div>
+    <div class="stat"><strong id="lastLoadStat">—</strong><span>última restauración</span></div>
+    <div class="stat"><strong id="modulesStat">0/4</strong><span>módulos con datos</span></div>
+  </section>
+
+  <section class="layout">
+    <aside class="panel">
+      <h2>Configuración</h2>
+      <p>La URL y la clave quedan sólo en este dispositivo. No se suben al repositorio ni al respaldo global.</p>
+      <div class="form">
+        <div class="field"><label>URL del Apps Script Web App</label><input id="endpoint" placeholder="https://script.google.com/macros/s/.../exec"></div>
+        <div class="field"><label>Clave de sincronización</label><input id="secret" type="password" placeholder="La misma clave que pondrás en Apps Script"></div>
+        <div class="actions"><button class="btn primary" id="saveConfig" type="button">Guardar configuración</button><button class="btn" id="toggleSecret" type="button">Ver clave</button><button class="btn danger" id="clearConfig" type="button">Borrar configuración</button></div>
+      </div>
+      <hr style="border:0;border-top:1px solid var(--line);margin:16px 0">
+      <h2>Estado de módulos</h2>
+      <div id="moduleStatus"></div>
+    </aside>
+
+    <main class="panel">
+      <h2>Panel de operación</h2>
+      <div id="log" class="log">Listo. Configura el Apps Script y prueba conexión.</div>
+      <div class="actions">
+        <button class="btn" id="copyScriptBtn" type="button">Copiar Apps Script</button>
+        <button class="btn" id="copyGuideBtn" type="button">Copiar guía rápida</button>
+        <button class="btn warn" id="clearPreviewBtn" type="button">Limpiar previsualización</button>
+      </div>
+      <section id="previewPanel" class="preview">
+        <h2>Previsualización de respaldo remoto</h2>
+        <div id="previewBox"></div>
+        <div class="actions"><button class="btn primary" id="applyRemote" type="button">Aplicar restauración</button><button class="btn" id="cancelRemote" type="button">Cancelar</button></div>
+      </section>
+    </main>
+  </section>
+
+  <section class="panel">
+    <h2>Guía de configuración</h2>
+    <div class="steps">
+      <div class="step"><div class="dot">1</div><div><strong>Crea una Google Sheet</strong><br><span>Nombre sugerido: <span class="mono">Emma OS - Base de Datos</span>.</span></div></div>
+      <div class="step"><div class="dot">2</div><div><strong>Abre Apps Script</strong><br><span>En la planilla: Extensiones → Apps Script.</span></div></div>
+      <div class="step"><div class="dot">3</div><div><strong>Pega el script</strong><br><span>Usa el botón “Copiar Apps Script”, reemplaza <span class="mono">CAMBIA_ESTA_CLAVE</span> por tu clave privada y guarda.</span></div></div>
+      <div class="step"><div class="dot">4</div><div><strong>Implementa como Web App</strong><br><span>Implementar → Nueva implementación → Aplicación web. Ejecutar como tú. Acceso: cualquier usuario con el enlace.</span></div></div>
+      <div class="step"><div class="dot">5</div><div><strong>Pega URL + clave en Emma OS</strong><br><span>Guarda configuración, prueba conexión y luego sube respaldo.</span></div></div>
+    </div>
+    <p class="notice"><strong>Nota honesta:</strong> esta integración depende de permisos de Google Apps Script. Si Google bloquea la llamada por permisos/CORS, mantén el Centro de respaldos manual como plan B y usamos esta pantalla como guía de configuración para ajustar el script.</p>
+  </section>
+
+  <section class="panel codebox">
+    <h2>Apps Script incluido</h2>
+    <textarea id="scriptTemplate" readonly></textarea>
+  </section>
+
+  <footer>Emma OS v1.5 · Google Sheets experimental + respaldo local</footer>
+</div>
+<script>
+const VERSION='v1.5';
+const CONFIG_KEY='emmaos_sheets_sync_config_v1';
+const LAST_UPLOAD_KEY='emmaos_sheets_last_upload_at';
+const LAST_LOAD_KEY='emmaos_sheets_last_load_at';
+const MODULES=[
+  {id:'pendientes',name:'Pendientes diarios',key:'emmaos_pendientes_v1',url:'../pendientes/'},
+  {id:'arrowverse',name:'Arrowverso',key:'emmaos_arrowverse_v1',url:'../arrowverse/'},
+  {id:'rutina_atomica',name:'Rutina atómica',key:'emmaos_rutina_atomica_v1',url:'../rutina-atomica/'},
+  {id:'botiquin',name:'Botiquín',key:'emmaos_botiquin_v1',url:'../botiquin/'}
+];
+const APPS_SCRIPT_TEMPLATE = `const SHEET_NAME = 'EmmaOS_Backups';
+const SECRET = 'CAMBIA_ESTA_CLAVE';
+
+function doPost(e) {
+  try {
+    const req = JSON.parse(e.postData.contents || '{}');
+    if (SECRET && req.secret !== SECRET) {
+      return json_({ ok: false, error: 'Clave de sincronización inválida.' });
+    }
+    if (req.action === 'test') {
+      getSheet_();
+      return json_({ ok: true, message: 'Conexión OK', now: new Date().toISOString() });
+    }
+    if (req.action === 'saveBackup') {
+      return saveBackup_(req.backup);
+    }
+    if (req.action === 'loadLatest') {
+      return loadLatest_();
+    }
+    return json_({ ok: false, error: 'Acción no reconocida.' });
+  } catch (err) {
+    return json_({ ok: false, error: String(err && err.message ? err.message : err) });
+  }
+}
+
+function getSheet_() {
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  let sh = ss.getSheetByName(SHEET_NAME);
+  if (!sh) {
+    sh = ss.insertSheet(SHEET_NAME);
+    sh.appendRow(['backupId','exportedAt','emmaOsVersion','moduleId','moduleName','key','rawJson']);
+  }
+  return sh;
+}
+
+function saveBackup_(backup) {
+  if (!backup || !backup.modules) return json_({ ok: false, error: 'Respaldo vacío o inválido.' });
+  const sh = getSheet_();
+  const backupId = Utilities.getUuid();
+  const exportedAt = backup.exportedAt || new Date().toISOString();
+  const version = backup.emmaOsVersion || '';
+  let count = 0;
+  Object.keys(backup.modules).forEach(moduleId => {
+    const m = backup.modules[moduleId];
+    if (!m || !m.raw) return;
+    sh.appendRow([backupId, exportedAt, version, moduleId, m.name || '', m.key || '', m.raw]);
+    count++;
+  });
+  PropertiesService.getDocumentProperties().setProperty('latestBackupId', backupId);
+  return json_({ ok: true, backupId, moduleCount: count, exportedAt, version });
+}
+
+function loadLatest_() {
+  const sh = getSheet_();
+  const values = sh.getDataRange().getValues();
+  if (values.length < 2) return json_({ ok: false, error: 'No hay respaldos guardados todavía.' });
+  const latestFromProps = PropertiesService.getDocumentProperties().getProperty('latestBackupId');
+  const backupId = latestFromProps || values[values.length - 1][0];
+  const modules = {};
+  let exportedAt = '';
+  let version = '';
+  for (let i = 1; i < values.length; i++) {
+    const row = values[i];
+    if (row[0] !== backupId) continue;
+    const moduleId = row[3];
+    exportedAt = row[1] || exportedAt;
+    version = row[2] || version;
+    modules[moduleId] = {
+      id: moduleId,
+      name: row[4] || moduleId,
+      key: row[5] || '',
+      raw: row[6] || '',
+      data: null
+    };
+  }
+  if (!Object.keys(modules).length) return json_({ ok: false, error: 'No se encontraron módulos para el último respaldo.' });
+  return json_({
+    ok: true,
+    backupId,
+    backup: {
+      app: 'Emma OS',
+      backupType: 'emma-os-sheets-latest',
+      schemaVersion: 2,
+      emmaOsVersion: version || 'v1.5',
+      exportedAt,
+      modules
+    }
+  });
+}
+
+function json_(obj) {
+  return ContentService
+    .createTextOutput(JSON.stringify(obj))
+    .setMimeType(ContentService.MimeType.JSON);
+}`;
+const GUIDE_TEXT=`Emma OS v1.5 — configuración Google Sheets\n\n1. Crea una Google Sheet llamada "Emma OS - Base de Datos".\n2. Entra a Extensiones > Apps Script.\n3. Pega el Apps Script entregado por Emma OS.\n4. Cambia CAMBIA_ESTA_CLAVE por una clave privada que sólo tú conozcas.\n5. Guarda el proyecto.\n6. Implementar > Nueva implementación > Aplicación web.\n7. Ejecutar como: tú mismo. Acceso: cualquier usuario con el enlace.\n8. Copia la URL terminada en /exec.\n9. Vuelve a Emma OS > Sync Sheets, pega la URL y la misma clave.\n10. Prueba conexión y luego sube un respaldo.\n\nImportante: no pongas tu clave privada dentro del repositorio público de GitHub.`;
+let pendingRemote=null;
+const el=id=>document.getElementById(id);
+function safeParse(raw){try{return raw?JSON.parse(raw):null}catch{return null}}
+function friendlyDate(iso){if(!iso)return '—';try{return new Date(iso).toLocaleString('es-CL',{dateStyle:'short',timeStyle:'short'});}catch{return '—'}}
+function byteSize(str){return new Blob([str||'']).size;}
+function formatBytes(bytes){if(!bytes)return '0 B'; if(bytes<1024)return bytes+' B'; if(bytes<1024*1024)return (bytes/1024).toFixed(1)+' KB'; return (bytes/1024/1024).toFixed(2)+' MB';}
+function log(msg){el('log').textContent=msg;}
+function getConfig(){return safeParse(localStorage.getItem(CONFIG_KEY)) || {endpoint:'', secret:''};}
+function saveConfig(){const cfg={endpoint:el('endpoint').value.trim(),secret:el('secret').value};localStorage.setItem(CONFIG_KEY,JSON.stringify(cfg));render();log('Configuración guardada sólo en este dispositivo.');}
+function moduleSummary(mod, raw, data){
+  if(!raw) return {detail:'sin datos', records:'—', updated:'—'};
+  let records='—';
+  if(Array.isArray(data?.tasks)) records=`${data.tasks.length} tareas`;
+  else if(Array.isArray(data?.checked)) records=`${data.checked.length} marcadas`;
+  else if(data?.checked && typeof data.checked==='object') records=`${Object.values(data.checked).filter(Boolean).length} checks`;
+  else if(Array.isArray(data?.items)) records=`${data.items.length} ítems`;
+  const updated=data?.updatedAt||data?.date||data?.createdAt||'';
+  return {detail:`${formatBytes(byteSize(raw))} · ${records}`, records, updated:friendlyDate(updated)};
+}
+function collectBackup(){
+  const modules={};
+  for(const mod of MODULES){const raw=localStorage.getItem(mod.key);const data=safeParse(raw);modules[mod.id]={id:mod.id,name:mod.name,key:mod.key,raw:raw,data:data,sizeBytes:byteSize(raw),summary:moduleSummary(mod,raw,data)};}
+  return {app:'Emma OS',backupType:'emma-os-sheets-sync',schemaVersion:2,emmaOsVersion:VERSION,exportedAt:new Date().toISOString(),origin:location.origin,modules};
+}
+async function callScript(action, payload={}){
+  const cfg=getConfig();
+  if(!cfg.endpoint) throw new Error('Falta la URL del Apps Script.');
+  if(!cfg.secret) throw new Error('Falta la clave de sincronización.');
+  const res=await fetch(cfg.endpoint,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({action,secret:cfg.secret,...payload})});
+  const text=await res.text();
+  let json;
+  try{json=JSON.parse(text);}catch{throw new Error('La respuesta no fue JSON. Revisa que la URL termine en /exec y que la implementación sea Web App.');}
+  if(!json.ok) throw new Error(json.error || 'El Apps Script respondió con error.');
+  return json;
+}
+async function testConnection(){try{log('Probando conexión...');const json=await callScript('test');log(`Conexión OK.\nRespuesta: ${json.message || 'OK'}\nHora remota: ${friendlyDate(json.now)}`);}catch(err){log(`No se pudo conectar.\n${err.message}\n\nRevisa permisos, URL /exec, clave y publicación del Apps Script.`);}}
+async function uploadBackup(){try{log('Subiendo respaldo global a Google Sheets...');const backup=collectBackup();const json=await callScript('saveBackup',{backup});localStorage.setItem(LAST_UPLOAD_KEY,new Date().toISOString());render();log(`Respaldo subido correctamente.\nID: ${json.backupId}\nMódulos guardados: ${json.moduleCount}\nExportado: ${friendlyDate(json.exportedAt)}`);}catch(err){log(`No se pudo subir el respaldo.\n${err.message}`);}}
+function validateBackup(json){const errors=[];const backup=json?.backup || json;if(!backup || typeof backup!=='object') errors.push('No llegó un respaldo válido.');if(backup?.app!=='Emma OS') errors.push('No se detectó app: Emma OS.');if(!backup?.modules || typeof backup.modules!=='object') errors.push('No se encontró la sección modules.');const available=MODULES.filter(mod=>backup?.modules && backup.modules[mod.id]);if(!available.length) errors.push('No contiene módulos reconocidos por esta versión.');return {ok:errors.length===0,errors,backup,available};}
+function showPreview(remote){const validation=validateBackup(remote);const panel=el('previewPanel');const box=el('previewBox');panel.classList.add('show');if(!validation.ok){pendingRemote=null;box.innerHTML=`<div class="dangerbox"><strong>No se puede restaurar este respaldo.</strong><ul>${validation.errors.map(e=>`<li>${e}</li>`).join('')}</ul></div>`;return;}pendingRemote=validation;const rows=validation.available.map(mod=>{const entry=validation.backup.modules[mod.id];const raw=entry.raw || (entry.data!==undefined&&entry.data!==null?JSON.stringify(entry.data):'');const summary=moduleSummary(mod,raw,entry.data||safeParse(raw));return `<div class="preview-item"><span><strong>${mod.name}</strong><br><small>${summary.detail}</small></span><span class="tag ok">incluido</span></div>`;}).join('');box.innerHTML=`<p><strong>Exportado:</strong> ${friendlyDate(validation.backup.exportedAt)} · <strong>Versión:</strong> ${validation.backup.emmaOsVersion||'—'} · <strong>Tipo:</strong> ${validation.backup.backupType||'—'}</p>${rows}`;log('Respaldo remoto recibido. Revísalo antes de aplicar la restauración.');}
+async function loadLatest(){try{log('Solicitando último respaldo desde Google Sheets...');const json=await callScript('loadLatest');showPreview(json);}catch(err){log(`No se pudo traer el respaldo.\n${err.message}`);}}
+function applyRemote(){if(!pendingRemote)return;const names=pendingRemote.available.map(m=>m.name).join(', ');if(!confirm(`Esto reemplazará los datos locales de: ${names}.\n\n¿Quieres continuar?`))return;for(const mod of pendingRemote.available){const entry=pendingRemote.backup.modules[mod.id];if(entry.raw){localStorage.setItem(mod.key,entry.raw);}else if(entry.data!==undefined&&entry.data!==null){localStorage.setItem(mod.key,JSON.stringify(entry.data));}}localStorage.setItem(LAST_LOAD_KEY,new Date().toISOString());pendingRemote=null;el('previewPanel').classList.remove('show');render();log(`Restauración aplicada: ${names}. Abre cada módulo para verificar.`);}
+function downloadText(filename,text,type='text/plain'){const blob=new Blob([text],{type});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download=filename;document.body.appendChild(a);a.click();a.remove();URL.revokeObjectURL(url);}
+async function copyText(text,label){try{await navigator.clipboard.writeText(text);log(`${label} copiado al portapapeles.`);}catch{downloadText(label.replaceAll(' ','_')+'.txt',text);log(`No pude copiar automáticamente. Descargué un archivo con ${label}.`);}}
+function render(){const cfg=getConfig();el('endpoint').value=cfg.endpoint||'';el('secret').value=cfg.secret||'';el('configuredStat').textContent=(cfg.endpoint&&cfg.secret)?'Sí':'No';el('lastUploadStat').textContent=friendlyDate(localStorage.getItem(LAST_UPLOAD_KEY));el('lastLoadStat').textContent=friendlyDate(localStorage.getItem(LAST_LOAD_KEY));let count=0;const rows=MODULES.map(mod=>{const raw=localStorage.getItem(mod.key);const has=!!raw;if(has)count++;const parsed=safeParse(raw);const summary=moduleSummary(mod,raw,parsed);return `<div class="module-row"><div><strong>${mod.name}</strong><br><small class="mono">${mod.key}</small><br><small>${summary.detail}</small></div><span class="tag ${has?'ok':'bad'}">${has?'con datos':'sin datos'}</span></div>`;}).join('');el('modulesStat').textContent=`${count}/${MODULES.length}`;el('moduleStatus').innerHTML=rows;el('scriptTemplate').value=APPS_SCRIPT_TEMPLATE;}
+el('saveConfig').addEventListener('click',saveConfig);
+el('clearConfig').addEventListener('click',()=>{if(confirm('¿Borrar URL y clave guardadas en este dispositivo?')){localStorage.removeItem(CONFIG_KEY);render();log('Configuración borrada.');}});
+el('toggleSecret').addEventListener('click',()=>{const inp=el('secret');inp.type=inp.type==='password'?'text':'password';el('toggleSecret').textContent=inp.type==='password'?'Ver clave':'Ocultar clave';});
+el('testBtn').addEventListener('click',testConnection);
+el('uploadBtn').addEventListener('click',uploadBackup);
+el('loadBtn').addEventListener('click',loadLatest);
+el('applyRemote').addEventListener('click',applyRemote);
+el('cancelRemote').addEventListener('click',()=>{pendingRemote=null;el('previewPanel').classList.remove('show');log('Restauración cancelada.');});
+el('clearPreviewBtn').addEventListener('click',()=>{pendingRemote=null;el('previewPanel').classList.remove('show');log('Previsualización limpia.');});
+el('copyScriptBtn').addEventListener('click',()=>copyText(APPS_SCRIPT_TEMPLATE,'Apps Script Emma OS'));
+el('copyGuideBtn').addEventListener('click',()=>copyText(GUIDE_TEXT,'Guía rápida Emma OS Sheets'));
+el('downloadScriptBtn').addEventListener('click',()=>downloadText('emma-os-apps-script-v1-5.gs',APPS_SCRIPT_TEMPLATE,'text/plain'));
+render();
+</script>
+</body>
+</html>

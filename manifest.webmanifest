@@ -1,7 +1,7 @@
 {
-  "name": "Emma OS v1.4",
+  "name": "Emma OS v1.5",
   "short_name": "Emma OS",
-  "description": "Centro de control personal con navegación lateral, pendientes, Arrowverso, rutina atómica, botiquín y respaldos externos preparados para Drive.",
+  "description": "Centro de control personal con navegación lateral, pendientes, Arrowverso, rutina atómica, botiquín, respaldos externos y Sync Sheets experimental.",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",

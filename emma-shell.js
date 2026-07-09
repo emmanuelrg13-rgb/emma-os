@@ -2,14 +2,15 @@
   const script = document.currentScript;
   const base = script?.dataset?.base || './';
   const current = script?.dataset?.current || 'inicio';
-  const version = script?.dataset?.version || 'v1.4';
+  const version = script?.dataset?.version || 'v1.5';
   const apps = [
     {id:'inicio', icon:'⌂', name:'Inicio', desc:'Dashboard general', href: base + 'index.html', accent:'cyan'},
     {id:'pendientes', icon:'✓', name:'Pendientes diarios', desc:'Prioridad, esfuerzo y tareas recurrentes', href: base + 'apps/pendientes/', accent:'green'},
     {id:'arrowverse', icon:'⚡', name:'Arrowverso', desc:'Checklist cronológico', href: base + 'apps/arrowverse/', accent:'violet'},
     {id:'rutina', icon:'🌱', name:'Rutina atómica', desc:'Hábitos mínimos diarios', href: base + 'apps/rutina-atomica/', accent:'lime'},
     {id:'botiquin', icon:'🧰', name:'Botiquín', desc:'Inventario, compras y alertas', href: base + 'apps/botiquin/', accent:'amber'},
-    {id:'respaldo', icon:'☁', name:'Respaldos', desc:'Respaldos externos y Drive', href: base + 'apps/respaldo/', accent:'blue'}
+    {id:'respaldo', icon:'☁', name:'Respaldos', desc:'Respaldos externos y Drive', href: base + 'apps/respaldo/', accent:'blue'},
+    {id:'sheets', icon:'▦', name:'Sync Sheets', desc:'Google Sheets experimental', href: base + 'apps/sheets-sync/', accent:'violet'}
   ];
   function create(){
     if(document.querySelector('.emma-shell-toggle')) return;
