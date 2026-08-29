@@ -1,0 +1,282 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Emma OS · Dale una oportunidad</title>
+<meta name="theme-color" content="#0d1324">
+<!--
+  Emma OS v1.6.0 — Módulo "Dale una oportunidad"
+  Fecha: 2026-08-28
+  Implementación: OpenAI · ChatGPT (GPT-5.6 Sol)
+  Objetivo: contar repeticiones sin calendario ni rachas. La meta global corresponde
+  a la edad/regla actual. Los retos nuevos nacen en 1; Gym se inicializa en 4/28.
+-->
+<style>
+:root{--bg:#0d1324;--panel:#121a2f;--panel2:#17223d;--card:#0f172a;--text:#e5e7eb;--muted:#9ca3af;--line:rgba(148,163,184,.24);--accent:#fb7185;--accent2:#fbbf24;--good:#34d399;--cyan:#38bdf8;--shadow:0 22px 65px rgba(0,0,0,.34);--radius:22px}
+*{box-sizing:border-box}body{margin:0;min-height:100vh;font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:radial-gradient(circle at top left,rgba(251,113,133,.17),transparent 32rem),radial-gradient(circle at bottom right,rgba(251,191,36,.11),transparent 32rem),var(--bg);color:var(--text)}button,input{font:inherit}.wrap{width:min(100% - 28px,1120px);margin:0 auto;padding:20px 0 44px}.topbar{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:14px}.brand{font-weight:950;letter-spacing:-.03em}.hero,.panel,.counter-card{background:linear-gradient(135deg,rgba(18,26,47,.94),rgba(23,34,61,.76));border:1px solid var(--line);box-shadow:0 14px 40px rgba(0,0,0,.20)}.hero{border-radius:30px;padding:26px;position:relative;overflow:hidden}.hero:after{content:"";position:absolute;right:-90px;bottom:-130px;width:320px;height:320px;background:radial-gradient(circle,rgba(251,113,133,.18),transparent 62%);pointer-events:none}.eyebrow{display:inline-flex;align-items:center;gap:7px;color:#fecdd3;font-weight:900;text-transform:uppercase;letter-spacing:.13em;font-size:.76rem}h1{margin:.35rem 0 .5rem;font-size:clamp(2rem,6vw,3.65rem);letter-spacing:-.065em}.subtitle{max-width:850px;color:var(--muted);font-size:1.03rem;line-height:1.55;margin:0}.hero-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-top:18px}.hero-stat{background:rgba(15,23,42,.62);border:1px solid var(--line);border-radius:17px;padding:13px}.hero-stat strong{display:block;font-size:1.55rem;letter-spacing:-.04em}.hero-stat span{display:block;color:var(--muted);font-size:.82rem;margin-top:2px}.actions{display:flex;gap:9px;flex-wrap:wrap;align-items:center}.btn{display:inline-flex;align-items:center;justify-content:center;gap:7px;min-height:42px;border:1px solid var(--line);background:rgba(23,34,61,.84);color:var(--text);border-radius:999px;padding:10px 14px;font-weight:850;cursor:pointer}.btn:hover{filter:brightness(1.12)}.btn.primary{background:linear-gradient(135deg,var(--accent),var(--accent2));color:#1c0b11;border:0}.btn.good{background:rgba(52,211,153,.15);border-color:rgba(52,211,153,.38);color:#bbf7d0}.btn.danger{background:rgba(251,113,133,.12);border-color:rgba(251,113,133,.35);color:#fecdd3}.btn.small{min-height:38px;padding:8px 11px;font-size:.88rem}.panel{border-radius:var(--radius);padding:18px;margin-top:14px}.panel-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:12px}.panel h2{margin:0 0 4px;letter-spacing:-.035em}.panel p{margin:0;color:var(--muted);line-height:1.5}.new-form{display:grid;grid-template-columns:1fr auto;gap:10px;margin-top:12px}.new-form input,.goal-input{width:100%;background:rgba(15,23,42,.72);color:var(--text);border:1px solid var(--line);border-radius:14px;padding:11px 12px;outline:none}.new-form input:focus,.goal-input:focus{border-color:rgba(251,113,133,.66);box-shadow:0 0 0 2px rgba(251,113,133,.09)}.rule-grid{display:grid;grid-template-columns:1.2fr .8fr;gap:14px}.rule-card{background:rgba(15,23,42,.52);border:1px solid var(--line);border-radius:17px;padding:14px}.rule-card strong.big{font-size:2rem;letter-spacing:-.055em}.rule-card small{display:block;color:var(--muted);line-height:1.45;margin-top:4px}.counter-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin-top:14px}.counter-card{border-radius:24px;padding:18px;position:relative;overflow:hidden}.counter-card.complete{border-color:rgba(52,211,153,.38)}.counter-top{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}.counter-title{min-width:0}.counter-title h2{margin:0;font-size:1.32rem;word-break:break-word}.counter-title small{display:block;color:var(--muted);margin-top:4px}.badge{display:inline-flex;align-items:center;border:1px solid var(--line);border-radius:999px;padding:6px 9px;font-size:.78rem;color:var(--muted);white-space:nowrap}.badge.complete{color:#bbf7d0;border-color:rgba(52,211,153,.38);background:rgba(52,211,153,.08)}.counter-value{display:flex;align-items:baseline;gap:7px;margin:18px 0 10px}.counter-value strong{font-size:clamp(2.8rem,9vw,4.5rem);letter-spacing:-.085em;line-height:.85}.counter-value span{color:var(--muted);font-weight:850;font-size:1.05rem}.progress{height:12px;border-radius:999px;overflow:hidden;background:rgba(148,163,184,.15);border:1px solid var(--line)}.progress span{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--accent),var(--accent2));transition:width .24s ease}.counter-card.complete .progress span{background:linear-gradient(90deg,var(--good),var(--cyan))}.phrase{min-height:54px;margin:12px 0;color:#f8fafc;line-height:1.45;font-weight:750}.counter-actions{display:flex;gap:8px;flex-wrap:wrap}.counter-actions .btn.plus{flex:1;min-width:140px}.history{margin-top:11px;padding-top:10px;border-top:1px solid var(--line);color:var(--muted);font-size:.82rem;line-height:1.4}.empty{border:1px dashed var(--line);border-radius:19px;padding:24px;text-align:center;color:var(--muted);grid-column:1/-1}.live{margin-top:12px;min-height:46px;border:1px solid rgba(251,113,133,.32);background:rgba(251,113,133,.08);border-radius:16px;padding:12px 14px;color:#fecdd3;font-weight:750;line-height:1.45}.live.good{border-color:rgba(52,211,153,.35);background:rgba(52,211,153,.08);color:#bbf7d0}.tiny{font-size:.82rem;color:var(--muted);line-height:1.45}.footer{text-align:center;color:var(--muted);font-size:.88rem;margin-top:24px}@media(max-width:850px){.counter-grid,.rule-grid{grid-template-columns:1fr}.hero-grid{grid-template-columns:1fr 1fr 1fr}}@media(max-width:620px){.wrap{width:min(100% - 18px,1120px)}.hero{padding:22px}.hero-grid{grid-template-columns:1fr}.new-form{grid-template-columns:1fr}.new-form .btn{width:100%}.counter-actions .btn{flex:1}.counter-actions .btn.plus{flex-basis:100%}.panel-head{flex-direction:column}.actions{width:100%}.actions .btn{flex:1}.topbar{align-items:flex-start;flex-direction:column}}
+</style>
+<link rel="stylesheet" href="../../emma-theme.css">
+<script src="../../emma-shell.js" data-base="../../" data-current="oportunidad" data-version="v1.6.0" defer></script>
+</head>
+<body class="emma-module emma-module-oportunidad">
+<header class="emma-system-bar" role="banner"><a class="emma-system-brand" href="../../index.html"><span class="emma-mark">E</span><span><b>Emma OS</b><small>v1.6.0 · Dale una oportunidad</small></span></a></header>
+<div class="emma-module-note">Emma OS v1.6.0 · cuenta intentos, no días ni rachas · cada reto nuevo parte en 1.</div>
+<div class="wrap">
+  <div class="topbar"><div class="brand">Emma OS · Dale una oportunidad</div><a class="btn" href="../../">← Volver al inicio</a></div>
+
+  <section class="hero">
+    <div class="eyebrow">✦ La regla de tu edad</div>
+    <h1>Dale una oportunidad</h1>
+    <p class="subtitle">Antes de decidir si algo nuevo es o no para ti, dale al menos tantas oportunidades como indica tu regla actual. Sin calendario, sin rachas y sin castigos por faltar: sólo cuenta cuántas veces volviste.</p>
+    <div class="hero-grid">
+      <div class="hero-stat"><strong id="goalStat">28</strong><span>oportunidades mínimas</span></div>
+      <div class="hero-stat"><strong id="counterStat">1</strong><span>retos activos</span></div>
+      <div class="hero-stat"><strong id="completedStat">0</strong><span>metas cumplidas</span></div>
+    </div>
+    <div id="liveMessage" class="live" aria-live="polite">Gym parte en 4/28. Esto ya no puede llamarse accidente. 😌</div>
+  </section>
+
+  <section class="panel">
+    <div class="panel-head">
+      <div><h2>Nuevo reto</h2><p>Crear un contador significa que ya lo hiciste al menos una vez; por eso todo reto nuevo nace directamente en 1.</p></div>
+    </div>
+    <form id="newCounterForm" class="new-form">
+      <input id="newCounterName" maxlength="60" autocomplete="off" placeholder="Ej.: Salir a correr, aprender guitarra…" aria-label="Nombre del nuevo reto" required>
+      <button class="btn primary" type="submit">+ Nuevo reto</button>
+    </form>
+  </section>
+
+  <section id="counterGrid" class="counter-grid" aria-live="polite"></section>
+
+  <section class="panel rule-grid">
+    <div class="rule-card">
+      <h2>Tu regla actual</h2>
+      <strong class="big"><span id="goalRule">28</span> veces</strong>
+      <small>La meta se aplica a todos los retos activos. Si un reto ya había completado una meta anterior, Emma OS conserva ese hito.</small>
+      <div class="actions" style="margin-top:12px">
+        <button id="birthdayBtn" class="btn primary" type="button">🎂 Cumplí años · subir a 29</button>
+        <button id="editGoalBtn" class="btn" type="button">Editar meta</button>
+      </div>
+    </div>
+    <div class="rule-card">
+      <h2>La idea</h2>
+      <small><strong style="color:var(--text)">La meta es un mínimo, no un límite.</strong> Al llegar a la cifra puedes seguir sumando. La barra queda completa, pero el contador continúa creciendo.</small>
+      <small style="margin-top:10px">Nada de “lo probé una vez y no funcionó”. Primero junta evidencia. Después emites el veredicto 😂.</small>
+    </div>
+  </section>
+
+  <section class="panel">
+    <h2>Cómo funcionan los hitos</h2>
+    <p>Las frases se recalculan cuando cambia tu meta. Hay hitos de inicio, 25 %, mitad, 75 %, recta final y contrato cumplido, además de algunas sorpresas intermedias.</p>
+  </section>
+
+  <div class="footer">Emma OS v1.6.0 · <code>emmaos_dale_una_oportunidad_v1</code> · datos guardados localmente y compatibles con Respaldos/Sync Sheets</div>
+</div>
+
+<script>
+/*
+  Emma OS v1.6.0 — lógica de "Dale una oportunidad"
+  Fecha: 2026-08-28
+  Implementación: OpenAI · ChatGPT (GPT-5.6 Sol)
+  Decisiones clave:
+  - Meta global editable; empieza en 28.
+  - Gym es el único contador inicial excepcional: 4/28.
+  - Todo reto creado desde la interfaz parte en 1, nunca en 0.
+  - Se permite seguir contando por encima de la meta.
+  - Al subir la meta, los objetivos anteriores completados quedan registrados.
+*/
+const STORAGE_KEY='emmaos_dale_una_oportunidad_v1';
+const SCHEMA_VERSION=1;
+
+function id(){return window.crypto?.randomUUID?.() || 'opp-'+Date.now()+'-'+Math.random().toString(16).slice(2);}
+function nowISO(){return new Date().toISOString();}
+function defaultState(){
+  const now=nowISO();
+  return {
+    version:SCHEMA_VERSION,
+    goal:28,
+    createdAt:now,
+    updatedAt:now,
+    counters:[{
+      id:'gym',
+      name:'Gym',
+      count:4,
+      createdAt:now,
+      updatedAt:now,
+      completedGoals:[]
+    }]
+  };
+}
+function normalizeCounter(counter){
+  const count=Math.max(1,Math.floor(Number(counter?.count)||1));
+  return {
+    id:String(counter?.id||id()),
+    name:String(counter?.name||'Reto sin nombre').trim().slice(0,60)||'Reto sin nombre',
+    count,
+    createdAt:counter?.createdAt||nowISO(),
+    updatedAt:counter?.updatedAt||counter?.createdAt||nowISO(),
+    completedGoals:Array.isArray(counter?.completedGoals)?counter.completedGoals.filter(x=>Number.isFinite(Number(x?.goal))).map(x=>({goal:Math.max(1,Math.floor(Number(x.goal))),completedAt:x.completedAt||nowISO()})):[]
+  };
+}
+function loadState(){
+  try{
+    const raw=localStorage.getItem(STORAGE_KEY);
+    if(!raw){const initial=defaultState();localStorage.setItem(STORAGE_KEY,JSON.stringify(initial));return initial;}
+    const parsed=JSON.parse(raw);
+    const goal=Math.max(1,Math.floor(Number(parsed?.goal)||28));
+    const counters=Array.isArray(parsed?.counters)?parsed.counters.map(normalizeCounter):[];
+    const state={version:SCHEMA_VERSION,goal,createdAt:parsed?.createdAt||nowISO(),updatedAt:parsed?.updatedAt||nowISO(),counters};
+    if(!state.counters.length) state.counters=defaultState().counters;
+    return state;
+  }catch(error){
+    console.warn('No se pudo leer Dale una oportunidad. Se cargará el estado inicial.',error);
+    return defaultState();
+  }
+}
+let state=loadState();
+
+const els={
+  goalStat:document.getElementById('goalStat'),counterStat:document.getElementById('counterStat'),completedStat:document.getElementById('completedStat'),
+  liveMessage:document.getElementById('liveMessage'),counterGrid:document.getElementById('counterGrid'),goalRule:document.getElementById('goalRule'),
+  birthdayBtn:document.getElementById('birthdayBtn'),editGoalBtn:document.getElementById('editGoalBtn'),newCounterForm:document.getElementById('newCounterForm'),newCounterName:document.getElementById('newCounterName')
+};
+
+function save(){state.updatedAt=nowISO();localStorage.setItem(STORAGE_KEY,JSON.stringify(state));}
+function esc(value){return String(value??'').replace(/[&<>"']/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[ch]));}
+function clampPct(count,goal){return Math.max(0,Math.min(100,Math.round((count/goal)*100)));}
+function uniqueMilestones(goal){
+  const candidates=[
+    [1,'Bueno… técnicamente ya empezaste 😂'],
+    [4,'Esto ya no puede llamarse accidente.'],
+    [Math.max(2,Math.round(goal*.25)),'Una cuarta parte. Tu cuerpo ya sospecha algo.'],
+    [10,'Dos dígitos. Ahora sí hay antecedentes.'],
+    [Math.max(2,Math.round(goal*.5)),'Mitad del trato. Ya no puedes decir “lo probé una vez”.'],
+    [Math.max(2,Math.round(goal*.65)),'A estas alturas estás sospechosamente comprometido.'],
+    [Math.max(2,Math.round(goal*.75)),'Tres cuartos. El sofá empieza a extrañarte.'],
+    [Math.max(1,goal-3),'Quedan tres. Sería ridículo abandonar ahora 😂.'],
+    [Math.max(1,goal-1),'UNA. MÁS.'],
+    [goal,'Contrato cumplido. Ya tienes permiso para decidir. 🏆']
+  ];
+  const map=new Map();
+  for(const [at,text] of candidates){if(at>=1&&at<=goal) map.set(at,text);}
+  return [...map.entries()].sort((a,b)=>a[0]-b[0]).map(([at,text])=>({at,text}));
+}
+function phraseFor(count,goal){
+  if(count>goal) return 'Contrato cumplido. Todo lo que sigue es puro DLC 😎.';
+  const exact=uniqueMilestones(goal).find(m=>m.at===count);
+  if(exact) return exact.text;
+  const p=count/goal;
+  if(p<.25) return 'Vas juntando pruebas. Todavía no se acepta un “esto no es para mí” 😂.';
+  if(p<.5) return 'Ya hay suficiente evidencia como para llamarlo intento serio.';
+  if(p<.75) return 'Esto se está poniendo sospechosamente constante.';
+  if(p<1) return 'Ya huele a trato cumplido. Sigue sumando.';
+  return 'Contrato cumplido. Ya tienes permiso para decidir. 🏆';
+}
+function completedGoalText(counter){
+  const goals=[...new Set((counter.completedGoals||[]).map(x=>Number(x.goal)).filter(Number.isFinite))].sort((a,b)=>a-b);
+  if(!goals.length) return '';
+  return `🏆 Metas anteriores completadas: ${goals.join(', ')}.`;
+}
+function ensureCompletion(counter,goal=state.goal){
+  if(counter.count<goal) return false;
+  if(counter.completedGoals.some(x=>Number(x.goal)===goal)) return false;
+  counter.completedGoals.push({goal,completedAt:nowISO()});
+  return true;
+}
+function renderCard(counter){
+  const pct=clampPct(counter.count,state.goal);
+  const complete=counter.count>=state.goal;
+  const remaining=Math.max(0,state.goal-counter.count);
+  const history=completedGoalText(counter);
+  return `<article class="counter-card ${complete?'complete':''}" data-id="${esc(counter.id)}">
+    <div class="counter-top">
+      <div class="counter-title"><h2>${esc(counter.name)}</h2><small>${complete?`Meta actual alcanzada · ${counter.count-state.goal>0?counter.count-state.goal+' extra':'justo en la meta'}`:`Faltan ${remaining} ${remaining===1?'oportunidad':'oportunidades'}`}</small></div>
+      <span class="badge ${complete?'complete':''}">${complete?'✓ cumplida':pct+'%'}</span>
+    </div>
+    <div class="counter-value"><strong>${counter.count}</strong><span>/ ${state.goal}</span></div>
+    <div class="progress" aria-label="Progreso ${esc(counter.name)}"><span style="width:${pct}%"></span></div>
+    <div class="phrase">${esc(phraseFor(counter.count,state.goal))}</div>
+    <div class="counter-actions">
+      <button class="btn small" type="button" data-action="minus" data-id="${esc(counter.id)}" ${counter.count<=1?'disabled':''}>−1</button>
+      <button class="btn primary plus" type="button" data-action="plus" data-id="${esc(counter.id)}">+1 · Lo hice</button>
+      <button class="btn small" type="button" data-action="rename" data-id="${esc(counter.id)}">Renombrar</button>
+      <button class="btn small danger" type="button" data-action="delete" data-id="${esc(counter.id)}">Borrar</button>
+    </div>
+    ${history?`<div class="history">${esc(history)}</div>`:''}
+  </article>`;
+}
+function render(){
+  state.counters.forEach(counter=>ensureCompletion(counter));
+  save();
+  els.goalStat.textContent=state.goal;
+  els.goalRule.textContent=state.goal;
+  els.counterStat.textContent=state.counters.length;
+  els.completedStat.textContent=state.counters.filter(c=>c.count>=state.goal).length;
+  els.birthdayBtn.textContent=`🎂 Cumplí años · subir a ${state.goal+1}`;
+  els.counterGrid.innerHTML=state.counters.length?state.counters.map(renderCard).join(''):'<div class="empty">Todavía no hay retos. Crea el primero arriba.</div>';
+}
+function announce(text,type=''){
+  els.liveMessage.textContent=text;
+  els.liveMessage.className='live'+(type==='good'?' good':'');
+}
+function findCounter(idValue){return state.counters.find(c=>c.id===idValue);}
+function updateCount(counter,delta){
+  const before=counter.count;
+  counter.count=Math.max(1,counter.count+delta);
+  counter.updatedAt=nowISO();
+  const justCompleted=before<state.goal&&counter.count>=state.goal;
+  ensureCompletion(counter);
+  save();render();
+  if(justCompleted) announce(`${counter.name}: ${phraseFor(counter.count,state.goal)}`,'good');
+  else announce(`${counter.name} · ${counter.count}/${state.goal} — ${phraseFor(counter.count,state.goal)}`,counter.count>=state.goal?'good':'');
+}
+function changeGoal(nextGoal){
+  const next=Math.max(1,Math.floor(Number(nextGoal)||state.goal));
+  if(next===state.goal) return;
+  const previous=state.goal;
+  state.counters.forEach(counter=>{if(counter.count>=previous) ensureCompletion(counter,previous);});
+  state.goal=next;
+  save();render();
+  announce(`Regla actualizada: ahora son ${state.goal} oportunidades. Las metas anteriores completadas quedaron guardadas.`,'good');
+}
+
+els.newCounterForm.addEventListener('submit',event=>{
+  event.preventDefault();
+  const name=els.newCounterName.value.trim().slice(0,60);
+  if(!name) return;
+  if(state.counters.some(c=>c.name.toLocaleLowerCase('es')===name.toLocaleLowerCase('es'))){announce(`Ya existe un reto llamado “${name}”.`);return;}
+  const now=nowISO();
+  state.counters.push({id:id(),name,count:1,createdAt:now,updatedAt:now,completedGoals:[]});
+  els.newCounterName.value='';
+  save();render();announce(`${name} creado en 1/${state.goal}. Bueno… técnicamente ya empezaste 😂`);
+});
+els.counterGrid.addEventListener('click',event=>{
+  const btn=event.target.closest('[data-action]');if(!btn)return;
+  const counter=findCounter(btn.dataset.id);if(!counter)return;
+  const action=btn.dataset.action;
+  if(action==='plus') updateCount(counter,1);
+  if(action==='minus') updateCount(counter,-1);
+  if(action==='rename'){
+    const value=prompt('Nuevo nombre del reto:',counter.name);if(value===null)return;
+    const name=value.trim().slice(0,60);if(!name)return;
+    counter.name=name;counter.updatedAt=nowISO();save();render();announce(`Reto renombrado a “${name}”.`);
+  }
+  if(action==='delete'){
+    if(!confirm(`¿Borrar el reto “${counter.name}”? Esta acción elimina su contador de este dispositivo.`))return;
+    state.counters=state.counters.filter(c=>c.id!==counter.id);save();render();announce(`Reto “${counter.name}” eliminado.`);
+  }
+});
+els.birthdayBtn.addEventListener('click',()=>changeGoal(state.goal+1));
+els.editGoalBtn.addEventListener('click',()=>{
+  const value=prompt('¿Cuál será la nueva meta de oportunidades?',String(state.goal));
+  if(value===null)return;
+  const n=Math.floor(Number(value));
+  if(!Number.isFinite(n)||n<1||n>150){announce('La meta debe ser un número entero entre 1 y 150.');return;}
+  changeGoal(n);
+});
+
+render();
+</script>
+</body>
+</html>
