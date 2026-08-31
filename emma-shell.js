@@ -1,10 +1,10 @@
-/* Emma OS v1.6.0 · 2026-08-28 · OpenAI/ChatGPT (GPT-5.6 Sol)
+/* Emma OS v1.6.1 · 2026-08-29 · OpenAI/ChatGPT (GPT-5.5 Thinking)
    Cambio: se registra el módulo "Dale una oportunidad" en el shell lateral. */
 (function(){
   const script = document.currentScript;
   const base = script?.dataset?.base || './';
   const current = script?.dataset?.current || 'inicio';
-  const version = script?.dataset?.version || 'v1.6.0';
+  const version = script?.dataset?.version || 'v1.6.1';
   const apps = [
     {id:'inicio', icon:'⌂', name:'Inicio', desc:'Dashboard general', href: base + 'index.html', accent:'cyan'},
     {id:'pendientes', icon:'✓', name:'Pendientes diarios', desc:'Prioridad, esfuerzo y tareas recurrentes', href: base + 'apps/pendientes/', accent:'green'},
