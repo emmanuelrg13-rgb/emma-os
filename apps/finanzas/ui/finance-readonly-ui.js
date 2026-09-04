@@ -1,8 +1,8 @@
-/* Emma OS v1.7.2 — Control Financiero Personal M3 lectura
+/* Emma OS v1.7.3 — Control Financiero Personal M3 lectura + escritura controlada
    Archivo: finance-readonly-ui.js
    Autoría: OpenAI/ChatGPT (GPT-5.5 Thinking) para Emmanuel Rojas.
    Propósito: renderizar la UI nativa de lectura del dominio financiero dentro de Emma OS.
-   Alcance M3 parcial: no escribe en Google Sheets; no registra pagos; no anula; no edita ítems.
+   Alcance M3: lectura nativa estable y escritura controlada desde una pestaña separada.
 */
 
 export const TYPE_LABELS = Object.freeze({ Deuda: 'Deudas', Compra: 'Compras', 'Inversión': 'Inversiones' });
@@ -98,7 +98,7 @@ export function renderThisMonth(target, state) {
   const payments = plan.payments || [];
   target.innerHTML = `
     <div class="finance-section-head">
-      <div><h2>Este mes</h2><p>Asignación sugerida usando el aporte mensual base y la estrategia activa. Sólo lectura: no registra pagos.</p></div>
+      <div><h2>Este mes</h2><p>Asignación sugerida usando el aporte mensual base y la estrategia activa. Para registrar, usa la pestaña Escritura.</p></div>
       <div class="finance-big-number"><small>Total sugerido</small><strong>${money(plan.total)}</strong></div>
     </div>
     <div class="finance-route-list">
@@ -234,5 +234,5 @@ export function renderSettings(target, state, sourceMeta = {}) {
       <article class="finance-kpi"><small>Repositorio</small><strong>${escapeHtml(sourceMeta.kind || '—')}</strong><span>${sourceMeta.readOnly === false ? 'lectura/escritura contrato' : 'sólo lectura UI'}</span></article>
       <article class="finance-kpi"><small>Snapshot fuente</small><strong>v10.1</strong><span>auditoría estable</span></article>
     </div>
-    <p class="finance-note">En M3 parcial estos ajustes se muestran en lectura. La escritura de configuración queda para la etapa de escritura controlada.</p>`;
+    <p class="finance-note">Estos ajustes se muestran aquí en lectura. Para modificarlos, usa la pestaña Escritura controlada.</p>`;
 }

@@ -1,8 +1,7 @@
-/* Emma OS v1.7.2 — Control Financiero Personal M2/M3 lectura
+/* Emma OS v1.7.3 — Control Financiero Personal M3 escritura controlada
    Archivo: google-sheets-finance-adapter.js
    Propósito: adaptador de persistencia hacia una Web App de Google Apps Script.
-   Nota de seguridad: en M2 la UI usa este adaptador para lectura/pruebas. Las escrituras quedan detrás
-   del contrato y requieren habilitación explícita en el backend/endpoint.
+   Nota de seguridad: las escrituras siguen detrás del contrato, requieren allowWrites en cliente y allowWrite=1 en backend.
 */
 
 import { FinanceRepository, FinanceRepositoryError, validateRepositoryContract } from './finance-repository.js';
@@ -38,7 +37,7 @@ export class GoogleSheetsFinanceAdapter extends FinanceRepository {
   async call(action, payload = {}, { write = false } = {}) {
     this.assertReady();
     if (write && !this.allowWrites) {
-      throw new FinanceRepositoryError('Escrituras desactivadas en el adaptador M2. Se habilitarán en M3/M4 tras pruebas de paridad.');
+      throw new FinanceRepositoryError('Escrituras desactivadas en este adaptador. Activa allowWrites sólo desde la UI de escritura controlada.');
     }
     const response = await this.jsonp(action, payload, { write });
     if (!response || response.ok === false) {
@@ -70,7 +69,7 @@ export class GoogleSheetsFinanceAdapter extends FinanceRepository {
       params.set('action', action);
       params.set('secret', this.secret);
       params.set('callback', callback);
-      params.set('client', 'emma-os-finanzas-m2');
+      params.set('client', 'emma-os-finanzas-m3-escritura');
       params.set('module', FINANCE_APP.module);
       if (write) params.set('allowWrite', '1');
       params.set('payload', safeJson(payload));

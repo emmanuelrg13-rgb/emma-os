@@ -1,14 +1,14 @@
-/* Emma OS v1.7.2 — Control Financiero Personal M3 lectura
+/* Emma OS v1.7.3 — Control Financiero Personal M3 escritura controlada
    Archivo: finance-schema.js
    Autoría: OpenAI/ChatGPT (GPT-5.5 Thinking) para Emmanuel Rojas.
    Propósito: definir contrato, enums y metadatos estables del dominio financiero.
-   Nota: este módulo no accede a Google Sheets ni modifica datos reales. */
+   Nota: el dominio sigue separado de la persistencia; las escrituras reales pasan por repositorio/adaptador y backend. */
 
 export const FINANCE_APP = Object.freeze({
   module: 'control-financiero',
   release: 'v1.0',
   sourceSnapshot: 'v10.1-auditoria',
-  emmaMigrationVersion: 'v1.7.2-m3-lectura',
+  emmaMigrationVersion: 'v1.7.3-m3-escritura',
   schemaVersion: 'finance-schema-v1',
   timezone: 'America/Santiago',
   currency: 'CLP'

@@ -1,4 +1,4 @@
-/* Emma OS v1.7.2 — Control Financiero Personal M1/M2/M3 lectura
+/* Emma OS v1.7.3 — Control Financiero Personal M1/M2/M3 lectura
    Archivo: finance-strategies.js
    Propósito: ordenar ítems elegibles sin tocar persistencia. */
 

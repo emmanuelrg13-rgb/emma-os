@@ -1,7 +1,7 @@
 {
-  "name": "Emma OS v1.7.2",
+  "name": "Emma OS v1.7.3",
   "short_name": "Emma OS",
-  "description": "Centro de control personal con Finanzas M3 parcial: UI nativa de lectura conectada al dominio financiero y Google Sheets, sin escrituras reales todavía.",
+  "description": "Centro de control personal con Finanzas M3 escritura controlada: UI nativa conectada a Google Sheets con acciones reales protegidas por confirmaciones y validación backend.",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",

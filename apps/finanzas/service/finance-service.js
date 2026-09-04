@@ -1,6 +1,6 @@
-/* Emma OS v1.7.2 — Control Financiero Personal M2/M3 lectura
+/* Emma OS v1.7.3 — Control Financiero Personal M3 escritura controlada
    Archivo: finance-service.js
-   Propósito: capa de aplicación entre FinanceUI, FinanceCore y FinanceRepository.
+   Propósito: capa de aplicación entre FinanceUI, FinanceCore y FinanceRepository. M3 escritura controlada habilita mutaciones sólo con adaptadores allowWrites.
 */
 
 import { buildAppState, previewMonthlyAmount as corePreviewMonthlyAmount, simulateAmount as coreSimulateAmount, validateImportData } from '../core/finance-core.js';
@@ -97,6 +97,33 @@ export class FinanceService {
 
   simulateFromState(amount, normalizedState) {
     return coreSimulateAmount(amount, normalizedState.coreState.items, normalizedState.coreState.settings);
+  }
+
+  async saveSettings(payload = {}) {
+    const raw = await this.repository.saveSettings(payload);
+    return this.normalizeState(raw);
+  }
+
+  async saveItem(payload = {}) {
+    const raw = await this.repository.saveItem(payload);
+    return this.normalizeState(raw);
+  }
+
+  async archiveItem(id) {
+    const raw = await this.repository.archiveItem(id);
+    return this.normalizeState(raw);
+  }
+
+  async registerPaymentBatch(payload = {}) {
+    const raw = await this.repository.registerPaymentBatch(payload);
+    const normalized = this.normalizeState(raw);
+    normalized.duplicateRequestIgnored = !!raw.duplicateRequestIgnored;
+    return normalized;
+  }
+
+  async voidPayment(pagoId) {
+    const raw = await this.repository.voidPayment(pagoId);
+    return this.normalizeState(raw);
   }
 
   async exportData() {

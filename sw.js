@@ -1,5 +1,5 @@
-/* Emma OS v1.7.2 · 2026-09-04 · OpenAI/ChatGPT · M3 parcial Finanzas lectura + cache network-first. */
-const CACHE_NAME = 'emma-os-v1-7-2-cache-001';
+/* Emma OS v1.7.3 · 2026-09-04 · OpenAI/ChatGPT · M3 Finanzas escritura controlada + cache network-first. */
+const CACHE_NAME = 'emma-os-v1-7-3-cache-001';
 const FALLBACK_URL = './index.html';
 const ASSETS = [
   './',
@@ -18,6 +18,7 @@ const ASSETS = [
   './apps/finanzas/',
   './apps/finanzas/index.html',
   './apps/finanzas/ui/finance-readonly-ui.js',
+  './apps/finanzas/ui/finance-write-ui.js',
   './apps/finanzas/core/finance-schema.js',
   './apps/finanzas/core/finance-dates.js',
   './apps/finanzas/core/finance-strategies.js',
@@ -27,9 +28,11 @@ const ASSETS = [
   './apps/finanzas/repository/google-sheets-finance-adapter.js',
   './apps/finanzas/service/finance-service.js',
   './apps/finanzas/backend/finance-google-sheets-api-v1-7-1.gs.txt',
+  './apps/finanzas/backend/finance-google-sheets-api-v1-7-3.gs.txt',
   './apps/finanzas/tests/finance-fixtures.js',
   './apps/finanzas/tests/finance-core-tests.html',
   './apps/finanzas/tests/finance-repository-tests.html',
+  './apps/finanzas/tests/finance-write-tests.html',
   './apps/botiquin/',
   './apps/botiquin/index.html',
   './apps/respaldo/',

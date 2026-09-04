@@ -1,0 +1,109 @@
+<!doctype html>
+<!-- Emma OS v1.7.3 · Finanzas M3 escritura controlada · pruebas locales no destructivas -->
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Emma OS · Finanzas M3 tests</title>
+  <link rel="stylesheet" href="../../../emma-theme.css">
+  <style>
+    body{margin:0;background:var(--emma-bg);color:var(--emma-text);font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}.wrap{width:min(100% - 28px,980px);margin:0 auto;padding:24px 0 42px}.hero,.row{border:1px solid var(--emma-line);border-radius:24px;background:rgba(18,26,47,.88);padding:18px;margin:12px 0}.btn{border:1px solid var(--emma-line);background:rgba(23,34,61,.78);color:var(--emma-text);border-radius:999px;padding:10px 13px;font-weight:900;cursor:pointer}.btn.primary{background:linear-gradient(135deg,var(--emma-yellow),var(--emma-green));color:#06111f;border:0}.ok{border-color:rgba(52,211,153,.45)}.err{border-color:rgba(248,113,113,.55)}small{color:var(--emma-muted)}pre{white-space:pre-wrap;overflow:auto;background:rgba(15,23,42,.75);border:1px solid var(--emma-line);border-radius:18px;padding:14px;color:#cbd5e1}
+  </style>
+</head>
+<body class="emma-module emma-module-finanzas">
+  <main class="wrap">
+    <section class="hero">
+      <small>M3 · pruebas locales</small>
+      <h1>Finance write tests</h1>
+      <p>Pruebas no destructivas con MemoryFinanceRepository. No leen ni escriben Google Sheets.</p>
+      <button class="btn primary" id="run">Ejecutar pruebas</button>
+      <a class="btn" href="../">Volver a Finanzas</a>
+    </section>
+    <section id="results"></section>
+    <pre id="dump">—</pre>
+  </main>
+  <script type="module">
+    import { createMemoryFinanceService } from '../service/finance-service.js';
+    import { settings, items, payments } from './finance-fixtures.js';
+
+    const $ = id => document.getElementById(id);
+    const results = $('results');
+    const tests = [];
+    function test(name, fn){ tests.push({name, fn}); }
+    function assert(condition, message){ if(!condition) throw new Error(message || 'Assert falló'); }
+    function hasAnulado(state, pagoId){ return state.coreState.payments.some(p => p.pagoId === pagoId && p.estado === 'Anulado'); }
+
+    test('saveSettings actualiza estrategia y conserva contrato', async () => {
+      const service = createMemoryFinanceService({ settings, items, payments });
+      const next = await service.saveSettings({ ...settings, strategy: 'urgentes_primero', monthlyCurrent: 70000 });
+      assert(next.coreState.settings.strategy === 'urgentes_primero', 'Estrategia no actualizada');
+      assert(Number(next.coreState.settings.monthlyCurrent) === 70000, 'Aporte base no actualizado');
+    });
+
+    test('saveItem crea ítem con ID estable y saldo derivado', async () => {
+      const service = createMemoryFinanceService({ settings, items, payments });
+      const before = await service.getAppState();
+      const next = await service.saveItem({ nombre:'Compra test M3', tipo:'Compra', montoTotal:25000, pagadoPrevio:5000, prioridad:30, estado:'Activo', notas:'test local' });
+      assert(next.coreState.items.length === before.coreState.items.length + 1, 'No agregó ítem');
+      const item = next.coreState.items.find(i => i.nombre === 'Compra test M3');
+      assert(item && item.id > 0, 'Ítem sin ID');
+      assert(item.saldoPendiente === 20000, 'Saldo derivado incorrecto');
+    });
+
+    test('registerPaymentBatch registra pago, baja saldo y usa idempotencia', async () => {
+      const service = createMemoryFinanceService({ settings, items, payments });
+      const before = await service.getAppState();
+      const target = before.coreState.items.find(i => i.estado !== 'Archivado' && i.estado !== 'Pagado' && i.tipo !== 'Inversión' && i.saldoPendiente > 1000);
+      const payload = { fecha:'2026-09-04', requestId:'m3-test-idempotente', payments:[{ itemId: target.id, monto:1000, mesPlan:1, nota:'test' }] };
+      const first = await service.registerPaymentBatch(payload);
+      const second = await service.registerPaymentBatch(payload);
+      assert(first.coreState.payments.length === before.coreState.payments.length + 1, 'No registró pago');
+      assert(second.duplicateRequestIgnored === true, 'No marcó request duplicado');
+      assert(second.coreState.payments.length === first.coreState.payments.length, 'Duplicó pago');
+    });
+
+    test('voidPayment anula sin borrar historial', async () => {
+      const service = createMemoryFinanceService({ settings, items, payments });
+      const paid = await service.registerPaymentBatch({ fecha:'2026-09-04', requestId:'m3-test-void', payments:[{ itemId:1, monto:1000, mesPlan:1, nota:'test void' }] });
+      const pagoId = paid.coreState.payments[paid.coreState.payments.length - 1].pagoId;
+      const voided = await service.voidPayment(pagoId);
+      assert(hasAnulado(voided, pagoId), 'Pago no quedó Anulado');
+      assert(voided.coreState.payments.length === paid.coreState.payments.length, 'Se borró historial');
+    });
+
+    test('archiveItem excluye de totales sin borrar ítem', async () => {
+      const service = createMemoryFinanceService({ settings, items, payments });
+      const before = await service.getAppState();
+      const target = before.coreState.items.find(i => i.estado !== 'Archivado' && i.saldoPendiente > 0);
+      const archived = await service.archiveItem(target.id);
+      const item = archived.coreState.items.find(i => i.id === target.id);
+      assert(item.estado === 'Archivado', 'Ítem no archivado');
+      assert(archived.coreState.items.length === before.coreState.items.length, 'Ítem fue eliminado');
+    });
+
+    test('inversión bloqueada antes del umbral sigue protegida', async () => {
+      const service = createMemoryFinanceService({ settings, items, payments });
+      const state = await service.getAppState();
+      const inv = state.coreState.items.find(i => i.tipo === 'Inversión' && i.saldoPendiente > 0);
+      let failed = false;
+      try { await service.registerPaymentBatch({ fecha:'2026-09-04', requestId:'m3-test-inv-block', payments:[{ itemId: inv.id, monto:1000, mesPlan:1 }] }); }
+      catch(error) { failed = /inversiones/i.test(error.message); }
+      assert(failed, 'Gate de inversiones no bloqueó el pago');
+    });
+
+    async function run(){
+      results.innerHTML = '';
+      const detail = [];
+      for(const t of tests){
+        const row = document.createElement('article'); row.className = 'row';
+        try { await t.fn(); row.classList.add('ok'); row.innerHTML = `<strong>✓ ${t.name}</strong><br><small>OK</small>`; detail.push({name:t.name, ok:true}); }
+        catch(error){ row.classList.add('err'); row.innerHTML = `<strong>✗ ${t.name}</strong><br><small>${error.message}</small>`; detail.push({name:t.name, ok:false, error:error.message}); }
+        results.appendChild(row);
+      }
+      $('dump').textContent = JSON.stringify({ passed: detail.filter(x=>x.ok).length, total: detail.length, detail }, null, 2);
+    }
+    $('run').addEventListener('click', run);
+    run();
+  </script>
+</body>
+</html>
