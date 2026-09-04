@@ -1,7 +1,7 @@
 {
-  "name": "Emma OS v1.7.0",
+  "name": "Emma OS v1.7.1",
   "short_name": "Emma OS",
-  "description": "Centro de control personal con navegación lateral, pendientes, Arrowverso, rutina atómica, Dale una oportunidad, botiquín, respaldos externos, Sync Sheets y laboratorio Finanzas M0/M1.",
+  "description": "Centro de control personal con navegación lateral, pendientes, Arrowverso, rutina atómica, Dale una oportunidad, botiquín, respaldos externos, Sync Sheets y laboratorio Finanzas M0/M1/M2.",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",

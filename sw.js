@@ -1,5 +1,5 @@
-/* Emma OS v1.7.0 · 2026-09-03 · OpenAI/ChatGPT · M0/M1 Finanzas + cache network-first. */
-const CACHE_NAME = 'emma-os-v1-7-0-cache-001';
+/* Emma OS v1.7.1 · 2026-09-03 · OpenAI/ChatGPT · M0/M1/M2 Finanzas + cache network-first. */
+const CACHE_NAME = 'emma-os-v1-7-1-cache-001';
 const FALLBACK_URL = './index.html';
 const ASSETS = [
   './',
@@ -22,8 +22,13 @@ const ASSETS = [
   './apps/finanzas/core/finance-strategies.js',
   './apps/finanzas/core/finance-achievements.js',
   './apps/finanzas/core/finance-core.js',
+  './apps/finanzas/repository/finance-repository.js',
+  './apps/finanzas/repository/google-sheets-finance-adapter.js',
+  './apps/finanzas/service/finance-service.js',
+  './apps/finanzas/backend/finance-google-sheets-api-v1-7-1.gs.txt',
   './apps/finanzas/tests/finance-fixtures.js',
   './apps/finanzas/tests/finance-core-tests.html',
+  './apps/finanzas/tests/finance-repository-tests.html',
   './apps/botiquin/',
   './apps/botiquin/index.html',
   './apps/respaldo/',

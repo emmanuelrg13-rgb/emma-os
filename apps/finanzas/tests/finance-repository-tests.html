@@ -1,0 +1,97 @@
+<!doctype html>
+<!-- Emma OS v1.7.1 · Finanzas M2 tests · 2026-09-03 · OpenAI/ChatGPT -->
+<html lang="es">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Emma OS · Finanzas M2 tests</title>
+  <link rel="stylesheet" href="../../../emma-theme.css">
+  <style>
+    body{margin:0;min-height:100vh;background:var(--emma-bg);color:var(--emma-text);font-family:Inter,system-ui,sans-serif}.wrap{width:min(100% - 28px,980px);margin:auto;padding:28px 0}.hero,.row{border:1px solid var(--emma-line);border-radius:24px;background:rgba(18,26,47,.88);padding:18px;box-shadow:var(--emma-shadow)}.list{display:grid;gap:10px;margin-top:14px}.ok{border-color:rgba(52,211,153,.45)}.err{border-color:rgba(248,113,113,.48)}button,a{display:inline-flex;margin:5px 5px 0 0;border:1px solid var(--emma-line);border-radius:999px;padding:10px 13px;background:rgba(23,34,61,.8);color:var(--emma-text);font-weight:900;text-decoration:none;cursor:pointer}.primary{background:linear-gradient(135deg,var(--emma-cyan),var(--emma-green));color:#06111f;border:0}small{color:var(--emma-muted)}pre{white-space:pre-wrap;background:rgba(15,23,42,.75);padding:14px;border-radius:18px;border:1px solid var(--emma-line)}
+  </style>
+</head>
+<body class="emma-module emma-module-finanzas">
+  <main class="wrap">
+    <section class="hero">
+      <small>M2 · pruebas locales</small>
+      <h1>FinanceRepository tests</h1>
+      <p>Pruebas no destructivas del contrato de repositorio usando adaptador en memoria. No leen ni escriben Google Sheets.</p>
+      <button class="primary" id="run" type="button">Ejecutar pruebas</button>
+      <a href="../">Volver a Finanzas</a>
+    </section>
+    <section class="list" id="results"></section>
+    <pre id="dump">—</pre>
+  </main>
+  <script type="module">
+    import { createMemoryFinanceService } from '../service/finance-service.js';
+    import { validateRepositoryContract, MemoryFinanceRepository } from '../repository/finance-repository.js';
+    import { settings, items, payments } from './finance-fixtures.js';
+
+    const $ = id => document.getElementById(id);
+    const tests = [];
+    function test(name, fn){ tests.push({ name, fn }); }
+    function assert(cond, msg='Assert falló'){ if(!cond) throw new Error(msg); }
+
+    test('Contrato M2 expone 8 métodos funcionales', async () => {
+      const repo = new MemoryFinanceRepository({ settings, items, payments });
+      const result = validateRepositoryContract(repo);
+      assert(result.ok, 'Faltan métodos: ' + result.missing.join(', '));
+    });
+
+    test('Repositorio local entrega getAppState normalizado', async () => {
+      const service = createMemoryFinanceService({ settings, items, payments });
+      const state = await service.getAppState();
+      assert(state.ok, 'Estado no OK');
+      assert(state.coreState.items.length === items.length, 'No conserva cantidad de ítems');
+      assert(state.coreState.totals.General.pending >= 0, 'Saldo general inválido');
+    });
+
+    test('saveItem respeta historial confirmado y bloquea monto menor', async () => {
+      const service = createMemoryFinanceService({ settings, items, payments });
+      let failed = false;
+      try {
+        await service.repository.saveItem({ id: 1, nombre: 'Fondo iglesia para eventos', tipo: 'Deuda', montoTotal: 1, pagadoPrevio: 0, prioridad: 1, estado: 'Activo', notas: '' });
+      } catch (_error) { failed = true; }
+      assert(failed, 'Debió bloquear edición con monto bajo historial confirmado');
+    });
+
+    test('registerPaymentBatch es idempotente por requestId', async () => {
+      const repo = new MemoryFinanceRepository({ settings, items, payments: [] });
+      const payload = { requestId: 'm2-test-001', fecha: '2026-09-03', payments: [{ itemId: 1, monto: 1000, mesPlan: 1, nota: 'test' }] };
+      const first = await repo.registerPaymentBatch(payload);
+      const second = await repo.registerPaymentBatch(payload);
+      assert(first.payments.length === 1, 'Primer pago no se registró');
+      assert(second.payments.length === 1, 'Duplicó pago con mismo requestId');
+      assert(second.duplicateRequestIgnored === true, 'No reportó request duplicado');
+    });
+
+    test('voidPayment anula sin borrar historial', async () => {
+      const repo = new MemoryFinanceRepository({ settings, items, payments: [] });
+      const state = await repo.registerPaymentBatch({ requestId: 'm2-test-002', fecha: '2026-09-03', payments: [{ itemId: 1, monto: 1000, mesPlan: 1, nota: 'test' }] });
+      const pagoId = state.payments[0].pagoId;
+      const after = await repo.voidPayment(pagoId);
+      assert(after.payments.length === 1, 'Borró el pago');
+      assert(after.payments[0].estado === 'Anulado', 'No cambió a Anulado');
+    });
+
+    test('Export financiero incluye schemaVersion estable', async () => {
+      const repo = new MemoryFinanceRepository({ settings, items, payments });
+      const payload = await repo.exportData();
+      assert(payload.module === 'control-financiero', 'Módulo incorrecto');
+      assert(payload.schemaVersion === 'finance-schema-v1', 'schemaVersion incorrecto');
+    });
+
+    async function run(){
+      $('results').innerHTML = '';
+      const summary = [];
+      for(const t of tests){
+        const row = document.createElement('div'); row.className = 'row'; row.innerHTML = `<strong>… ${t.name}</strong><br><small>Ejecutando</small>`; $('results').appendChild(row);
+        try { await t.fn(); row.classList.add('ok'); row.innerHTML = `<strong>✓ ${t.name}</strong><br><small>OK</small>`; summary.push({ name:t.name, ok:true }); }
+        catch(error){ row.classList.add('err'); row.innerHTML = `<strong>✗ ${t.name}</strong><br><small>${error.message}</small>`; summary.push({ name:t.name, ok:false, error:error.message }); }
+      }
+      $('dump').textContent = JSON.stringify(summary, null, 2);
+    }
+    $('run').addEventListener('click', run);
+    run();
+  </script>
+</body>
+</html>

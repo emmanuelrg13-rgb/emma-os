@@ -1,54 +1,102 @@
 <!doctype html>
-<!-- Emma OS v1.7.0 · Finanzas M0/M1 · 2026-09-03 · OpenAI/ChatGPT (GPT-5.5 Thinking) -->
+<!-- Emma OS v1.7.1 · Finanzas M2 · 2026-09-03 · OpenAI/ChatGPT (GPT-5.5 Thinking) -->
 <html lang="es">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Emma OS · Finanzas M0/M1</title>
+  <title>Emma OS · Finanzas M2</title>
   <link rel="manifest" href="../../manifest.webmanifest">
   <meta name="theme-color" content="#0d1324">
   <link rel="stylesheet" href="../../emma-theme.css">
   <style>
     body{margin:0;min-height:100vh;font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:var(--emma-bg);color:var(--emma-text)}
-    .wrap{width:min(100% - 28px,1180px);margin:0 auto;padding:26px 0 44px}.hero,.card,.panel{border:1px solid var(--emma-line);border-radius:28px;background:linear-gradient(135deg,rgba(18,26,47,.96),rgba(23,34,61,.78));box-shadow:var(--emma-shadow);padding:22px}.hero{position:relative;overflow:hidden}.hero:after{content:"";position:absolute;right:-90px;bottom:-120px;width:300px;height:300px;background:radial-gradient(circle,rgba(52,211,153,.20),transparent 62%)}.eyebrow{color:var(--module-accent,var(--emma-green));font-weight:900;text-transform:uppercase;letter-spacing:.14em;font-size:.75rem}h1{font-size:clamp(2rem,7vw,4rem);letter-spacing:-.07em;margin:.35rem 0}.subtitle,p,li,small{color:var(--emma-muted);line-height:1.55}.actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px}.btn{display:inline-flex;align-items:center;gap:8px;text-decoration:none;border:1px solid var(--emma-line);background:rgba(23,34,61,.78);color:var(--emma-text);border-radius:999px;padding:11px 14px;font-weight:900;cursor:pointer}.btn.primary{background:linear-gradient(135deg,var(--module-accent,var(--emma-green)),var(--module-accent-2,var(--emma-yellow)));border:0;color:#06111f}.grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-top:14px}.card strong{display:block;font-size:1.55rem}.panel{margin-top:14px}.cols{display:grid;grid-template-columns:1fr 1fr;gap:14px}.list{display:grid;gap:10px}.row{border:1px solid var(--emma-line);border-radius:18px;background:rgba(15,23,42,.60);padding:12px}.tag{display:inline-flex;border:1px solid var(--emma-line);border-radius:999px;padding:6px 10px;color:var(--emma-muted);font-size:.8rem;margin:2px}.bar{height:10px;background:rgba(148,163,184,.18);border:1px solid var(--emma-line);border-radius:999px;overflow:hidden}.bar span{display:block;height:100%;background:linear-gradient(90deg,var(--module-accent,var(--emma-green)),var(--module-accent-2,var(--emma-yellow)))}pre{white-space:pre-wrap;overflow:auto;background:rgba(15,23,42,.75);border:1px solid var(--emma-line);border-radius:18px;padding:14px;color:#cbd5e1}.warn{border-color:rgba(251,191,36,.45);background:linear-gradient(135deg,rgba(251,191,36,.12),rgba(15,23,42,.64))}@media(max-width:900px){.grid,.cols{grid-template-columns:1fr}.hero,.card,.panel{padding:18px}}
+    .wrap{width:min(100% - 28px,1180px);margin:0 auto;padding:26px 0 44px}
+    .hero,.card,.panel{border:1px solid var(--emma-line);border-radius:28px;background:linear-gradient(135deg,rgba(18,26,47,.96),rgba(23,34,61,.78));box-shadow:var(--emma-shadow);padding:22px}
+    .hero{position:relative;overflow:hidden}.hero:after{content:"";position:absolute;right:-90px;bottom:-120px;width:300px;height:300px;background:radial-gradient(circle,rgba(52,211,153,.20),transparent 62%)}
+    .eyebrow{color:var(--module-accent,var(--emma-green));font-weight:900;text-transform:uppercase;letter-spacing:.14em;font-size:.75rem}
+    h1{font-size:clamp(2rem,7vw,4rem);letter-spacing:-.07em;margin:.35rem 0}h2{margin:.2rem 0 .8rem} .subtitle,p,li,small{color:var(--emma-muted);line-height:1.55}
+    .actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px}.btn{display:inline-flex;align-items:center;gap:8px;text-decoration:none;border:1px solid var(--emma-line);background:rgba(23,34,61,.78);color:var(--emma-text);border-radius:999px;padding:11px 14px;font-weight:900;cursor:pointer}.btn.primary{background:linear-gradient(135deg,var(--module-accent,var(--emma-green)),var(--module-accent-2,var(--emma-yellow)));border:0;color:#06111f}.btn:disabled{opacity:.48;cursor:not-allowed}
+    .grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-top:14px}.card strong{display:block;font-size:1.55rem}.panel{margin-top:14px}.cols{display:grid;grid-template-columns:1fr 1fr;gap:14px}.list{display:grid;gap:10px}.row{border:1px solid var(--emma-line);border-radius:18px;background:rgba(15,23,42,.60);padding:12px}.row.ok{border-color:rgba(52,211,153,.38)}.row.warn{border-color:rgba(251,191,36,.42)}.row.err{border-color:rgba(248,113,113,.46)}
+    .tag{display:inline-flex;border:1px solid var(--emma-line);border-radius:999px;padding:6px 10px;color:var(--emma-muted);font-size:.8rem;margin:2px}.bar{height:10px;background:rgba(148,163,184,.18);border:1px solid var(--emma-line);border-radius:999px;overflow:hidden}.bar span{display:block;height:100%;background:linear-gradient(90deg,var(--module-accent,var(--emma-green)),var(--module-accent-2,var(--emma-yellow)))}
+    pre{white-space:pre-wrap;overflow:auto;max-height:340px;background:rgba(15,23,42,.75);border:1px solid var(--emma-line);border-radius:18px;padding:14px;color:#cbd5e1}.warnPanel{border-color:rgba(251,191,36,.45);background:linear-gradient(135deg,rgba(251,191,36,.12),rgba(15,23,42,.64))}
+    label{display:grid;gap:7px;color:var(--emma-muted);font-weight:800}input{width:100%;box-sizing:border-box;border:1px solid var(--emma-line);border-radius:16px;background:rgba(15,23,42,.75);color:var(--emma-text);padding:12px 14px;font:inherit}input:focus{outline:2px solid rgba(52,211,153,.25)}.formGrid{display:grid;grid-template-columns:1.5fr 1fr;gap:12px}.tiny{font-size:.78rem}.status{margin-top:12px;border:1px solid var(--emma-line);border-radius:18px;padding:12px;background:rgba(15,23,42,.56)}
+    @media(max-width:900px){.grid,.cols,.formGrid{grid-template-columns:1fr}.hero,.card,.panel{padding:18px}}
   </style>
-  <script src="../../emma-shell.js" data-base="../../" data-current="finanzas" data-version="v1.7.0" defer></script>
+  <script src="../../emma-shell.js" data-base="../../" data-current="finanzas" data-version="v1.7.1" defer></script>
 </head>
 <body class="emma-module emma-module-finanzas">
   <main class="wrap">
     <section class="hero">
-      <div class="eyebrow">Emma OS v1.7.0 · Finanzas M0/M1</div>
+      <div class="eyebrow">Emma OS v1.7.1 · Finanzas M2</div>
       <h1>Control Financiero Personal</h1>
-      <p class="subtitle">Laboratorio nativo de migración. Esta pantalla prueba el núcleo financiero puro, pero todavía no lee ni escribe la Google Sheet real.</p>
+      <p class="subtitle">M2 agrega la capa <strong>FinanceRepository</strong> y el adaptador experimental hacia Google Sheets. Esta pantalla puede probar conexión y leer estado real; las escrituras siguen bloqueadas desde la UI para evitar cambios antes de M3/M4.</p>
       <div class="actions">
-        <button class="btn primary" id="runDemo" type="button">Ejecutar demo del núcleo</button>
-        <a class="btn" href="tests/finance-core-tests.html">Abrir pruebas M1</a>
-        <a class="btn" href="../../docs/control-financiero/M0_M1_IMPLEMENTACION_EMMA_OS.md">Ver documento M0/M1</a>
+        <button class="btn primary" id="runDemo" type="button">Probar repositorio local</button>
+        <button class="btn" id="testSheets" type="button">Probar conexión Sheets</button>
+        <button class="btn" id="readSheets" type="button">Leer estado desde Sheets</button>
+        <a class="btn" href="tests/finance-core-tests.html">Pruebas M1</a>
+        <a class="btn" href="tests/finance-repository-tests.html">Pruebas M2</a>
+        <a class="btn" href="backend/finance-google-sheets-api-v1-7-1.gs.txt">Descargar Apps Script M2</a>
       </div>
+      <div class="status" id="statusBox">M2 listo. Configura URL/clave para probar Google Sheets.</div>
     </section>
 
     <section class="grid">
-      <div class="card"><small>Estado migración</small><strong>M0 + M1</strong><span>Congelación + FinanceCore</span></div>
+      <div class="card"><small>Estado migración</small><strong>M2</strong><span>FinanceRepository + adapter</span></div>
       <div class="card"><small>Fuente funcional</small><strong>v10.1</strong><span>auditoría estable</span></div>
-      <div class="card"><small>Persistencia real</small><strong>No tocada</strong><span>Google Sheets queda para M2</span></div>
-      <div class="card"><small>Reglas portadas</small><strong id="rulesCount">—</strong><span>núcleo puro</span></div>
+      <div class="card"><small>Sheet real</small><strong>Lectura</strong><span>sin escrituras UI</span></div>
+      <div class="card"><small>Contrato</small><strong id="contractCount">8/8</strong><span>métodos definidos</span></div>
     </section>
 
-    <section class="panel warn">
-      <h2>Alcance seguro de esta etapa</h2>
-      <p>No registra pagos reales, no anula pagos, no crea ítems y no modifica la planilla. Sirve para validar dominio: saldos, estrategias, proyección, gate de inversiones, hitos, logros y fechas.</p>
-      <div>
-        <span class="tag">Sin iframe</span><span class="tag">Sin CSS antiguo</span><span class="tag">Sin google.script.run</span><span class="tag">Sin escritura real</span>
+    <section class="panel warnPanel">
+      <h2>Configurar adaptador Google Sheets</h2>
+      <p>Usa una implementación nueva de Apps Script apuntando a la misma Google Sheet de Control Financiero. Pega el script M2, define el ID de la planilla y una clave privada, despliega como Web App y guarda aquí la URL <code>/exec</code>.</p>
+      <div class="formGrid">
+        <label>URL Apps Script /exec
+          <input id="scriptUrl" placeholder="https://script.google.com/macros/s/.../exec" autocomplete="off">
+        </label>
+        <label>Clave privada
+          <input id="secret" placeholder="Tu clave privada" autocomplete="off" type="password">
+        </label>
+      </div>
+      <div class="actions">
+        <button class="btn primary" id="saveConfig" type="button">Guardar configuración local</button>
+        <button class="btn" id="clearConfig" type="button">Borrar configuración</button>
+      </div>
+      <p class="tiny">La configuración queda sólo en localStorage de este dispositivo. No se sube al repositorio público.</p>
+    </section>
+
+    <section class="panel warnPanel">
+      <h2>Alcance seguro de M2</h2>
+      <p>No registra pagos reales, no anula pagos, no crea ítems y no archiva ítems desde Emma OS. M2 prueba la frontera de persistencia: leer desde Google Sheets y comparar resultados livianos contra FinanceCore.</p>
+      <div><span class="tag">Sin iframe</span><span class="tag">Sin CSS antiguo</span><span class="tag">Sin google.script.run</span><span class="tag">Escrituras bloqueadas en UI</span></div>
+    </section>
+
+    <section class="cols">
+      <div class="panel">
+        <h2>Resumen financiero leído</h2>
+        <div class="list" id="summary"><div class="row">Pulsa “Probar repositorio local” o “Leer estado desde Sheets”.</div></div>
+      </div>
+      <div class="panel">
+        <h2>Paridad ligera M2</h2>
+        <div class="list" id="parity"><div class="row">La comparación aparecerá al leer desde el repositorio.</div></div>
       </div>
     </section>
 
     <section class="cols">
       <div class="panel">
-        <h2>Resultado demo</h2>
-        <div class="list" id="summary"><div class="row">Pulsa “Ejecutar demo del núcleo”.</div></div>
+        <h2>Simulación local sobre último estado</h2>
+        <p class="tiny">No persiste nada. Usa FinanceCore con los datos leídos.</p>
+        <div class="formGrid">
+          <label>Monto a simular
+            <input id="simAmount" inputmode="numeric" value="50000">
+          </label>
+          <div class="actions" style="align-items:end"><button class="btn" id="simulate" type="button">Simular</button></div>
+        </div>
+        <div class="list" id="simulation"><div class="row">—</div></div>
       </div>
       <div class="panel">
-        <h2>Primera asignación</h2>
+        <h2>Primera asignación actual</h2>
         <div class="list" id="plan"><div class="row">—</div></div>
       </div>
     </section>
@@ -60,26 +108,95 @@
   </main>
 
   <script type="module">
-    import * as Core from './core/finance-core.js';
+    import { createMemoryFinanceService, createGoogleSheetsFinanceService, loadFinanceConnection, saveFinanceConnection, clearFinanceConnection } from './service/finance-service.js';
     import { settings, items, payments } from './tests/finance-fixtures.js';
 
+    const $ = id => document.getElementById(id);
     const money = value => '$' + Math.round(Number(value)||0).toLocaleString('es-CL');
     const pct = value => Math.round((Number(value)||0)*100) + '%';
+    let lastNormalizedState = null;
 
-    function render(){
-      const state = Core.buildAppState({ settings, items, payments });
-      document.getElementById('rulesCount').textContent = '12+';
-      document.getElementById('summary').innerHTML = `
-        <div class="row"><small>Saldo deuda</small><strong>${money(state.totals.Deuda.pending)}</strong><div class="bar"><span style="width:${Math.round(state.totals.Deuda.progress*100)}%"></span></div><small>avance ${pct(state.totals.Deuda.progress)}</small></div>
-        <div class="row"><small>Gate inversiones</small><strong>${state.investmentGate.unlocked ? 'Desbloqueado' : 'Bloqueado'}</strong><small>faltan ${money(state.investmentGate.remainingToUnlock)} para el umbral</small></div>
-        <div class="row"><small>Proyección demo</small><strong>${state.projection.routeComplete ? state.projection.finishDate : 'ruta incompleta'}</strong><small>${state.projection.message || state.projection.totalMonths + ' meses simulados'}</small></div>
-        <div class="row"><small>Logros calculados</small><strong>${state.achievementSummary.unlocked}/${state.achievementSummary.total}</strong><small>IDs preservados; unlockedAt real queda para M2/M4</small></div>`;
-      document.getElementById('plan').innerHTML = state.currentPlan.payments.map(p => `<div class="row"><strong>${p.nombre}</strong><small>${p.tipo} · ${money(p.monto)}</small></div>`).join('') || '<div class="row">Sin pagos sugeridos.</div>';
-      document.getElementById('dump').textContent = JSON.stringify({ migration: Core.FINANCE_APP, totals: state.totals, investmentGate: state.investmentGate, milestones: state.milestones, projection: { totalMonths: state.projection.totalMonths, finishDate: state.projection.finishDate, routeComplete: state.projection.routeComplete, message: state.projection.message } }, null, 2);
+    function setStatus(message, kind=''){
+      const box = $('statusBox');
+      box.textContent = message;
+      box.className = 'status ' + kind;
     }
 
-    document.getElementById('runDemo').addEventListener('click', render);
-    render();
+    function renderNormalized(normalized){
+      lastNormalizedState = normalized;
+      const state = normalized.coreState;
+      $('summary').innerHTML = `
+        <div class="row"><small>Saldo general pendiente</small><strong>${money(state.totals.General.pending)}</strong><small>${state.items.length} ítems · ${state.payments.length} pagos</small></div>
+        <div class="row"><small>Saldo deuda</small><strong>${money(state.totals.Deuda.pending)}</strong><div class="bar"><span style="width:${Math.round(state.totals.Deuda.progress*100)}%"></span></div><small>avance ${pct(state.totals.Deuda.progress)}</small></div>
+        <div class="row"><small>Gate inversiones</small><strong>${state.investmentGate.unlocked ? 'Desbloqueado' : 'Bloqueado'}</strong><small>faltan ${money(state.investmentGate.remainingToUnlock)} para el umbral</small></div>
+        <div class="row"><small>Logros calculados</small><strong>${state.achievementSummary.unlocked}/${state.achievementSummary.total}</strong><small>IDs/unlockedAt se preservan desde la fuente</small></div>`;
+
+      $('plan').innerHTML = state.currentPlan.payments.map(p => `<div class="row"><strong>${p.nombre}</strong><small>${p.tipo} · ${money(p.monto)}</small></div>`).join('') || '<div class="row">Sin pagos sugeridos.</div>';
+
+      const checks = normalized.parityLite.checks || [];
+      $('parity').innerHTML = checks.length ? checks.map(c => `<div class="row ${c.ok?'ok':'warn'}"><strong>${c.ok?'✓':'⚠'} ${c.label}</strong><small>Fuente: ${c.source ?? '—'} · Core: ${c.core ?? '—'}</small></div>`).join('') : '<div class="row warn">No hubo totales de fuente para comparar. Esto es normal en repositorio local.</div>';
+
+      $('dump').textContent = JSON.stringify({ repository: normalized.repository, parityLite: normalized.parityLite, totals: state.totals, investmentGate: state.investmentGate, projection: { totalMonths: state.projection.totalMonths, finishDate: state.projection.finishDate, routeComplete: state.projection.routeComplete, message: state.projection.message } }, null, 2);
+    }
+
+    async function runLocal(){
+      try{
+        setStatus('Probando repositorio local/memoria...', '');
+        const service = createMemoryFinanceService({ settings, items, payments });
+        await service.testConnection();
+        const normalized = await service.getAppState();
+        renderNormalized(normalized);
+        setStatus('Repositorio local M2 correcto. Contrato y FinanceCore funcionan sin tocar Google Sheets.', 'ok');
+      }catch(error){ setStatus('Error local: ' + error.message, 'err'); }
+    }
+
+    function readConfig(){
+      return { scriptUrl: $('scriptUrl').value.trim(), secret: $('secret').value.trim() };
+    }
+
+    async function testSheets(){
+      try{
+        setStatus('Probando conexión con Apps Script financiero...', '');
+        const service = createGoogleSheetsFinanceService(readConfig());
+        const result = await service.testConnection();
+        setStatus(result.message || 'Conexión OK con Google Sheets.', 'ok');
+        $('dump').textContent = JSON.stringify(result, null, 2);
+      }catch(error){ setStatus('No se pudo conectar: ' + error.message, 'err'); }
+    }
+
+    async function readSheets(){
+      try{
+        setStatus('Leyendo estado financiero real desde Google Sheets...', '');
+        const service = createGoogleSheetsFinanceService(readConfig());
+        const normalized = await service.getAppState();
+        renderNormalized(normalized);
+        setStatus('Estado leído desde Google Sheets. Escrituras siguen bloqueadas en esta pantalla M2.', 'ok');
+      }catch(error){ setStatus('No se pudo leer Sheets: ' + error.message, 'err'); }
+    }
+
+    function simulate(){
+      try{
+        if(!lastNormalizedState){ setStatus('Primero lee o genera un estado financiero.', 'warn'); return; }
+        const service = createMemoryFinanceService();
+        const result = service.simulateFromState(Number($('simAmount').value)||0, lastNormalizedState);
+        $('simulation').innerHTML = `<div class="row"><small>Monto</small><strong>${money(result.amount)}</strong><small>Base: ${result.baseMonths || '—'} meses · Simulado: ${result.simulatedMonths || '—'} meses</small></div><div class="row"><small>Fecha estimada</small><strong>${result.simulatedFinishDate || 'Ruta incompleta'}</strong><small>${result.message || 'Sin persistir cambios'}</small></div>`;
+      }catch(error){ $('simulation').innerHTML = `<div class="row err">${error.message}</div>`; }
+    }
+
+    function hydrateConfig(){
+      const config = loadFinanceConnection();
+      $('scriptUrl').value = config.scriptUrl || '';
+      $('secret').value = config.secret || '';
+    }
+
+    $('runDemo').addEventListener('click', runLocal);
+    $('testSheets').addEventListener('click', testSheets);
+    $('readSheets').addEventListener('click', readSheets);
+    $('simulate').addEventListener('click', simulate);
+    $('saveConfig').addEventListener('click', () => { saveFinanceConnection(readConfig()); setStatus('Configuración financiera guardada localmente.', 'ok'); });
+    $('clearConfig').addEventListener('click', () => { clearFinanceConnection(); $('scriptUrl').value=''; $('secret').value=''; setStatus('Configuración financiera borrada de este dispositivo.', 'warn'); });
+    hydrateConfig();
+    runLocal();
   </script>
 </body>
 </html>

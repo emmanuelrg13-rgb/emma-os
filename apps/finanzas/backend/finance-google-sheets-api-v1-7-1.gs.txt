@@ -1,0 +1,1671 @@
+/*****
+ * EMMA OS — FINANZAS M2 API
+ * Archivo generado para Emma OS v1.7.1 M2.
+ * Base funcional: Control Financiero Personal v1.0 / snapshot v10.1-auditoria.
+ * Uso recomendado: crear una implementación NUEVA de Apps Script apuntando a la misma Google Sheet.
+ * No pegues esta API encima de la Web App estable sin conservar una copia/fallback.
+ *****/
+
+/*****
+ * CONTROL FINANCIERO PERSONAL — v10.1 Correcciones de Auditoría
+ * Base: Google Sheets + Apps Script Web App
+ *
+ * Roadmap incluido:
+ * - Bloque 1: identidad, vista Este mes, confirmaciones y filtros.
+ * - Bloque 2: pagos flexibles, pago manual, edición rápida y anulación.
+ * - Aporte temporal para este mes.
+ * - Pago parcial/manual a cualquier ítem.
+ * - Edición rápida de prioridad, estado y notas.
+ * - Bloque 3A: corrección visual móvil obligatoria.
+ * - Bloque 3B: ruta completa, estados claros y estrategias de pago.
+ * - Bloque 4: simulador rápido de aporte mensual.
+ * - Bloque 5: barra de desbloqueo de inversiones, hitos visuales y logros persistentes.
+ * - Bloque 6: historial avanzado con filtros.
+ * - Bloque 7: modo oscuro y pulido final.
+ * - v10.1: correcciones de auditoría (fechas, estados, validaciones, concurrencia y proyecciones por objetivo).
+ *****/
+
+const APP_SPREADSHEET_ID = 'PEGA_AQUI_EL_ID_DE_TU_GOOGLE_SHEET';
+const APP_VERSION = '10.1-auditoria';
+const APP_TIME_ZONE = 'America/Santiago';
+
+// Emma OS M2: cambia esta clave por una frase privada larga.
+// Esta clave se guarda sólo en tu navegador dentro de Emma OS.
+const EMMA_OS_FINANCE_API_SECRET = 'CAMBIA_ESTA_CLAVE_PRIVADA';
+
+const SHEETS = {
+  CONFIG: 'Config',
+  ITEMS: 'Items',
+  PAYMENTS: 'Pagos',
+  ACHIEVEMENTS: 'Logros',
+  README: 'Readme'
+};
+
+const ITEM_HEADERS = [
+  'id',
+  'nombre',
+  'tipo',
+  'montoTotal',
+  'pagadoPrevio',
+  'saldoPendiente',
+  'prioridad',
+  'estado',
+  'notas',
+  'createdAt',
+  'updatedAt'
+];
+
+const PAYMENT_HEADERS = [
+  'pagoId',
+  'fecha',
+  'itemId',
+  'nombreItem',
+  'tipo',
+  'monto',
+  'mesPlan',
+  'nota',
+  'createdAt',
+  'estado'
+];
+
+const ACHIEVEMENT_HEADERS = [
+  'achievementId',
+  'nombre',
+  'condicion',
+  'leyenda',
+  'unlockedAt',
+  'createdAt'
+];
+
+const ACHIEVEMENT_DEFINITIONS = [
+  {
+    id: 'primer_golpe',
+    icon: '⚔',
+    nombre: 'Primer golpe al monstruo',
+    condicion: 'Registrar el primer pago confirmado.',
+    leyenda: 'La deuda no cayó, pero sintió el golpe. El héroe miró la barra de vida del enemigo y descubrió algo peligroso: sí se podía bajar.'
+  },
+  {
+    id: 'piedra_pequena',
+    icon: '◆',
+    nombre: 'La piedra pequeña desaparece',
+    condicion: 'Completar por primera vez una deuda o compra.',
+    leyenda: 'No era la montaña completa, pero era una piedra en el zapato. Y, contra todo pronóstico administrativo, dejó de molestar.'
+  },
+  {
+    id: 'no_era_fase',
+    icon: '↻',
+    nombre: 'No era una fase financiera',
+    condicion: 'Registrar pagos en 3 meses calendario distintos.',
+    leyenda: 'Lo que parecía un arranque de entusiasmo comenzó a mostrar síntomas preocupantes de convertirse en disciplina. La campaña sigue en pie.'
+  },
+  {
+    id: 'jefe_barra_vida',
+    icon: '25',
+    nombre: 'El jefe tiene barra de vida',
+    condicion: 'Alcanzar el 25% de avance en deudas.',
+    leyenda: 'Antes parecía una sombra enorme sin forma. Ahora tiene porcentaje, saldo pendiente y una barra que baja. El miedo perdió su ventaja narrativa.'
+  },
+  {
+    id: 'mitad_dragon',
+    icon: '50',
+    nombre: 'Mitad del dragón',
+    condicion: 'Alcanzar el 50% de avance en deudas.',
+    leyenda: 'El dragón sigue respirando, sí. Pero ya no se ve tan inmortal desde que le falta media barra de vida.'
+  },
+  {
+    id: 'puerta_se_abre',
+    icon: '75',
+    nombre: 'La puerta se empieza a abrir',
+    condicion: 'Alcanzar el umbral que habilita inversiones.',
+    leyenda: 'No se cruzó todavía al reino de las inversiones, pero la puerta dejó de estar sellada. Alguien encontró la llave debajo de varios pagos constantes.'
+  },
+  {
+    id: 'deuda_derrotada',
+    icon: '★',
+    nombre: 'Deuda derrotada',
+    condicion: 'Completar el 100% de las deudas activas.',
+    leyenda: 'Cayó. Después de cuotas, ajustes, meses raros y más paciencia de la presupuestada, el enemigo principal dejó de ocupar espacio en el mapa.'
+  },
+  {
+    id: 'compra_sin_culpa',
+    icon: '✓',
+    nombre: 'Compra sin culpa',
+    condicion: 'Completar por primera vez una compra importante.',
+    leyenda: 'El objeto fue adquirido sin invocar demonios crediticios adicionales. Una pequeña victoria para el bolsillo y una gran noticia para la paz mental.'
+  },
+  {
+    id: 'modo_resistencia',
+    icon: '盾',
+    nombre: 'Modo Resistencia financiero',
+    condicion: 'Registrar en un mes al menos un pago, aunque el total quede bajo el aporte base.',
+    leyenda: 'Hoy no se conquistó el reino. Pero tampoco fue entregado al enemigo. A veces sostener la campaña ya cuenta como hazaña.'
+  },
+  {
+    id: 'mes_no_te_gano',
+    icon: '☑',
+    nombre: 'El mes no te ganó',
+    condicion: 'Registrar en un mes pagos por al menos el aporte mensual base.',
+    leyenda: 'El calendario presentó batalla, los gastos hicieron ruido y aun así el mes cerró con una marca verde. No fue magia: fue seguimiento.'
+  },
+  {
+    id: 'contraataque',
+    icon: '↑',
+    nombre: 'Contraataque presupuestario',
+    condicion: 'Registrar en un mes al menos 150% del aporte mensual base.',
+    leyenda: 'El presupuesto encontró munición adicional y decidió no guardarla para decorar. El enemigo recibió daño crítico inesperado.'
+  },
+  {
+    id: 'otro_lado',
+    icon: '◇',
+    nombre: 'Primer paso del otro lado',
+    condicion: 'Registrar el primer aporte a una inversión.',
+    leyenda: 'La ruta dejó de ser solo salir de deudas. Por primera vez, una parte del esfuerzo comenzó a construir algo que mira hacia adelante.'
+  }
+];
+
+const DEFAULT_CONFIG = [
+  ['appName', 'Control Financiero Personal', 'Nombre visible de la app'],
+  ['monthlyMin', 50000, 'Escenario mínimo mensual'],
+  ['monthlyMax', 150000, 'Escenario máximo mensual'],
+  ['monthlyCurrent', 50000, 'Aporte mensual base'],
+  ['startDate', '2026-08-01', 'Fecha base del plan'],
+  ['investmentUnlockDebtProgress', 0.75, 'Inversiones se habilitan al 75% de avance en deudas'],
+  ['strategy', 'prioridad_manual', 'Estrategia de pago: prioridad_manual, menor_monto_primero, deudas_primero o urgentes_primero'],
+  ['currency', 'CLP', 'Moneda utilizada'],
+  ['version', APP_VERSION, 'Versión del modelo']
+];
+
+const DEFAULT_ITEMS = [
+  [1, 'Fondo iglesia para eventos', 'Deuda', 25000, 0, 25000, 1, 'Activo', 'Deuda pequeña inicial'],
+  [2, 'Llave de agua para ducha', 'Compra', 25000, 0, 25000, 2, 'Activo', 'Compra importante'],
+  [3, 'Capa Jack', 'Compra', 10000, 0, 10000, 3, 'Activo', 'Necesario para pasar el invierno de mascota'],
+  [4, 'Iglesia', 'Deuda', 146300, 0, 146300, 4, 'Activo', ''],
+  [5, 'Línea de Crédito Banco Chile', 'Deuda', 500000, 0, 500000, 5, 'Activo', ''],
+  [6, 'Tarjeta de crédito Banco Chile', 'Deuda', 1400000, 0, 1400000, 6, 'Activo', ''],
+  [7, 'Tarjeta de Crédito Banco Ripley', 'Deuda', 1850000, 0, 1850000, 7, 'Activo', ''],
+  [8, 'Fondo mutuo a largo plazo', 'Inversión', 1000000, 0, 1000000, 8, 'Activo', 'Se activa después del 75% de deudas cubiertas'],
+  [9, 'Inversión en ETFs', 'Inversión', 1000000, 0, 1000000, 9, 'Activo', 'Se activa después del 75% de deudas cubiertas'],
+  [10, 'Colchón de emergencia', 'Inversión', 6000000, 0, 6000000, 10, 'Activo', 'Se activa después del 75% de deudas cubiertas']
+];
+
+function doGet(e) {
+  return financeApiHandle_(e, false);
+}
+
+function doPost(e) {
+  return financeApiHandle_(e, true);
+}
+
+function financeApiHandle_(e, isPost) {
+  try {
+    const params = (e && e.parameter) || {};
+    const secret = String(params.secret || '').trim();
+    if (!secret || secret !== EMMA_OS_FINANCE_API_SECRET) {
+      throw new Error('Clave inválida para Emma OS Finanzas.');
+    }
+
+    const action = String(params.action || 'test').trim();
+    const payload = financeApiPayload_(e);
+    const isWrite = ['saveSettings', 'saveItem', 'archiveItem', 'registerPaymentBatch', 'voidPayment', 'importData'].indexOf(action) >= 0;
+
+    // En M2 las escrituras existen en el contrato, pero quedan protegidas por una bandera explícita.
+    // La UI M2 no envía escrituras reales; esto queda para M3/M4 tras pruebas de paridad.
+    if (isWrite && String(params.allowWrite || '') !== '1') {
+      throw new Error('Escritura bloqueada: falta allowWrite=1.');
+    }
+
+    let result;
+    switch (action) {
+      case 'test':
+        result = financeApiTest_();
+        break;
+      case 'getAppState':
+        result = getAppState();
+        break;
+      case 'previewMonthlyAmount':
+        result = previewMonthlyAmount(payload.amount);
+        break;
+      case 'simulateAmount':
+        result = simulateAmount(payload.amount);
+        break;
+      case 'saveSettings':
+        result = saveSettings(payload);
+        break;
+      case 'saveItem':
+        result = saveItem(payload);
+        break;
+      case 'archiveItem':
+        result = archiveItem(payload.id);
+        break;
+      case 'registerPaymentBatch':
+        result = registerPaymentBatch(payload);
+        break;
+      case 'voidPayment':
+        result = voidPayment(payload.pagoId);
+        break;
+      case 'exportData':
+        result = financeApiExportData_();
+        break;
+      case 'importData':
+        throw new Error('importData queda reservado para M5/M6; no se habilita en M2.');
+      default:
+        throw new Error('Acción no soportada por Emma OS Finanzas M2: ' + action);
+    }
+
+    return financeApiRespond_(e, result);
+  } catch (error) {
+    return financeApiRespond_(e, {
+      ok: false,
+      error: String(error && error.message ? error.message : error),
+      version: APP_VERSION,
+      apiVersion: 'emma-os-finanzas-v1.7.1-m2'
+    });
+  }
+}
+
+function financeApiPayload_(e) {
+  const params = (e && e.parameter) || {};
+  let raw = params.payload || '';
+  if (!raw && e && e.postData && e.postData.contents) raw = e.postData.contents;
+  if (!raw) return {};
+  try {
+    return JSON.parse(raw);
+  } catch (error) {
+    throw new Error('Payload JSON inválido: ' + error.message);
+  }
+}
+
+function financeApiRespond_(e, obj) {
+  const params = (e && e.parameter) || {};
+  const callback = String(params.callback || '').trim();
+  const output = Object.assign({
+    apiVersion: 'emma-os-finanzas-v1.7.1-m2',
+    sourceSnapshot: APP_VERSION,
+    timezone: APP_TIME_ZONE
+  }, obj || {});
+  const text = JSON.stringify(output);
+  if (callback) {
+    return ContentService
+      .createTextOutput(callback + '(' + text + ');')
+      .setMimeType(ContentService.MimeType.JAVASCRIPT);
+  }
+  return ContentService
+    .createTextOutput(text)
+    .setMimeType(ContentService.MimeType.JSON);
+}
+
+function financeApiTest_() {
+  setupApp();
+  const ss = getSpreadsheet_();
+  return {
+    ok: true,
+    message: 'Conexión OK con Control Financiero Personal.',
+    spreadsheetUrl: ss.getUrl(),
+    sheets: Object.keys(SHEETS).map(function(k) { return SHEETS[k]; }),
+    version: APP_VERSION,
+    timezone: APP_TIME_ZONE
+  };
+}
+
+function financeApiExportData_() {
+  const state = getAppState();
+  return {
+    ok: true,
+    module: 'control-financiero',
+    schemaVersion: 'finance-schema-v1',
+    exportedAt: nowText_(),
+    settings: state.settings,
+    items: state.items,
+    payments: state.payments,
+    achievements: state.achievements
+  };
+}
+
+function include(filename) {
+  return HtmlService.createHtmlOutputFromFile(filename).getContent();
+}
+
+function setupApp() {
+  const ss = getSpreadsheet_();
+
+  // v10.1: toda la capa de fechas trabaja en la misma zona horaria.
+  if (ss.getSpreadsheetTimeZone() !== APP_TIME_ZONE) {
+    ss.setSpreadsheetTimeZone(APP_TIME_ZONE);
+  }
+
+  const config = ensureSheet_(ss, SHEETS.CONFIG);
+  const items = ensureSheet_(ss, SHEETS.ITEMS);
+  const payments = ensureSheet_(ss, SHEETS.PAYMENTS);
+  const achievements = ensureSheet_(ss, SHEETS.ACHIEVEMENTS);
+  const readme = ensureSheet_(ss, SHEETS.README);
+
+  setupConfigSheet_(config);
+  setupItemsSheet_(items);
+  setupPaymentsSheet_(payments);
+  setupAchievementsSheet_(achievements);
+  setupReadmeSheet_(readme);
+
+  SpreadsheetApp.flush();
+
+  return {
+    ok: true,
+    spreadsheetUrl: ss.getUrl()
+  };
+}
+
+function getAppState() {
+  assertAppReady_();
+
+  const settings = getSettings_();
+  const payments = getPayments_();
+  const items = getItems_();
+
+  hydrateItemsWithPayments_(items, payments);
+
+  const totals = buildTotals_(items);
+  const currentPlan = buildMonthPlan_(items, settings.monthlyCurrent, 1, settings);
+  const projection = buildProjection_(items, settings);
+  const scenarios = buildScenarios_(items, settings);
+  const investmentGate = buildInvestmentGate_(totals, settings);
+  const milestones = buildDebtMilestones_(totals.Deuda.progress, settings);
+  const computedAchievements = computeAchievements_(items, payments, totals, settings);
+  const achievementSync = syncAchievementUnlocks_(computedAchievements);
+  const achievements = enrichAchievementsWithUnlocks_(computedAchievements, achievementSync.unlockMap);
+
+  return {
+    ok: true,
+    settings: settings,
+    items: items,
+    payments: payments,
+    totals: totals,
+    currentPlan: currentPlan,
+    projection: projection,
+    scenarios: scenarios,
+    investmentGate: investmentGate,
+    milestones: milestones,
+    achievements: achievements,
+    newlyUnlocked: achievementSync.newlyUnlocked,
+    achievementSummary: {
+      unlocked: achievements.filter(function(x) { return x.unlocked; }).length,
+      total: achievements.length
+    },
+    spreadsheetUrl: getSpreadsheet_().getUrl(),
+    version: APP_VERSION
+  };
+}
+
+function previewMonthlyAmount(amount) {
+  assertAppReady_();
+
+  const settings = getSettings_();
+  const payments = getPayments_();
+  const items = getItems_();
+
+  hydrateItemsWithPayments_(items, payments);
+
+  const monthlyAmount = Number(amount) || 0;
+  if (monthlyAmount <= 0) throw new Error('El aporte temporal debe ser mayor a 0.');
+
+  return {
+    ok: true,
+    amount: monthlyAmount,
+    currentPlan: buildMonthPlan_(items, monthlyAmount, 1, settings)
+  };
+}
+
+function simulateAmount(amount) {
+  assertAppReady_();
+
+  const settings = getSettings_();
+  const payments = getPayments_();
+  const items = getItems_();
+
+  hydrateItemsWithPayments_(items, payments);
+
+  const monthlyAmount = Number(amount) || 0;
+  if (monthlyAmount <= 0) throw new Error('El monto a simular debe ser mayor a 0.');
+
+  const baseProjection = buildProjection_(items, settings);
+  const simulatedSettings = clone_(settings);
+  simulatedSettings.monthlyCurrent = monthlyAmount;
+  const simulatedProjection = buildProjection_(items, simulatedSettings);
+
+  return {
+    ok: true,
+    amount: monthlyAmount,
+    baseAmount: Number(settings.monthlyCurrent) || 0,
+    baseMonths: Number(baseProjection.totalMonths) || 0,
+    baseFinishDate: baseProjection.finishDate || '',
+    simulatedMonths: Number(simulatedProjection.totalMonths) || 0,
+    simulatedFinishDate: simulatedProjection.finishDate || '',
+    deltaMonths: projectionDeltaMonths_(simulatedProjection, baseProjection),
+    debtDeltaMonths: goalDeltaMonths_(simulatedProjection.goals.debtFree, baseProjection.goals.debtFree),
+    baseGoals: baseProjection.goals,
+    simulatedGoals: simulatedProjection.goals,
+    routeComplete: simulatedProjection.routeComplete,
+    blockedPending: simulatedProjection.blockedPending,
+    firstMonths: simulatedProjection.months.slice(0, 6),
+    message: simulatedProjection.message || ''
+  };
+}
+
+function saveSettings(payload) {
+  assertAppReady_();
+
+  payload = payload || {};
+
+  const updates = {
+    appName: 'Control Financiero Personal',
+    monthlyMin: Number(payload.monthlyMin) || 0,
+    monthlyMax: Number(payload.monthlyMax) || 0,
+    monthlyCurrent: Number(payload.monthlyCurrent) || 0,
+    startDate: normalizeIsoDateInput_(payload.startDate) || todayText_(),
+    investmentUnlockDebtProgress: Number(payload.investmentUnlockDebtProgress),
+    strategy: normalizeStrategy_(payload.strategy || 'prioridad_manual'),
+    version: APP_VERSION
+  };
+
+  if (updates.monthlyMin <= 0) throw new Error('El aporte mínimo debe ser mayor a 0.');
+  if (updates.monthlyMax <= 0) throw new Error('El aporte máximo debe ser mayor a 0.');
+  if (updates.monthlyCurrent <= 0) throw new Error('El aporte mensual base debe ser mayor a 0.');
+  if (updates.monthlyMin > updates.monthlyMax) throw new Error('El aporte mínimo no puede ser mayor al aporte máximo.');
+  if (!isValidIsoDate_(updates.startDate)) throw new Error('La fecha base del plan no es válida.');
+  if (!isFinite(updates.investmentUnlockDebtProgress) ||
+      updates.investmentUnlockDebtProgress <= 0 ||
+      updates.investmentUnlockDebtProgress > 1) {
+    throw new Error('El porcentaje de desbloqueo de inversiones debe estar entre 1% y 100%.');
+  }
+
+  const sheet = getSpreadsheet_().getSheetByName(SHEETS.CONFIG);
+  const values = sheet.getDataRange().getValues();
+  const rowByKey = {};
+
+  for (let r = 1; r < values.length; r++) {
+    const key = String(values[r][0] || '').trim();
+    if (key) rowByKey[key] = r + 1;
+  }
+
+  Object.keys(updates).forEach(function(key) {
+    if (rowByKey[key]) {
+      sheet.getRange(rowByKey[key], 2).setValue(updates[key]);
+    } else {
+      sheet.appendRow([key, updates[key], '']);
+    }
+  });
+
+  return getAppState();
+}
+
+function saveItem(payload) {
+  assertAppReady_();
+
+  payload = payload || {};
+
+  const id = Number(payload.id) || 0;
+  const item = normalizeItemPayload_(payload);
+  const sheet = getSpreadsheet_().getSheetByName(SHEETS.ITEMS);
+
+  if (!item.nombre) throw new Error('Debes ingresar un nombre.');
+  if (item.montoTotal <= 0) throw new Error('El monto total debe ser mayor a 0.');
+  if (item.pagadoPrevio < 0) throw new Error('El pagado previo no puede ser negativo.');
+  if (item.prioridad <= 0) throw new Error('La prioridad debe ser mayor a 0.');
+
+  const confirmedLog = id > 0 ? getConfirmedPaidForItem_(id) : 0;
+  const totalAlreadyPaid = roundMoney_(item.pagadoPrevio + confirmedLog);
+
+  if (item.pagadoPrevio > item.montoTotal) {
+    throw new Error('El pagado previo no puede superar el monto total.');
+  }
+  if (confirmedLog > item.montoTotal) {
+    throw new Error('El nuevo monto total es menor que los pagos confirmados del historial (' + formatMoney_(confirmedLog) + ').');
+  }
+  if (totalAlreadyPaid > item.montoTotal) {
+    throw new Error('Pagado previo + historial confirmado superan el monto total del ítem.');
+  }
+
+  const currentBalance = Math.max(0, roundMoney_(item.montoTotal - totalAlreadyPaid));
+  if (item.estado === 'Pagado' && currentBalance > 0) {
+    throw new Error('No puedes marcar un ítem como Pagado mientras conserve un saldo de ' + formatMoney_(currentBalance) + '. Registra el pago o usa otro estado.');
+  }
+
+  const now = nowText_();
+
+  if (id > 0) {
+    const row = findItemRowById_(id);
+    if (!row) throw new Error('No encontré el ítem indicado.');
+
+    sheet.getRange(row, 2, 1, 9).setValues([[
+      item.nombre,
+      item.tipo,
+      item.montoTotal,
+      item.pagadoPrevio,
+      currentBalance,
+      item.prioridad,
+      currentBalance <= 0 ? 'Pagado' : item.estado,
+      item.notas,
+      sheet.getRange(row, 10).getValue() || todayText_()
+    ]]);
+    sheet.getRange(row, 11).setValue(now);
+  } else {
+    const items = getItems_();
+    const nextId = items.length ? Math.max.apply(null, items.map(function(x) { return Number(x.id) || 0; })) + 1 : 1;
+    sheet.appendRow([
+      nextId,
+      item.nombre,
+      item.tipo,
+      item.montoTotal,
+      item.pagadoPrevio,
+      currentBalance,
+      item.prioridad || nextId,
+      currentBalance <= 0 ? 'Pagado' : item.estado,
+      item.notas,
+      now,
+      now
+    ]);
+  }
+
+  return getAppState();
+}
+
+function archiveItem(id) {
+  assertAppReady_();
+
+  id = Number(id);
+  if (!id) throw new Error('ID inválido.');
+
+  const sheet = getSpreadsheet_().getSheetByName(SHEETS.ITEMS);
+  const row = findItemRowById_(id);
+  if (!row) throw new Error('No encontré el ítem indicado.');
+
+  sheet.getRange(row, 8).setValue('Archivado');
+  sheet.getRange(row, 11).setValue(nowText_());
+
+  return getAppState();
+}
+
+function registerPaymentBatch(payload) {
+  assertAppReady_();
+
+  payload = payload || {};
+  const selected = payload.payments || [];
+  const requestId = cleanText_(payload.requestId);
+
+  if (!selected.length) throw new Error('No seleccionaste pagos para registrar.');
+
+  const lock = LockService.getScriptLock();
+  lock.waitLock(15000);
+  let duplicateRequest = false;
+
+  try {
+    const cache = CacheService.getScriptCache();
+    const cacheKey = requestId ? 'cfp_payment_batch_' + requestId : '';
+
+    if (cacheKey && cache.get(cacheKey)) {
+      duplicateRequest = true;
+    } else {
+      const payments = getPayments_();
+      const items = getItems_();
+      hydrateItemsWithPayments_(items, payments);
+
+      const settings = getSettings_();
+      const totals = buildTotals_(items);
+      const investmentGate = buildInvestmentGate_(totals, settings);
+
+      const itemMap = {};
+      items.forEach(function(item) { itemMap[item.id] = item; });
+
+      const totalsByItemInBatch = {};
+      selected.forEach(function(payment) {
+        const id = Number(payment.itemId);
+        const amount = Number(payment.monto) || 0;
+        if (!id) throw new Error('Uno de los pagos no tiene ítem válido.');
+        if (amount <= 0) throw new Error('Uno de los montos no es válido.');
+        if (!totalsByItemInBatch[id]) totalsByItemInBatch[id] = 0;
+        totalsByItemInBatch[id] += amount;
+      });
+
+      Object.keys(totalsByItemInBatch).forEach(function(idText) {
+        const id = Number(idText);
+        const item = itemMap[id];
+        if (!item) throw new Error('No encontré uno de los ítems seleccionados.');
+
+        const status = normalizeStatus_(item.estado);
+        if (status === 'Archivado') throw new Error('No puedes registrar pagos en un ítem archivado.');
+        if (status === 'Pagado' || Number(item.saldoPendiente) <= 0) {
+          throw new Error('El ítem "' + item.nombre + '" ya no tiene saldo pendiente.');
+        }
+        if (item.tipo === 'Inversión' && !investmentGate.unlocked) {
+          throw new Error('Las inversiones aún están bloqueadas. Debes alcanzar el ' + Math.round(investmentGate.targetProgress * 100) + '% de avance en deudas antes de registrar aportes de inversión.');
+        }
+        if (totalsByItemInBatch[id] > item.saldoPendiente) {
+          throw new Error('El pago para "' + item.nombre + '" supera su saldo pendiente. Saldo: ' + formatMoney_(item.saldoPendiente));
+        }
+      });
+
+      const sheet = getSpreadsheet_().getSheetByName(SHEETS.PAYMENTS);
+      const now = nowText_();
+      const date = normalizeIsoDateInput_(payload.fecha) || todayText_();
+      if (!isValidIsoDate_(date)) throw new Error('La fecha del pago no es válida.');
+
+      const rows = selected.map(function(payment) {
+        const itemId = Number(payment.itemId);
+        const amount = Number(payment.monto) || 0;
+        const item = itemMap[itemId];
+
+        return [
+          Utilities.getUuid(),
+          date,
+          item.id,
+          item.nombre,
+          item.tipo,
+          amount,
+          Number(payment.mesPlan) || 1,
+          cleanText_(payment.nota),
+          now,
+          'Confirmado'
+        ];
+      });
+
+      const startRow = sheet.getLastRow() + 1;
+      sheet.getRange(startRow, 1, rows.length, PAYMENT_HEADERS.length).setValues(rows);
+
+      refreshStoredBalances_();
+
+      if (cacheKey) cache.put(cacheKey, '1', 600);
+    }
+  } finally {
+    if (lock.hasLock()) lock.releaseLock();
+  }
+
+  const state = getAppState();
+  state.duplicateRequestIgnored = duplicateRequest;
+  return state;
+}
+
+function voidPayment(pagoId) {
+  assertAppReady_();
+
+  pagoId = cleanText_(pagoId);
+  if (!pagoId) throw new Error('ID de pago inválido.');
+
+  const lock = LockService.getScriptLock();
+  lock.waitLock(15000);
+  let found = false;
+
+  try {
+    const sheet = getSpreadsheet_().getSheetByName(SHEETS.PAYMENTS);
+    const values = sheet.getDataRange().getValues();
+
+    for (let r = 1; r < values.length; r++) {
+      if (String(values[r][0]) === pagoId) {
+        found = true;
+        const currentStatus = String(values[r][9] || 'Confirmado');
+
+        if (currentStatus !== 'Anulado') {
+          sheet.getRange(r + 1, 10).setValue('Anulado');
+          const note = String(values[r][7] || '');
+          sheet.getRange(r + 1, 8).setValue((note ? note + ' | ' : '') + 'Anulado ' + nowText_());
+          refreshStoredBalances_();
+        }
+        break;
+      }
+    }
+
+    if (!found) throw new Error('No encontré el pago indicado.');
+  } finally {
+    if (lock.hasLock()) lock.releaseLock();
+  }
+
+  return getAppState();
+}
+
+function getSpreadsheet_() {
+  if (APP_SPREADSHEET_ID && APP_SPREADSHEET_ID.trim()) {
+    return SpreadsheetApp.openById(APP_SPREADSHEET_ID.trim());
+  }
+  return SpreadsheetApp.getActiveSpreadsheet();
+}
+
+function ensureSheet_(ss, name) {
+  let sheet = ss.getSheetByName(name);
+  if (!sheet) sheet = ss.insertSheet(name);
+  return sheet;
+}
+
+function setupConfigSheet_(sheet) {
+  const hasData = sheet.getLastRow() > 0 && String(sheet.getRange(1, 1).getValue() || '').trim() === 'clave';
+
+  if (!hasData) {
+    sheet.clear();
+    sheet.getRange(1, 1, 1, 3).setValues([['clave', 'valor', 'descripcion']]);
+    sheet.getRange(2, 1, DEFAULT_CONFIG.length, 3).setValues(DEFAULT_CONFIG);
+  } else {
+    upsertConfigIfMissing_(sheet, DEFAULT_CONFIG);
+    upsertConfigValue_(sheet, 'appName', 'Control Financiero Personal');
+    upsertConfigValue_(sheet, 'version', APP_VERSION);
+  }
+
+  sheet.setFrozenRows(1);
+  styleHeader_(sheet, 1, 1, 3);
+  sheet.autoResizeColumns(1, 3);
+}
+
+function setupItemsSheet_(sheet) {
+  const hasHeaders = sheet.getLastRow() > 0 && String(sheet.getRange(1, 1).getValue() || '').trim() === 'id';
+
+  if (!hasHeaders) {
+    sheet.clear();
+    sheet.getRange(1, 1, 1, ITEM_HEADERS.length).setValues([ITEM_HEADERS]);
+  }
+
+  if (sheet.getLastRow() <= 1) {
+    const now = todayText_();
+    const rows = DEFAULT_ITEMS.map(function(item) {
+      return [item[0], item[1], item[2], item[3], item[4], item[5], item[6], item[7], item[8], now, now];
+    });
+    sheet.getRange(2, 1, rows.length, ITEM_HEADERS.length).setValues(rows);
+  }
+
+  formatItemsSheet_(sheet);
+}
+
+function setupPaymentsSheet_(sheet) {
+  const hasHeaders = sheet.getLastRow() > 0 && String(sheet.getRange(1, 1).getValue() || '').trim() === 'pagoId';
+
+  if (!hasHeaders) {
+    sheet.clear();
+    sheet.getRange(1, 1, 1, PAYMENT_HEADERS.length).setValues([PAYMENT_HEADERS]);
+  }
+
+  formatPaymentsSheet_(sheet);
+}
+
+
+function setupAchievementsSheet_(sheet) {
+  const hasHeaders = sheet.getLastRow() > 0 && String(sheet.getRange(1, 1).getValue() || '').trim() === 'achievementId';
+
+  if (!hasHeaders) {
+    sheet.clear();
+    sheet.getRange(1, 1, 1, ACHIEVEMENT_HEADERS.length).setValues([ACHIEVEMENT_HEADERS]);
+  }
+
+  sheet.setFrozenRows(1);
+  styleHeader_(sheet, 1, 1, ACHIEVEMENT_HEADERS.length);
+  sheet.autoResizeColumns(1, ACHIEVEMENT_HEADERS.length);
+}
+
+function setupReadmeSheet_(sheet) {
+  const rows = [
+    ['Sección', 'Detalle'],
+    ['App', 'Control Financiero Personal v10.1 — Correcciones de Auditoría.'],
+    ['Items', 'Deudas, compras e inversiones.'],
+    ['Pagos', 'Historial de pagos confirmados o anulados.'],
+    ['Aporte temporal', 'Permite calcular este mes con un monto distinto sin cambiar el aporte base.'],
+    ['Pago manual', 'Permite registrar pagos parciales fuera de la ruta sugerida.'],
+    ['Anulación', 'Los pagos no se borran: se marcan como Anulado para mantener trazabilidad.'],
+    ['Ruta completa', 'Vista proyectada mes a mes según la estrategia seleccionada.'],
+    ['Estrategias', 'Prioridad manual, menor monto primero, deudas primero o urgentes primero.'],
+    ['Simulador', 'Permite probar aportes mensuales sin modificar el plan base.'],
+    ['Bloque 5', 'Incluye desbloqueo de inversiones, hitos visuales y 12 logros persistentes.'],
+    ['Logros', 'La hoja Logros registra la primera fecha en que cada logro fue desbloqueado.'],
+    ['v10.1', 'Corrige fechas de fin de mes, zona horaria, validaciones, concurrencia, estados y proyecciones por objetivo.'],
+    ['Proyección', 'Las estimaciones usan los saldos actuales y no calculan intereses, comisiones ni cargos futuros.']
+  ];
+
+  const current = sheet.getDataRange().getValues();
+  const existingKeys = {};
+  current.forEach(function(row) {
+    if (row[0]) existingKeys[String(row[0])] = true;
+  });
+
+  if (sheet.getLastRow() === 0) {
+    sheet.getRange(1, 1, rows.length, 2).setValues(rows);
+  } else {
+    rows.slice(1).forEach(function(row) {
+      if (!existingKeys[row[0]]) sheet.appendRow(row);
+      if (row[0] === 'App') {
+        for (let r = 1; r < current.length; r++) {
+          if (String(current[r][0]) === 'App') sheet.getRange(r + 1, 2).setValue(row[1]);
+        }
+      }
+    });
+  }
+
+  sheet.setFrozenRows(1);
+  styleHeader_(sheet, 1, 1, 2);
+  sheet.autoResizeColumns(1, 2);
+}
+
+function formatItemsSheet_(sheet) {
+  sheet.setFrozenRows(1);
+  styleHeader_(sheet, 1, 1, ITEM_HEADERS.length);
+  const lastRow = Math.max(sheet.getLastRow(), 2);
+  sheet.getRange(2, 4, lastRow - 1, 3).setNumberFormat('$#,##0');
+  sheet.getRange(2, 7, lastRow - 1, 1).setNumberFormat('0');
+  sheet.autoResizeColumns(1, ITEM_HEADERS.length);
+}
+
+function formatPaymentsSheet_(sheet) {
+  sheet.setFrozenRows(1);
+  styleHeader_(sheet, 1, 1, PAYMENT_HEADERS.length);
+  const lastRow = Math.max(sheet.getLastRow(), 2);
+  sheet.getRange(2, 6, lastRow - 1, 1).setNumberFormat('$#,##0');
+  sheet.autoResizeColumns(1, PAYMENT_HEADERS.length);
+}
+
+function styleHeader_(sheet, row, col, width) {
+  sheet.getRange(row, col, 1, width)
+    .setBackground('#0f172a')
+    .setFontColor('#ffffff')
+    .setFontWeight('bold')
+    .setVerticalAlignment('middle');
+}
+
+function upsertConfigIfMissing_(sheet, rows) {
+  rows.forEach(function(row) {
+    if (!findConfigRow_(sheet, row[0])) sheet.appendRow(row);
+  });
+}
+
+function upsertConfigValue_(sheet, key, value) {
+  const row = findConfigRow_(sheet, key);
+  if (row) sheet.getRange(row, 2).setValue(value);
+  else sheet.appendRow([key, value, '']);
+}
+
+function findConfigRow_(sheet, key) {
+  const values = sheet.getDataRange().getValues();
+  for (let r = 1; r < values.length; r++) {
+    if (String(values[r][0]) === String(key)) return r + 1;
+  }
+  return null;
+}
+
+function getSettings_() {
+  const sheet = getSpreadsheet_().getSheetByName(SHEETS.CONFIG);
+  const values = sheet.getDataRange().getValues();
+  const raw = {};
+
+  for (let r = 1; r < values.length; r++) {
+    const key = cleanText_(values[r][0]);
+    if (key) raw[key] = values[r][1];
+  }
+
+  return {
+    appName: 'Control Financiero Personal',
+    monthlyMin: Number(raw.monthlyMin) || 50000,
+    monthlyMax: Number(raw.monthlyMax) || 150000,
+    monthlyCurrent: Number(raw.monthlyCurrent) || 50000,
+    startDate: normalizeDateText_(raw.startDate || '2026-08-01'),
+    investmentUnlockDebtProgress: Number(raw.investmentUnlockDebtProgress) || 0.75,
+    strategy: normalizeStrategy_(raw.strategy || 'prioridad_manual'),
+    currency: cleanText_(raw.currency || 'CLP'),
+    version: APP_VERSION
+  };
+}
+
+function normalizeStrategy_(value) {
+  const raw = cleanText_(value).toLowerCase();
+  if (raw === 'menor_monto_primero') return 'menor_monto_primero';
+  if (raw === 'deudas_primero') return 'deudas_primero';
+  if (raw === 'urgentes_primero') return 'urgentes_primero';
+  return 'prioridad_manual';
+}
+
+function getItems_() {
+  const sheet = getSpreadsheet_().getSheetByName(SHEETS.ITEMS);
+  const values = sheet.getDataRange().getValues();
+  const items = [];
+
+  for (let r = 1; r < values.length; r++) {
+    if (!values[r][0] && !values[r][1]) continue;
+    items.push({
+      id: Number(values[r][0]),
+      nombre: cleanText_(values[r][1]),
+      tipo: normalizeType_(values[r][2]),
+      montoTotal: Number(values[r][3]) || 0,
+      pagadoPrevio: Number(values[r][4]) || 0,
+      saldoPendiente: Number(values[r][5]) || 0,
+      prioridad: Number(values[r][6]) || 999,
+      estado: normalizeStatus_(values[r][7]),
+      notas: cleanText_(values[r][8]),
+      createdAt: normalizeDateText_(values[r][9]),
+      updatedAt: normalizeDateText_(values[r][10])
+    });
+  }
+
+  return items;
+}
+
+function getPayments_() {
+  const sheet = getSpreadsheet_().getSheetByName(SHEETS.PAYMENTS);
+  const values = sheet.getDataRange().getValues();
+  const payments = [];
+
+  for (let r = 1; r < values.length; r++) {
+    if (!values[r][0]) continue;
+    payments.push({
+      pagoId: String(values[r][0] || ''),
+      fecha: normalizeDateText_(values[r][1]),
+      itemId: Number(values[r][2]) || 0,
+      nombreItem: cleanText_(values[r][3]),
+      tipo: normalizeType_(values[r][4]),
+      monto: Number(values[r][5]) || 0,
+      mesPlan: Number(values[r][6]) || 0,
+      nota: cleanText_(values[r][7]),
+      createdAt: String(values[r][8] || ''),
+      estado: cleanText_(values[r][9] || 'Confirmado')
+    });
+  }
+
+  return payments;
+}
+
+function hydrateItemsWithPayments_(items, payments) {
+  const paidByItem = {};
+
+  payments.forEach(function(payment) {
+    if (String(payment.estado).toLowerCase() === 'anulado') return;
+    if (!paidByItem[payment.itemId]) paidByItem[payment.itemId] = 0;
+    paidByItem[payment.itemId] += Number(payment.monto) || 0;
+  });
+
+  items.forEach(function(item) {
+    const log = paidByItem[item.id] || 0;
+    item.pagadoLog = roundMoney_(log);
+    item.pagadoTotal = roundMoney_((item.pagadoPrevio || 0) + log);
+    item.saldoPendiente = Math.max(0, roundMoney_((item.montoTotal || 0) - item.pagadoTotal));
+    if (item.saldoPendiente <= 0 && item.estado === 'Activo') item.estadoCalculado = 'Pagado';
+    else item.estadoCalculado = item.estado;
+  });
+}
+
+function refreshStoredBalances_() {
+  const sheet = getSpreadsheet_().getSheetByName(SHEETS.ITEMS);
+  const values = sheet.getDataRange().getValues();
+  if (values.length <= 1) return;
+
+  const payments = getPayments_();
+  const paidByItem = {};
+
+  payments.forEach(function(payment) {
+    if (String(payment.estado).toLowerCase() === 'anulado') return;
+    paidByItem[payment.itemId] = roundMoney_((paidByItem[payment.itemId] || 0) + (Number(payment.monto) || 0));
+  });
+
+  const balances = [];
+  const statuses = [];
+
+  for (let r = 1; r < values.length; r++) {
+    const id = Number(values[r][0]);
+    const total = Number(values[r][3]) || 0;
+    const previous = Number(values[r][4]) || 0;
+    const log = paidByItem[id] || 0;
+    const balance = Math.max(0, roundMoney_(total - previous - log));
+    balances.push([balance]);
+
+    const storedStatus = normalizeStatus_(values[r][7]);
+    let nextStatus = storedStatus;
+    if (storedStatus !== 'Archivado') {
+      if (balance <= 0) nextStatus = 'Pagado';
+      else if (storedStatus === 'Pagado') nextStatus = 'Activo';
+    }
+    statuses.push([nextStatus]);
+  }
+
+  sheet.getRange(2, 6, balances.length, 1).setValues(balances);
+  sheet.getRange(2, 8, statuses.length, 1).setValues(statuses);
+}
+
+function buildTotals_(items) {
+  const totals = {
+    Deuda: baseTotal_(),
+    Compra: baseTotal_(),
+    Inversion: baseTotal_(),
+    General: baseTotal_()
+  };
+
+  items.forEach(function(item) {
+    if (item.estado === 'Archivado') return;
+
+    const key = item.tipo === 'Inversión' ? 'Inversion' : item.tipo;
+    if (!totals[key]) return;
+
+    const original = Number(item.montoTotal) || 0;
+    const paid = Math.min(original, Number(item.pagadoTotal) || 0);
+    const pending = Math.max(0, original - paid);
+
+    totals[key].original += original;
+    totals[key].paid += paid;
+    totals[key].pending += pending;
+
+    totals.General.original += original;
+    totals.General.paid += paid;
+    totals.General.pending += pending;
+  });
+
+  Object.keys(totals).forEach(function(key) {
+    totals[key].original = roundMoney_(totals[key].original);
+    totals[key].paid = roundMoney_(totals[key].paid);
+    totals[key].pending = roundMoney_(totals[key].pending);
+    totals[key].progress = totals[key].original > 0 ? totals[key].paid / totals[key].original : 1;
+  });
+
+  return totals;
+}
+
+function baseTotal_() {
+  return { original: 0, paid: 0, pending: 0, progress: 0 };
+}
+
+function buildMonthPlan_(items, monthlyAmount, monthNumber, settings) {
+  const simItems = clone_(items);
+  const payments = allocateMonth_(simItems, Number(monthlyAmount) || 0, settings);
+  return {
+    monthNumber: Number(monthNumber) || 1,
+    monthlyAmount: Number(monthlyAmount) || 0,
+    total: payments.reduce(function(sum, payment) { return sum + payment.monto; }, 0),
+    payments: payments
+  };
+}
+
+function buildProjection_(items, settings) {
+  const simItems = clone_(items);
+  const monthlyAmount = Number(settings.monthlyCurrent) || 0;
+  const maxMonths = 480;
+  const months = [];
+  const initialTotals = buildTotals_(simItems);
+  const unlockTarget = Number(settings.investmentUnlockDebtProgress) || 0.75;
+
+  const goals = {
+    investmentsUnlocked: goalState_('Inversiones desbloqueadas', initialTotals.Deuda.progress >= unlockTarget || initialTotals.Deuda.pending <= 0, 0, settings.startDate),
+    debtFree: goalState_('Libre de deudas', initialTotals.Deuda.pending <= 0, 0, settings.startDate),
+    purchasesComplete: goalState_('Compras completas', initialTotals.Compra.pending <= 0, 0, settings.startDate),
+    planComplete: goalState_('Plan completo', initialTotals.General.pending <= 0, 0, settings.startDate)
+  };
+
+  if (monthlyAmount <= 0) {
+    return {
+      months: [],
+      totalMonths: 0,
+      finishDate: '',
+      routeComplete: false,
+      blockedPending: initialTotals.General.pending,
+      goals: goals,
+      message: 'Define un aporte mensual mayor a 0.'
+    };
+  }
+
+  let stoppedByUnavailableItems = false;
+
+  for (let m = 1; m <= maxMonths; m++) {
+    const payments = allocateMonth_(simItems, monthlyAmount, settings);
+    const total = payments.reduce(function(sum, payment) { return sum + payment.monto; }, 0);
+
+    if (total <= 0) {
+      stoppedByUnavailableItems = getTotalPending_(simItems) > 0;
+      break;
+    }
+
+    const monthDate = addMonthsText_(settings.startDate, m - 1);
+    const monthTotals = buildTotals_(simItems);
+
+    captureGoal_(goals.investmentsUnlocked, monthTotals.Deuda.progress >= unlockTarget || monthTotals.Deuda.pending <= 0, m, monthDate);
+    captureGoal_(goals.debtFree, monthTotals.Deuda.pending <= 0, m, monthDate);
+    captureGoal_(goals.purchasesComplete, monthTotals.Compra.pending <= 0, m, monthDate);
+    captureGoal_(goals.planComplete, monthTotals.General.pending <= 0, m, monthDate);
+
+    months.push({
+      monthNumber: m,
+      date: monthDate,
+      payments: payments,
+      total: total,
+      remainingAfterMonth: monthTotals.General.pending,
+      debtPendingAfterMonth: monthTotals.Deuda.pending,
+      purchasePendingAfterMonth: monthTotals.Compra.pending,
+      investmentPendingAfterMonth: monthTotals.Inversion.pending
+    });
+
+    if (monthTotals.General.pending <= 0) break;
+  }
+
+  const remaining = getTotalPending_(simItems);
+  const routeComplete = remaining <= 0;
+  const hitLimit = months.length >= maxMonths && !routeComplete;
+
+  let message = '';
+  if (hitLimit) {
+    message = 'La proyección superó el límite de ' + maxMonths + ' meses.';
+  } else if (stoppedByUnavailableItems) {
+    message = 'La ruta se detuvo porque quedan saldos en ítems Pausados o fuera de la ruta activa.';
+  }
+
+  return {
+    months: months,
+    totalMonths: months.length,
+    finishDate: routeComplete && months.length ? months[months.length - 1].date : '',
+    routeComplete: routeComplete,
+    blockedPending: routeComplete ? 0 : remaining,
+    goals: goals,
+    message: message
+  };
+}
+
+function buildScenarios_(items, settings) {
+  const minSettings = clone_(settings);
+  const maxSettings = clone_(settings);
+  minSettings.monthlyCurrent = Number(settings.monthlyMin) || 0;
+  maxSettings.monthlyCurrent = Number(settings.monthlyMax) || 0;
+
+  const minProjection = buildProjection_(items, minSettings);
+  const maxProjection = buildProjection_(items, maxSettings);
+
+  return {
+    min: scenarioFromProjection_(minSettings.monthlyCurrent, minProjection),
+    max: scenarioFromProjection_(maxSettings.monthlyCurrent, maxProjection)
+  };
+}
+
+function allocateMonth_(simItems, budget, settings) {
+  let remainingBudget = Number(budget) || 0;
+  const payments = [];
+  let guard = 0;
+
+  while (remainingBudget > 0 && guard < 300) {
+    guard++;
+    const nextItem = getNextEligibleItem_(simItems, settings);
+    if (!nextItem) break;
+
+    const amount = Math.min(remainingBudget, Number(nextItem.saldoPendiente) || 0);
+    if (amount <= 0) break;
+
+    nextItem.saldoPendiente = roundMoney_(nextItem.saldoPendiente - amount);
+    nextItem.pagadoTotal = roundMoney_((nextItem.pagadoTotal || 0) + amount);
+    remainingBudget = roundMoney_(remainingBudget - amount);
+
+    payments.push({
+      itemId: nextItem.id,
+      nombre: nextItem.nombre,
+      tipo: nextItem.tipo,
+      monto: amount
+    });
+  }
+
+  return payments;
+}
+
+function getNextEligibleItem_(items, settings) {
+  const debtProgress = calcTypeProgressFromItems_(items, 'Deuda');
+  const debtPending = calcTypePendingFromItems_(items, 'Deuda');
+  const unlock = Number(settings.investmentUnlockDebtProgress || 0.75);
+  const investmentUnlocked = debtProgress >= unlock || debtPending <= 0;
+  const strategy = normalizeStrategy_(settings.strategy || 'prioridad_manual');
+
+  const candidates = items.filter(function(item) {
+    const status = normalizeStatus_(item.estado);
+    if (status !== 'Activo' && status !== 'Urgente') return false;
+    if ((Number(item.saldoPendiente) || 0) <= 0) return false;
+    if (item.tipo === 'Inversión' && !investmentUnlocked) return false;
+    return true;
+  });
+
+  candidates.sort(function(a, b) {
+    const urgentA = normalizeStatus_(a.estado) === 'Urgente' ? 0 : 1;
+    const urgentB = normalizeStatus_(b.estado) === 'Urgente' ? 0 : 1;
+
+    if (strategy === 'urgentes_primero' && urgentA !== urgentB) return urgentA - urgentB;
+
+    if (strategy === 'deudas_primero') {
+      const typeA = typeRank_(a.tipo);
+      const typeB = typeRank_(b.tipo);
+      if (typeA !== typeB) return typeA - typeB;
+    }
+
+    if (strategy === 'menor_monto_primero') {
+      const sa = Number(a.saldoPendiente) || Number(a.montoTotal) || 0;
+      const sb = Number(b.saldoPendiente) || Number(b.montoTotal) || 0;
+      if (sa !== sb) return sa - sb;
+    }
+
+    const pa = Number(a.prioridad) || 999;
+    const pb = Number(b.prioridad) || 999;
+    if (pa !== pb) return pa - pb;
+
+    const ma = Number(a.montoTotal) || 0;
+    const mb = Number(b.montoTotal) || 0;
+    if (ma !== mb) return ma - mb;
+
+    return Number(a.id) - Number(b.id);
+  });
+
+  return candidates.length ? candidates[0] : null;
+}
+
+function typeRank_(type) {
+  if (type === 'Deuda') return 1;
+  if (type === 'Compra') return 2;
+  if (type === 'Inversión') return 3;
+  return 9;
+}
+
+function calcTypeProgressFromItems_(items, typeName) {
+  let original = 0;
+  let pending = 0;
+
+  items.forEach(function(item) {
+    if (item.estado === 'Archivado') return;
+    if (item.tipo !== typeName) return;
+    original += Number(item.montoTotal) || 0;
+    pending += Number(item.saldoPendiente) || 0;
+  });
+
+  return original > 0 ? (original - pending) / original : 1;
+}
+
+function calcTypePendingFromItems_(items, typeName) {
+  return items.reduce(function(sum, item) {
+    if (item.estado === 'Archivado') return sum;
+    if (item.tipo !== typeName) return sum;
+    return sum + (Number(item.saldoPendiente) || 0);
+  }, 0);
+}
+
+function getTotalPending_(items) {
+  return items.reduce(function(sum, item) {
+    if (item.estado === 'Archivado') return sum;
+    return sum + (Number(item.saldoPendiente) || 0);
+  }, 0);
+}
+
+
+function buildInvestmentGate_(totals, settings) {
+  const debt = totals && totals.Deuda ? totals.Deuda : baseTotal_();
+  const target = Number(settings.investmentUnlockDebtProgress) || 0.75;
+  const current = Number(debt.progress) || 0;
+  const targetPaid = roundMoney_((Number(debt.original) || 0) * target);
+  const remainingToUnlock = Math.max(0, roundMoney_(targetPaid - (Number(debt.paid) || 0)));
+  const unlocked = (Number(debt.original) || 0) <= 0 || current >= target || (Number(debt.pending) || 0) <= 0;
+
+  return {
+    targetProgress: target,
+    debtProgress: current,
+    progressToTarget: target > 0 ? Math.min(1, current / target) : 1,
+    unlocked: unlocked,
+    remainingToUnlock: unlocked ? 0 : remainingToUnlock,
+    targetPaid: targetPaid,
+    debtPaid: Number(debt.paid) || 0,
+    debtOriginal: Number(debt.original) || 0
+  };
+}
+
+function buildDebtMilestones_(debtProgress, settings) {
+  const progress = Math.max(0, Math.min(1, Number(debtProgress) || 0));
+  const thresholds = [0.10, 0.25, 0.50, Number(settings.investmentUnlockDebtProgress) || 0.75, 1.00];
+  const seen = {};
+  const milestones = [];
+
+  thresholds.forEach(function(value) {
+    const rounded = Math.round(value * 100);
+    if (seen[rounded]) return;
+    seen[rounded] = true;
+    milestones.push({
+      percent: rounded,
+      reached: progress + 0.0000001 >= value
+    });
+  });
+
+  let next = null;
+  for (let i = 0; i < milestones.length; i++) {
+    if (!milestones[i].reached) {
+      next = milestones[i];
+      break;
+    }
+  }
+
+  return {
+    currentPercent: Math.round(progress * 100),
+    points: milestones,
+    nextPercent: next ? next.percent : null
+  };
+}
+
+function computeAchievements_(items, payments, totals, settings) {
+  const confirmed = payments.filter(function(payment) {
+    return String(payment.estado || '').toLowerCase() !== 'anulado';
+  });
+
+  const distinctMonths = {};
+  const monthlyTotals = {};
+  confirmed.forEach(function(payment) {
+    const dateText = normalizeDateText_(payment.fecha);
+    const monthKey = dateText && dateText.length >= 7 ? dateText.substring(0, 7) : '';
+    if (!monthKey) return;
+    distinctMonths[monthKey] = true;
+    monthlyTotals[monthKey] = (monthlyTotals[monthKey] || 0) + (Number(payment.monto) || 0);
+  });
+
+  const baseMonthly = Number(settings.monthlyCurrent) || 0;
+  const monthValues = Object.keys(monthlyTotals).map(function(key) { return monthlyTotals[key]; });
+  const debtProgress = totals && totals.Deuda ? Number(totals.Deuda.progress) || 0 : 0;
+  const unlockTarget = Number(settings.investmentUnlockDebtProgress) || 0.75;
+  const debtOriginal = totals && totals.Deuda ? Number(totals.Deuda.original) || 0 : 0;
+  const debtPending = totals && totals.Deuda ? Number(totals.Deuda.pending) || 0 : 0;
+
+  const anyCompleted = items.some(function(item) {
+    return item.estado !== 'Archivado' &&
+      (item.tipo === 'Deuda' || item.tipo === 'Compra') &&
+      Number(item.montoTotal) > 0 &&
+      Number(item.saldoPendiente) <= 0;
+  });
+
+  const purchaseCompleted = items.some(function(item) {
+    return item.estado !== 'Archivado' &&
+      item.tipo === 'Compra' &&
+      Number(item.montoTotal) > 0 &&
+      Number(item.saldoPendiente) <= 0;
+  });
+
+  const investmentPaid = items.some(function(item) {
+    return item.estado !== 'Archivado' &&
+      item.tipo === 'Inversión' &&
+      Number(item.pagadoTotal || 0) > 0;
+  });
+
+  const resistanceMonth = baseMonthly > 0 && monthValues.some(function(total) {
+    return total > 0 && total < baseMonthly;
+  });
+
+  const completeMonth = baseMonthly > 0 && monthValues.some(function(total) {
+    return total >= baseMonthly;
+  });
+
+  const counterattackMonth = baseMonthly > 0 && monthValues.some(function(total) {
+    return total >= baseMonthly * 1.5;
+  });
+
+  const conditions = {
+    primer_golpe: confirmed.length >= 1,
+    piedra_pequena: anyCompleted,
+    no_era_fase: Object.keys(distinctMonths).length >= 3,
+    jefe_barra_vida: debtProgress >= 0.25,
+    mitad_dragon: debtProgress >= 0.50,
+    puerta_se_abre: debtProgress >= unlockTarget || (debtOriginal > 0 && debtPending <= 0),
+    deuda_derrotada: debtOriginal > 0 && debtPending <= 0,
+    compra_sin_culpa: purchaseCompleted,
+    modo_resistencia: resistanceMonth,
+    mes_no_te_gano: completeMonth,
+    contraataque: counterattackMonth,
+    otro_lado: investmentPaid
+  };
+
+  return ACHIEVEMENT_DEFINITIONS.map(function(def) {
+    return {
+      id: def.id,
+      icon: def.icon,
+      nombre: def.nombre,
+      condicion: def.condicion,
+      leyenda: def.leyenda,
+      unlocked: !!conditions[def.id],
+      unlockedAt: ''
+    };
+  });
+}
+
+function getAchievementUnlockMap_() {
+  const sheet = getSpreadsheet_().getSheetByName(SHEETS.ACHIEVEMENTS);
+  const values = sheet.getDataRange().getValues();
+  const map = {};
+
+  for (let r = 1; r < values.length; r++) {
+    const id = cleanText_(values[r][0]);
+    if (!id) continue;
+    map[id] = {
+      achievementId: id,
+      nombre: cleanText_(values[r][1]),
+      condicion: cleanText_(values[r][2]),
+      leyenda: cleanText_(values[r][3]),
+      unlockedAt: String(values[r][4] || ''),
+      createdAt: String(values[r][5] || '')
+    };
+  }
+
+  return map;
+}
+
+function syncAchievementUnlocks_(computedAchievements) {
+  const lock = LockService.getScriptLock();
+  lock.waitLock(10000);
+
+  try {
+    const sheet = getSpreadsheet_().getSheetByName(SHEETS.ACHIEVEMENTS);
+    const unlockMap = getAchievementUnlockMap_();
+    const newlyUnlocked = [];
+    const now = nowText_();
+
+    computedAchievements.forEach(function(achievement) {
+      if (!achievement.unlocked || unlockMap[achievement.id]) return;
+
+      sheet.appendRow([
+        achievement.id,
+        achievement.nombre,
+        achievement.condicion,
+        achievement.leyenda,
+        now,
+        now
+      ]);
+
+      unlockMap[achievement.id] = {
+        achievementId: achievement.id,
+        nombre: achievement.nombre,
+        condicion: achievement.condicion,
+        leyenda: achievement.leyenda,
+        unlockedAt: now,
+        createdAt: now
+      };
+
+      newlyUnlocked.push({
+        id: achievement.id,
+        icon: achievement.icon,
+        nombre: achievement.nombre,
+        condicion: achievement.condicion,
+        leyenda: achievement.leyenda,
+        unlockedAt: now
+      });
+    });
+
+    return {
+      unlockMap: unlockMap,
+      newlyUnlocked: newlyUnlocked
+    };
+  } finally {
+    lock.releaseLock();
+  }
+}
+
+function enrichAchievementsWithUnlocks_(achievements, unlockMap) {
+  return achievements.map(function(achievement) {
+    const row = unlockMap[achievement.id];
+    achievement.unlocked = !!row;
+    achievement.unlockedAt = row ? String(row.unlockedAt || '') : '';
+    return achievement;
+  });
+}
+
+function normalizeItemPayload_(payload) {
+  return {
+    nombre: cleanText_(payload.nombre),
+    tipo: normalizeType_(payload.tipo),
+    montoTotal: Number(payload.montoTotal) || 0,
+    pagadoPrevio: Number(payload.pagadoPrevio) || 0,
+    prioridad: Number(payload.prioridad) || 999,
+    estado: normalizeStatus_(payload.estado),
+    notas: cleanText_(payload.notas)
+  };
+}
+
+function findItemRowById_(id) {
+  const sheet = getSpreadsheet_().getSheetByName(SHEETS.ITEMS);
+  const values = sheet.getDataRange().getValues();
+  for (let r = 1; r < values.length; r++) {
+    if (Number(values[r][0]) === Number(id)) return r + 1;
+  }
+  return null;
+}
+
+function normalizeType_(value) {
+  const raw = cleanText_(value).toLowerCase();
+  if (raw === 'deuda') return 'Deuda';
+  if (raw === 'compra') return 'Compra';
+  if (raw === 'inversion' || raw === 'inversión') return 'Inversión';
+  return 'Deuda';
+}
+
+function normalizeStatus_(value) {
+  const raw = cleanText_(value).toLowerCase();
+  if (raw === 'activo') return 'Activo';
+  if (raw === 'pausado') return 'Pausado';
+  if (raw === 'urgente') return 'Urgente';
+  if (raw === 'pagado') return 'Pagado';
+  if (raw === 'archivado') return 'Archivado';
+  return 'Activo';
+}
+
+function normalizeDateText_(value) {
+  if (Object.prototype.toString.call(value) === '[object Date]' && !isNaN(value.getTime())) {
+    return Utilities.formatDate(value, APP_TIME_ZONE, 'yyyy-MM-dd');
+  }
+
+  const text = cleanText_(value);
+  const iso = text.match(/^(\d{4})-(\d{2})-(\d{2})/);
+  return iso ? iso[1] + '-' + iso[2] + '-' + iso[3] : text;
+}
+
+function cleanText_(value) {
+  return String(value == null ? '' : value).trim();
+}
+
+function roundMoney_(value) {
+  return Math.round((Number(value) || 0) * 100) / 100;
+}
+
+function formatMoney_(value) {
+  return '$' + (Number(value) || 0).toLocaleString('es-CL');
+}
+
+function todayText_() {
+  return Utilities.formatDate(new Date(), APP_TIME_ZONE, 'yyyy-MM-dd');
+}
+
+function nowText_() {
+  return Utilities.formatDate(new Date(), APP_TIME_ZONE, 'yyyy-MM-dd HH:mm:ss');
+}
+
+function addMonthsText_(dateText, monthsToAdd) {
+  const base = parseIsoDateParts_(dateText) || parseIsoDateParts_(todayText_());
+  const offset = Number(monthsToAdd) || 0;
+  const monthIndex = (base.month - 1) + offset;
+  const targetYear = base.year + Math.floor(monthIndex / 12);
+  const targetMonthZero = ((monthIndex % 12) + 12) % 12;
+  const targetMonth = targetMonthZero + 1;
+  const maxDay = daysInMonth_(targetYear, targetMonth);
+  const targetDay = Math.min(base.day, maxDay);
+
+  return [
+    String(targetYear).padStart(4, '0'),
+    String(targetMonth).padStart(2, '0'),
+    String(targetDay).padStart(2, '0')
+  ].join('-');
+}
+
+
+function assertAppReady_() {
+  const ss = getSpreadsheet_();
+  const required = [SHEETS.CONFIG, SHEETS.ITEMS, SHEETS.PAYMENTS, SHEETS.ACHIEVEMENTS, SHEETS.README];
+  const missing = required.filter(function(name) { return !ss.getSheetByName(name); });
+  if (missing.length) {
+    throw new Error('Falta preparar la base de datos (' + missing.join(', ') + '). Ejecuta setupApp() una vez.');
+  }
+}
+
+function getConfirmedPaidForItem_(itemId) {
+  return getPayments_().reduce(function(sum, payment) {
+    if (Number(payment.itemId) !== Number(itemId)) return sum;
+    if (String(payment.estado).toLowerCase() === 'anulado') return sum;
+    return sum + (Number(payment.monto) || 0);
+  }, 0);
+}
+
+function parseIsoDateParts_(value) {
+  const match = cleanText_(value).match(/^(\d{4})-(\d{2})-(\d{2})$/);
+  if (!match) return null;
+
+  const year = Number(match[1]);
+  const month = Number(match[2]);
+  const day = Number(match[3]);
+
+  if (month < 1 || month > 12) return null;
+  if (day < 1 || day > daysInMonth_(year, month)) return null;
+
+  return { year: year, month: month, day: day };
+}
+
+function normalizeIsoDateInput_(value) {
+  return normalizeDateText_(value);
+}
+
+function isValidIsoDate_(value) {
+  return !!parseIsoDateParts_(value);
+}
+
+function daysInMonth_(year, month) {
+  if (month === 2) {
+    const leap = (year % 4 === 0 && year % 100 !== 0) || year % 400 === 0;
+    return leap ? 29 : 28;
+  }
+  return [4, 6, 9, 11].indexOf(month) >= 0 ? 30 : 31;
+}
+
+function goalState_(label, reached, month, date) {
+  return {
+    label: label,
+    reached: !!reached,
+    month: reached ? Number(month) || 0 : null,
+    date: reached ? normalizeDateText_(date) : ''
+  };
+}
+
+function captureGoal_(goal, condition, month, date) {
+  if (!goal.reached && condition) {
+    goal.reached = true;
+    goal.month = Number(month) || 0;
+    goal.date = normalizeDateText_(date);
+  }
+}
+
+function projectionDeltaMonths_(candidate, base) {
+  if (candidate.routeComplete && base.routeComplete) {
+    return Number(candidate.totalMonths || 0) - Number(base.totalMonths || 0);
+  }
+  return null;
+}
+
+function goalDeltaMonths_(candidateGoal, baseGoal) {
+  if (!candidateGoal || !baseGoal || !candidateGoal.reached || !baseGoal.reached) return null;
+  return Number(candidateGoal.month || 0) - Number(baseGoal.month || 0);
+}
+
+function scenarioFromProjection_(amount, projection) {
+  return {
+    amount: Number(amount) || 0,
+    months: projection.totalMonths,
+    finishDate: projection.finishDate,
+    routeComplete: projection.routeComplete,
+    blockedPending: projection.blockedPending,
+    goals: clone_(projection.goals)
+  };
+}
+
+function clone_(obj) {
+  return JSON.parse(JSON.stringify(obj));
+}

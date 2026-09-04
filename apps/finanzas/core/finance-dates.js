@@ -1,4 +1,4 @@
-/* Emma OS v1.7.0 — Control Financiero Personal M1
+/* Emma OS v1.7.1 — Control Financiero Personal M1/M2
    Archivo: finance-dates.js
    Propósito: aislar fechas financieras sin usar Date.setMonth(), manteniendo clamp 29/30/31. */
 

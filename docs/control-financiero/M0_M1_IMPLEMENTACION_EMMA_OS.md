@@ -1,4 +1,4 @@
-# Emma OS v1.7.0 — Control Financiero Personal M0 + M1
+# Emma OS v1.7.1 — Control Financiero Personal M0 + M1
 
 **Fecha:** 2026-09-03  
 **Autoría de implementación:** OpenAI / ChatGPT (GPT-5.5 Thinking), a partir del paquete maestro entregado por Emmanuel Rojas.  
@@ -58,11 +58,11 @@ docs/control-financiero/
 
 ## Archivos tocados en el shell de Emma OS
 
-- `index.html`: tarjeta de laboratorio de Finanzas y versión visible `v1.7.0`.
+- `index.html`: tarjeta de laboratorio de Finanzas y versión visible `v1.7.1`.
 - `emma-shell.js`: entrada de Finanzas en el menú lateral.
 - `emma-theme.css`: acento visual del módulo financiero.
 - `manifest.webmanifest`: versión/descripción.
-- `sw.js`: caché actualizado para archivos M0/M1.
+- `sw.js`: caché actualizado para archivos M0/M1/M2.
 
 ## Archivos no tocados funcionalmente
 

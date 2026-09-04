@@ -1,4 +1,4 @@
-# Changelog — Emma OS v1.7.0 M0/M1
+# Changelog — Emma OS v1.7.1 M0/M1/M2
 
 ## Agregado
 
