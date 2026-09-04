@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Emma OS · Pruebas M5 Finanzas</title>
+<link rel="stylesheet" href="../../../emma-theme.css">
+<style>
+body{margin:0;background:var(--emma-bg);color:var(--emma-text);font-family:system-ui;padding:24px}.wrap{max-width:920px;margin:auto}.card{border:1px solid var(--emma-line);border-radius:22px;background:rgba(18,26,47,.82);padding:18px;margin:12px 0}.ok{color:#86efac}.err{color:#fecaca}pre{white-space:pre-wrap;background:rgba(15,23,42,.72);border:1px solid var(--emma-line);border-radius:16px;padding:12px}
+</style>
+</head>
+<body>
+<div class="wrap">
+<h1>Pruebas M5 · Corte controlado</h1>
+<p>Estas pruebas no escriben datos. Verifican la forma del certificado M5 usando un estado mínimo de prueba.</p>
+<div id="out" class="card">Ejecutando…</div>
+<p><a href="../">Volver a Finanzas</a></p>
+</div>
+<script type="module">
+import { createMemoryFinanceService } from '../service/finance-service.js';
+import { settings, items, payments } from './finance-fixtures.js';
+import { buildParityReport } from '../ui/finance-parity-ui.js';
+import { buildCutoverReport } from '../ui/finance-cutover-ui.js';
+
+const out = document.getElementById('out');
+const results = [];
+function test(label, fn){ try{ const ok = !!fn(); results.push({label, ok}); }catch(e){ results.push({label, ok:false, error:e.message}); } }
+
+const service = createMemoryFinanceService({ settings, items, payments });
+const normalized = await service.getAppState();
+normalized.repository = { kind:'google-sheets-apps-script', version:'test', readOnly:true, schemaVersion:'finance-schema-v1' };
+const m4 = buildParityReport(normalized);
+const m5 = buildCutoverReport(normalized, m4);
+
+test('Certificado M5 usa schemaVersion correcto', () => m5.schemaVersion === 'finance-cutover-report-v1');
+test('Certificado M5 queda aprobado con M4 aprobado', () => m5.status === 'aprobado');
+test('Repositorio Google Sheets es requerido', () => m5.checks.find(x=>x.id==='repository-google-sheets').ok);
+test('Checks no negociables están aprobados', () => m5.summary.mustPassed === m5.summary.mustTotal);
+test('No altera ítems ni pagos', () => normalized.coreState.items.length === items.length && normalized.coreState.payments.length === payments.length);
+
+out.innerHTML = '<h2>Resultado</h2>' + results.map(r => `<div class="${r.ok?'ok':'err'}">${r.ok?'✓':'✗'} ${r.label}${r.error ? ': '+r.error : ''}</div>`).join('') + '<pre>'+JSON.stringify(m5.summary,null,2)+'</pre>';
+</script>
+</body>
+</html>

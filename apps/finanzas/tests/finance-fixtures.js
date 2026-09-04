@@ -1,4 +1,4 @@
-/* Emma OS v1.7.4 — Control Financiero Personal M1/M2/M3 lectura
+/* Emma OS v1.8.0 — Control Financiero Personal M1/M2/M3 lectura
    Fixtures locales. No representan la base real del usuario. */
 
 export const settings = {

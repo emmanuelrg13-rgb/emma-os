@@ -1,7 +1,7 @@
 {
-  "name": "Emma OS v1.7.4",
+  "name": "Emma OS v1.8.0",
   "short_name": "Emma OS",
-  "description": "Centro de control personal con Finanzas M4 paridad: UI nativa conectada a Google Sheets con reporte comparativo contra snapshot v10.1-auditoria antes del corte.",
+  "description": "Centro de control personal con Finanzas M5 corte controlado: Control Financiero Personal vive como módulo nativo de Emma OS, manteniendo Google Sheets como fuente de verdad inicial.",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",

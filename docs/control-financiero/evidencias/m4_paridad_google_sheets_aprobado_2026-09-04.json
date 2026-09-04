@@ -1,0 +1,1336 @@
+{
+  "module": "control-financiero",
+  "schemaVersion": "finance-parity-report-v1",
+  "emmaVersion": "v1.7.4",
+  "phase": "M4 Paridad",
+  "generatedAt": "2026-09-04T05:30:28.033Z",
+  "repository": {
+    "kind": "google-sheets-apps-script",
+    "version": "v1.7.4-m4-paridad",
+    "readOnly": true,
+    "schemaVersion": "finance-schema-v1"
+  },
+  "sourceSnapshot": "10.1-auditoria",
+  "summary": {
+    "total": 131,
+    "passed": 131,
+    "failed": 0,
+    "mustTotal": 75,
+    "mustPassed": 75,
+    "reviewTotal": 56,
+    "reviewPassed": 56,
+    "status": "aprobado"
+  },
+  "checks": [
+    {
+      "section": "metadata",
+      "id": "source-ok",
+      "label": "Estado fuente responde OK",
+      "ok": true,
+      "source": true,
+      "core": true,
+      "severity": "must",
+      "note": ""
+    },
+    {
+      "section": "metadata",
+      "id": "snapshot",
+      "label": "Snapshot funcional conservado",
+      "ok": true,
+      "source": "10.1-auditoria",
+      "core": "10.1-auditoria",
+      "severity": "must",
+      "note": ""
+    },
+    {
+      "section": "metadata",
+      "id": "timezone",
+      "label": "Zona horaria financiera",
+      "ok": true,
+      "source": "America/Santiago",
+      "core": "America/Santiago",
+      "severity": "must",
+      "note": ""
+    },
+    {
+      "section": "metadata",
+      "id": "sheet-read",
+      "label": "Lectura proviene del repositorio financiero",
+      "ok": true,
+      "source": "google-sheets-apps-script",
+      "core": "google-sheets-apps-script/memory",
+      "severity": "must",
+      "note": ""
+    },
+    {
+      "section": "items",
+      "id": "item-count",
+      "label": "Cantidad de ítems coincide",
+      "ok": true,
+      "source": 12,
+      "core": 12,
+      "severity": "must",
+      "note": ""
+    },
+    {
+      "section": "payments",
+      "id": "payment-count",
+      "label": "Cantidad de pagos coincide",
+      "ok": true,
+      "source": 0,
+      "core": 0,
+      "severity": "must",
+      "note": ""
+    },
+    {
+      "section": "achievements",
+      "id": "achievement-count",
+      "label": "Cantidad de logros coincide",
+      "ok": true,
+      "source": 12,
+      "core": 12,
+      "severity": "review",
+      "note": ""
+    },
+    {
+      "section": "items",
+      "id": "no-duplicate-item-ids",
+      "label": "IDs de ítems sin duplicados",
+      "ok": true,
+      "source": "sin duplicados",
+      "core": "sin duplicados",
+      "severity": "must",
+      "note": ""
+    },
+    {
+      "section": "payments",
+      "id": "no-duplicate-payment-ids",
+      "label": "UUIDs de pagos sin duplicados",
+      "ok": true,
+      "source": "sin duplicados",
+      "core": "sin duplicados",
+      "severity": "must",
+      "note": ""
+    },
+    {
+      "section": "totals",
+      "id": "total-general",
+      "label": "General: monto total coincide",
+      "ok": true,
+      "source": 12376900,
+      "core": 12376900,
+      "severity": "must",
+      "note": ""
+    },
+    {
+      "section": "totals",
+      "id": "paid-general",
+      "label": "General: pagado coincide",
+      "ok": true,
+      "source": 0,
+      "core": 0,
+      "severity": "must",
+      "note": ""
+    },
+    {
+      "section": "totals",
+      "id": "pending-general",
+      "label": "General: saldo pendiente coincide",
+      "ok": true,
+      "source": 12376900,
+      "core": 12376900,
+      "severity": "must",
+      "note": ""
+    },
+    {
+      "section": "totals",
+      "id": "progress-general",
+      "label": "General: avance coincide",
+      "ok": true,
+      "source": "0%",
+      "core": "0%",
+      "severity": "review",
+      "note": ""
+    },
+    {
+      "section": "totals",
+      "id": "total-deuda",
+      "label": "Deuda: monto total coincide",
+      "ok": true,
+      "source": 3891900,
+      "core": 3891900,
+      "severity": "must",
+      "note": ""
+    },
+    {
+      "section": "totals",
+      "id": "paid-deuda",
+      "label": "Deuda: pagado coincide",
+      "ok": true,
+      "source": 0,
+      "core": 0,
+      "severity": "must",
+      "note": ""
+    },
+    {
+      "section": "totals",
+      "id": "pending-deuda",
+      "label": "Deuda: saldo pendiente coincide",
+      "ok": true,
+      "source": 3891900,
+      "core": 3891900,
+      "severity": "must",
+      "note": ""
+    },
+    {
+      "section": "totals",
+      "id": "progress-deuda",
+      "label": "Deuda: avance coincide",
+      "ok": true,
+      "source": "0%",
+      "core": "0%",
+      "severity": "review",
+      "note": ""
+    },
+    {
+      "section": "totals",
+      "id": "total-compra",
+      "label": "Compra: monto total coincide",
+      "ok": true,
+      "source": 485000,
+      "core": 485000,
+      "severity": "must",
+      "note": ""
+    },
+    {
+      "section": "totals",
+      "id": "paid-compra",
+      "label": "Compra: pagado coincide",
+      "ok": true,
+      "source": 0,
+      "core": 0,
+      "severity": "must",
+      "note": ""
+    },
+    {
+      "section": "totals",
+      "id": "pending-compra",
+      "label": "Compra: saldo pendiente coincide",
+      "ok": true,
+      "source": 485000,
+      "core": 485000,
+      "severity": "must",
+      "note": ""
+    },
+    {
+      "section": "totals",
+      "id": "progress-compra",
+      "label": "Compra: avance coincide",
+      "ok": true,
+      "source": "0%",
+      "core": "0%",
+      "severity": "review",
+      "note": ""
+    },
+    {
+      "section": "totals",
+      "id": "total-inversion",
+      "label": "Inversión: monto total coincide",
+      "ok": true,
+      "source": 8000000,
+      "core": 8000000,
+      "severity": "must",
+      "note": ""
+    },
+    {
+      "section": "totals",
+      "id": "paid-inversion",
+      "label": "Inversión: pagado coincide",
+      "ok": true,
+      "source": 0,
+      "core": 0,
+      "severity": "must",
+      "note": ""
+    },
+    {
+      "section": "totals",
+      "id": "pending-inversion",
+      "label": "Inversión: saldo pendiente coincide",
+      "ok": true,
+      "source": 8000000,
+      "core": 8000000,
+      "severity": "must",
+      "note": ""
+    },
+    {
+      "section": "totals",
+      "id": "progress-inversion",
+      "label": "Inversión: avance coincide",
+      "ok": true,
+      "source": "0%",
+      "core": "0%",
+      "severity": "review",
+      "note": ""
+    },
+    {
+      "section": "items",
+      "id": "item-1-exists",
+      "label": "Ítem #1 existe en Core",
+      "ok": true,
+      "source": "Fondo iglesia para eventos",
+      "core": "Fondo iglesia para eventos",
+      "severity": "must",
+      "note": ""
+    },
+    {
+      "section": "items",
+      "id": "item-1-name",
+      "label": "Ítem #1: nombre conserva",
+      "ok": true,
+      "source": "Fondo iglesia para eventos",
+      "core": "Fondo iglesia para eventos",
+      "severity": "review",
+      "note": ""
+    },
+    {
+      "section": "items",
+      "id": "item-1-type",
+      "label": "Ítem #1: tipo conserva",
+      "ok": true,
+      "source": "Deuda",
+      "core": "Deuda",
+      "severity": "must",
+      "note": ""
+    },
+    {
+      "section": "items",
+      "id": "item-1-status",
+      "label": "Ítem #1: estado conserva",
+      "ok": true,
+      "source": "Activo",
+      "core": "Activo",
+      "severity": "must",
+      "note": ""
+    },
+    {
+      "section": "items",
+      "id": "item-1-balance",
+      "label": "Ítem #1: saldo pendiente coincide",
+      "ok": true,
+      "source": 48000,
+      "core": 48000,
+      "severity": "must",
+      "note": ""
+    },
+    {
+      "section": "items",
+      "id": "item-2-exists",
+      "label": "Ítem #2 existe en Core",
+      "ok": true,
+      "source": "Llave de agua para ducha",
+      "core": "Llave de agua para ducha",
+      "severity": "must",
+      "note": ""
+    },
+    {
+      "section": "items",
+      "id": "item-2-name",
+      "label": "Ítem #2: nombre conserva",
+      "ok": true,
+      "source": "Llave de agua para ducha",
+      "core": "Llave de agua para ducha",
+      "severity": "review",
+      "note": ""
+    },
+    {
+      "section": "items",
+      "id": "item-2-type",
+      "label": "Ítem #2: tipo conserva",
+      "ok": true,
+      "source": "Compra",
+      "core": "Compra",
+      "severity": "must",
+      "note": ""
+    },
+    {
+      "section": "items",
+      "id": "item-2-status",
+      "label": "Ítem #2: estado conserva",
+      "ok": true,
+      "source": "Activo",
+      "core": "Activo",
+      "severity": "must",
+      "note": ""
+    },
+    {
+      "section": "items",
+      "id": "item-2-balance",
+      "label": "Ítem #2: saldo pendiente coincide",
+      "ok": true,
+      "source": 25000,
+      "core": 25000,
+      "severity": "must",
+      "note": ""
+    },
+    {
+      "section": "items",
+      "id": "item-3-exists",
+      "label": "Ítem #3 existe en Core",
+      "ok": true,
+      "source": "Capa Jack",
+      "core": "Capa Jack",
+      "severity": "must",
+      "note": ""
+    },
+    {
+      "section": "items",
+      "id": "item-3-name",
+      "label": "Ítem #3: nombre conserva",
+      "ok": true,
+      "source": "Capa Jack",
+      "core": "Capa Jack",
+      "severity": "review",
+      "note": ""
+    },
+    {
+      "section": "items",
+      "id": "item-3-type",
+      "label": "Ítem #3: tipo conserva",
+      "ok": true,
+      "source": "Compra",
+      "core": "Compra",
+      "severity": "must",
+      "note": ""
+    },
+    {
+      "section": "items",
+      "id": "item-3-status",
+      "label": "Ítem #3: estado conserva",
+      "ok": true,
+      "source": "Activo",
+      "core": "Activo",
+      "severity": "must",
+      "note": ""
+    },
+    {
+      "section": "items",
+      "id": "item-3-balance",
+      "label": "Ítem #3: saldo pendiente coincide",
+      "ok": true,
+      "source": 10000,
+      "core": 10000,
+      "severity": "must",
+      "note": ""
+    },
+    {
+      "section": "items",
+      "id": "item-4-exists",
+      "label": "Ítem #4 existe en Core",
+      "ok": true,
+      "source": "Iglesia",
+      "core": "Iglesia",
+      "severity": "must",
+      "note": ""
+    },
+    {
+      "section": "items",
+      "id": "item-4-name",
+      "label": "Ítem #4: nombre conserva",
+      "ok": true,
+      "source": "Iglesia",
+      "core": "Iglesia",
+      "severity": "review",
+      "note": ""
+    },
+    {
+      "section": "items",
+      "id": "item-4-type",
+      "label": "Ítem #4: tipo conserva",
+      "ok": true,
+      "source": "Deuda",
+      "core": "Deuda",
+      "severity": "must",
+      "note": ""
+    },
+    {
+      "section": "items",
+      "id": "item-4-status",
+      "label": "Ítem #4: estado conserva",
+      "ok": true,
+      "source": "Activo",
+      "core": "Activo",
+      "severity": "must",
+      "note": ""
+    },
+    {
+      "section": "items",
+      "id": "item-4-balance",
+      "label": "Ítem #4: saldo pendiente coincide",
+      "ok": true,
+      "source": 73900,
+      "core": 73900,
+      "severity": "must",
+      "note": ""
+    },
+    {
+      "section": "items",
+      "id": "item-5-exists",
+      "label": "Ítem #5 existe en Core",
+      "ok": true,
+      "source": "Linea de Credito Banco Chile",
+      "core": "Linea de Credito Banco Chile",
+      "severity": "must",
+      "note": ""
+    },
+    {
+      "section": "items",
+      "id": "item-5-name",
+      "label": "Ítem #5: nombre conserva",
+      "ok": true,
+      "source": "Linea de Credito Banco Chile",
+      "core": "Linea de Credito Banco Chile",
+      "severity": "review",
+      "note": ""
+    },
+    {
+      "section": "items",
+      "id": "item-5-type",
+      "label": "Ítem #5: tipo conserva",
+      "ok": true,
+      "source": "Deuda",
+      "core": "Deuda",
+      "severity": "must",
+      "note": ""
+    },
+    {
+      "section": "items",
+      "id": "item-5-status",
+      "label": "Ítem #5: estado conserva",
+      "ok": true,
+      "source": "Activo",
+      "core": "Activo",
+      "severity": "must",
+      "note": ""
+    },
+    {
+      "section": "items",
+      "id": "item-5-balance",
+      "label": "Ítem #5: saldo pendiente coincide",
+      "ok": true,
+      "source": 500000,
+      "core": 500000,
+      "severity": "must",
+      "note": ""
+    },
+    {
+      "section": "items",
+      "id": "item-6-exists",
+      "label": "Ítem #6 existe en Core",
+      "ok": true,
+      "source": "Tarjeta de credito Banco Chile",
+      "core": "Tarjeta de credito Banco Chile",
+      "severity": "must",
+      "note": ""
+    },
+    {
+      "section": "items",
+      "id": "item-6-name",
+      "label": "Ítem #6: nombre conserva",
+      "ok": true,
+      "source": "Tarjeta de credito Banco Chile",
+      "core": "Tarjeta de credito Banco Chile",
+      "severity": "review",
+      "note": ""
+    },
+    {
+      "section": "items",
+      "id": "item-6-type",
+      "label": "Ítem #6: tipo conserva",
+      "ok": true,
+      "source": "Deuda",
+      "core": "Deuda",
+      "severity": "must",
+      "note": ""
+    },
+    {
+      "section": "items",
+      "id": "item-6-status",
+      "label": "Ítem #6: estado conserva",
+      "ok": true,
+      "source": "Activo",
+      "core": "Activo",
+      "severity": "must",
+      "note": ""
+    },
+    {
+      "section": "items",
+      "id": "item-6-balance",
+      "label": "Ítem #6: saldo pendiente coincide",
+      "ok": true,
+      "source": 1400000,
+      "core": 1400000,
+      "severity": "must",
+      "note": ""
+    },
+    {
+      "section": "items",
+      "id": "item-7-exists",
+      "label": "Ítem #7 existe en Core",
+      "ok": true,
+      "source": "Tarjeta de Credito Banco Ripley",
+      "core": "Tarjeta de Credito Banco Ripley",
+      "severity": "must",
+      "note": ""
+    },
+    {
+      "section": "items",
+      "id": "item-7-name",
+      "label": "Ítem #7: nombre conserva",
+      "ok": true,
+      "source": "Tarjeta de Credito Banco Ripley",
+      "core": "Tarjeta de Credito Banco Ripley",
+      "severity": "review",
+      "note": ""
+    },
+    {
+      "section": "items",
+      "id": "item-7-type",
+      "label": "Ítem #7: tipo conserva",
+      "ok": true,
+      "source": "Deuda",
+      "core": "Deuda",
+      "severity": "must",
+      "note": ""
+    },
+    {
+      "section": "items",
+      "id": "item-7-status",
+      "label": "Ítem #7: estado conserva",
+      "ok": true,
+      "source": "Activo",
+      "core": "Activo",
+      "severity": "must",
+      "note": ""
+    },
+    {
+      "section": "items",
+      "id": "item-7-balance",
+      "label": "Ítem #7: saldo pendiente coincide",
+      "ok": true,
+      "source": 1850000,
+      "core": 1850000,
+      "severity": "must",
+      "note": ""
+    },
+    {
+      "section": "items",
+      "id": "item-8-exists",
+      "label": "Ítem #8 existe en Core",
+      "ok": true,
+      "source": "Fondo mutuo largo plazo",
+      "core": "Fondo mutuo largo plazo",
+      "severity": "must",
+      "note": ""
+    },
+    {
+      "section": "items",
+      "id": "item-8-name",
+      "label": "Ítem #8: nombre conserva",
+      "ok": true,
+      "source": "Fondo mutuo largo plazo",
+      "core": "Fondo mutuo largo plazo",
+      "severity": "review",
+      "note": ""
+    },
+    {
+      "section": "items",
+      "id": "item-8-type",
+      "label": "Ítem #8: tipo conserva",
+      "ok": true,
+      "source": "Inversión",
+      "core": "Inversión",
+      "severity": "must",
+      "note": ""
+    },
+    {
+      "section": "items",
+      "id": "item-8-status",
+      "label": "Ítem #8: estado conserva",
+      "ok": true,
+      "source": "Activo",
+      "core": "Activo",
+      "severity": "must",
+      "note": ""
+    },
+    {
+      "section": "items",
+      "id": "item-8-balance",
+      "label": "Ítem #8: saldo pendiente coincide",
+      "ok": true,
+      "source": 1000000,
+      "core": 1000000,
+      "severity": "must",
+      "note": ""
+    },
+    {
+      "section": "items",
+      "id": "item-9-exists",
+      "label": "Ítem #9 existe en Core",
+      "ok": true,
+      "source": "Inversion en ETFs",
+      "core": "Inversion en ETFs",
+      "severity": "must",
+      "note": ""
+    },
+    {
+      "section": "items",
+      "id": "item-9-name",
+      "label": "Ítem #9: nombre conserva",
+      "ok": true,
+      "source": "Inversion en ETFs",
+      "core": "Inversion en ETFs",
+      "severity": "review",
+      "note": ""
+    },
+    {
+      "section": "items",
+      "id": "item-9-type",
+      "label": "Ítem #9: tipo conserva",
+      "ok": true,
+      "source": "Inversión",
+      "core": "Inversión",
+      "severity": "must",
+      "note": ""
+    },
+    {
+      "section": "items",
+      "id": "item-9-status",
+      "label": "Ítem #9: estado conserva",
+      "ok": true,
+      "source": "Activo",
+      "core": "Activo",
+      "severity": "must",
+      "note": ""
+    },
+    {
+      "section": "items",
+      "id": "item-9-balance",
+      "label": "Ítem #9: saldo pendiente coincide",
+      "ok": true,
+      "source": 1000000,
+      "core": 1000000,
+      "severity": "must",
+      "note": ""
+    },
+    {
+      "section": "items",
+      "id": "item-10-exists",
+      "label": "Ítem #10 existe en Core",
+      "ok": true,
+      "source": "Colchon de emergencia",
+      "core": "Colchon de emergencia",
+      "severity": "must",
+      "note": ""
+    },
+    {
+      "section": "items",
+      "id": "item-10-name",
+      "label": "Ítem #10: nombre conserva",
+      "ok": true,
+      "source": "Colchon de emergencia",
+      "core": "Colchon de emergencia",
+      "severity": "review",
+      "note": ""
+    },
+    {
+      "section": "items",
+      "id": "item-10-type",
+      "label": "Ítem #10: tipo conserva",
+      "ok": true,
+      "source": "Inversión",
+      "core": "Inversión",
+      "severity": "must",
+      "note": ""
+    },
+    {
+      "section": "items",
+      "id": "item-10-status",
+      "label": "Ítem #10: estado conserva",
+      "ok": true,
+      "source": "Activo",
+      "core": "Activo",
+      "severity": "must",
+      "note": ""
+    },
+    {
+      "section": "items",
+      "id": "item-10-balance",
+      "label": "Ítem #10: saldo pendiente coincide",
+      "ok": true,
+      "source": 6000000,
+      "core": 6000000,
+      "severity": "must",
+      "note": ""
+    },
+    {
+      "section": "items",
+      "id": "item-11-exists",
+      "label": "Ítem #11 existe en Core",
+      "ok": true,
+      "source": "Deuda pago Collipulli",
+      "core": "Deuda pago Collipulli",
+      "severity": "must",
+      "note": ""
+    },
+    {
+      "section": "items",
+      "id": "item-11-name",
+      "label": "Ítem #11: nombre conserva",
+      "ok": true,
+      "source": "Deuda pago Collipulli",
+      "core": "Deuda pago Collipulli",
+      "severity": "review",
+      "note": ""
+    },
+    {
+      "section": "items",
+      "id": "item-11-type",
+      "label": "Ítem #11: tipo conserva",
+      "ok": true,
+      "source": "Deuda",
+      "core": "Deuda",
+      "severity": "must",
+      "note": ""
+    },
+    {
+      "section": "items",
+      "id": "item-11-status",
+      "label": "Ítem #11: estado conserva",
+      "ok": true,
+      "source": "Activo",
+      "core": "Activo",
+      "severity": "must",
+      "note": ""
+    },
+    {
+      "section": "items",
+      "id": "item-11-balance",
+      "label": "Ítem #11: saldo pendiente coincide",
+      "ok": true,
+      "source": 20000,
+      "core": 20000,
+      "severity": "must",
+      "note": ""
+    },
+    {
+      "section": "items",
+      "id": "item-12-exists",
+      "label": "Ítem #12 existe en Core",
+      "ok": true,
+      "source": "TV 50 pulgadas",
+      "core": "TV 50 pulgadas",
+      "severity": "must",
+      "note": ""
+    },
+    {
+      "section": "items",
+      "id": "item-12-name",
+      "label": "Ítem #12: nombre conserva",
+      "ok": true,
+      "source": "TV 50 pulgadas",
+      "core": "TV 50 pulgadas",
+      "severity": "review",
+      "note": ""
+    },
+    {
+      "section": "items",
+      "id": "item-12-type",
+      "label": "Ítem #12: tipo conserva",
+      "ok": true,
+      "source": "Compra",
+      "core": "Compra",
+      "severity": "must",
+      "note": ""
+    },
+    {
+      "section": "items",
+      "id": "item-12-status",
+      "label": "Ítem #12: estado conserva",
+      "ok": true,
+      "source": "Activo",
+      "core": "Activo",
+      "severity": "must",
+      "note": ""
+    },
+    {
+      "section": "items",
+      "id": "item-12-balance",
+      "label": "Ítem #12: saldo pendiente coincide",
+      "ok": true,
+      "source": 450000,
+      "core": 450000,
+      "severity": "must",
+      "note": ""
+    },
+    {
+      "section": "payments",
+      "id": "voided-preserved",
+      "label": "Pagos anulados se conservan",
+      "ok": true,
+      "source": 0,
+      "core": 0,
+      "severity": "must",
+      "note": ""
+    },
+    {
+      "section": "payments",
+      "id": "confirmed-sum",
+      "label": "Suma de pagos confirmados coincide",
+      "ok": true,
+      "source": 0,
+      "core": 0,
+      "severity": "must",
+      "note": ""
+    },
+    {
+      "section": "route",
+      "id": "current-plan-total",
+      "label": "Plan del mes: total asignado coincide",
+      "ok": true,
+      "source": 50000,
+      "core": 50000,
+      "severity": "review",
+      "note": ""
+    },
+    {
+      "section": "route",
+      "id": "first-payment",
+      "label": "Primera asignación coincide",
+      "ok": true,
+      "source": 3,
+      "core": 3,
+      "severity": "must",
+      "note": ""
+    },
+    {
+      "section": "route",
+      "id": "route-signature",
+      "label": "Ruta sugerida del mes coincide",
+      "ok": true,
+      "source": "3|10000|Compra|Capa Jack\n11|20000|Deuda|Deuda pago Collipulli\n2|20000|Compra|Llave de agua para ducha",
+      "core": "3|10000|Compra|Capa Jack\n11|20000|Deuda|Deuda pago Collipulli\n2|20000|Compra|Llave de agua para ducha",
+      "severity": "review",
+      "note": ""
+    },
+    {
+      "section": "projection",
+      "id": "projection-months",
+      "label": "Proyección: meses totales coinciden",
+      "ok": true,
+      "source": "248",
+      "core": "248",
+      "severity": "must",
+      "note": ""
+    },
+    {
+      "section": "projection",
+      "id": "projection-finish",
+      "label": "Proyección: fecha final coincide",
+      "ok": true,
+      "source": "2047-03-31",
+      "core": "2047-03-31",
+      "severity": "must",
+      "note": ""
+    },
+    {
+      "section": "projection",
+      "id": "projection-complete",
+      "label": "Proyección: ruta completa coincide",
+      "ok": true,
+      "source": "true",
+      "core": "true",
+      "severity": "review",
+      "note": ""
+    },
+    {
+      "section": "projection",
+      "id": "first-six-months",
+      "label": "Primeros 6 meses de ruta coinciden",
+      "ok": true,
+      "source": "::2026-08-31::0::0::3|10000|Compra|Capa Jack~11|20000|Deuda|Deuda pago Collipulli~2|20000|Compra|Llave de agua para ducha\n::2026-09-30::0::0::2|5000|Compra|Llave de agua para ducha~1|45000|Deuda|Fondo iglesia para eventos\n::2026-10-31::0::0::1|3000|Deuda|Fondo iglesia para eventos~4|47000|Deuda|Iglesia\n::2026-11-30::0::0::4|26900|Deuda|Iglesia~12|23100|Compra|TV 50 pulgadas\n::2026-12-31::0::0::12|50000|Compra|TV 50 pulgadas\n::2027-01-31::0::0::12|50000|Compra|TV 50 pulgadas",
+      "core": "::2026-08-31::0::0::3|10000|Compra|Capa Jack~11|20000|Deuda|Deuda pago Collipulli~2|20000|Compra|Llave de agua para ducha\n::2026-09-30::0::0::2|5000|Compra|Llave de agua para ducha~1|45000|Deuda|Fondo iglesia para eventos\n::2026-10-31::0::0::1|3000|Deuda|Fondo iglesia para eventos~4|47000|Deuda|Iglesia\n::2026-11-30::0::0::4|26900|Deuda|Iglesia~12|23100|Compra|TV 50 pulgadas\n::2026-12-31::0::0::12|50000|Compra|TV 50 pulgadas\n::2027-01-31::0::0::12|50000|Compra|TV 50 pulgadas",
+      "severity": "review",
+      "note": ""
+    },
+    {
+      "section": "projection",
+      "id": "goal-investmentsUnlocked-reached",
+      "label": "Hito investmentsUnlocked: estado coincide",
+      "ok": true,
+      "source": "true",
+      "core": "true",
+      "severity": "review",
+      "note": ""
+    },
+    {
+      "section": "projection",
+      "id": "goal-investmentsUnlocked-date",
+      "label": "Hito investmentsUnlocked: fecha coincide",
+      "ok": true,
+      "source": "2032-04-30",
+      "core": "2032-04-30",
+      "severity": "review",
+      "note": ""
+    },
+    {
+      "section": "projection",
+      "id": "goal-debtFree-reached",
+      "label": "Hito debtFree: estado coincide",
+      "ok": true,
+      "source": "true",
+      "core": "true",
+      "severity": "review",
+      "note": ""
+    },
+    {
+      "section": "projection",
+      "id": "goal-debtFree-date",
+      "label": "Hito debtFree: fecha coincide",
+      "ok": true,
+      "source": "2033-11-30",
+      "core": "2033-11-30",
+      "severity": "review",
+      "note": ""
+    },
+    {
+      "section": "projection",
+      "id": "goal-purchasesComplete-reached",
+      "label": "Hito purchasesComplete: estado coincide",
+      "ok": true,
+      "source": "true",
+      "core": "true",
+      "severity": "review",
+      "note": ""
+    },
+    {
+      "section": "projection",
+      "id": "goal-purchasesComplete-date",
+      "label": "Hito purchasesComplete: fecha coincide",
+      "ok": true,
+      "source": "2027-08-31",
+      "core": "2027-08-31",
+      "severity": "review",
+      "note": ""
+    },
+    {
+      "section": "projection",
+      "id": "goal-planComplete-reached",
+      "label": "Hito planComplete: estado coincide",
+      "ok": true,
+      "source": "true",
+      "core": "true",
+      "severity": "review",
+      "note": ""
+    },
+    {
+      "section": "projection",
+      "id": "goal-planComplete-date",
+      "label": "Hito planComplete: fecha coincide",
+      "ok": true,
+      "source": "2047-03-31",
+      "core": "2047-03-31",
+      "severity": "review",
+      "note": ""
+    },
+    {
+      "section": "investments",
+      "id": "gate-unlocked",
+      "label": "Gate inversiones: estado coincide",
+      "ok": true,
+      "source": "false",
+      "core": "false",
+      "severity": "must",
+      "note": ""
+    },
+    {
+      "section": "investments",
+      "id": "gate-missing",
+      "label": "Gate inversiones: monto faltante coincide",
+      "ok": true,
+      "source": 0,
+      "core": 0,
+      "severity": "review",
+      "note": ""
+    },
+    {
+      "section": "route",
+      "id": "paused-out-route",
+      "label": "Ítems pausados salen de ruta automática",
+      "ok": true,
+      "source": "sin pausados en ruta",
+      "core": "sin pausados en ruta",
+      "severity": "must",
+      "note": ""
+    },
+    {
+      "section": "achievements",
+      "id": "achievement-primer_golpe-exists",
+      "label": "Logro primer_golpe: existe",
+      "ok": true,
+      "source": "Primer golpe al monstruo",
+      "core": "Primer golpe al monstruo",
+      "severity": "review",
+      "note": ""
+    },
+    {
+      "section": "achievements",
+      "id": "achievement-primer_golpe-unlocked",
+      "label": "Logro primer_golpe: desbloqueo coincide",
+      "ok": true,
+      "source": "false",
+      "core": "false",
+      "severity": "review",
+      "note": ""
+    },
+    {
+      "section": "achievements",
+      "id": "achievement-piedra_pequena-exists",
+      "label": "Logro piedra_pequena: existe",
+      "ok": true,
+      "source": "La piedra pequeña desaparece",
+      "core": "La piedra pequeña desaparece",
+      "severity": "review",
+      "note": ""
+    },
+    {
+      "section": "achievements",
+      "id": "achievement-piedra_pequena-unlocked",
+      "label": "Logro piedra_pequena: desbloqueo coincide",
+      "ok": true,
+      "source": "false",
+      "core": "false",
+      "severity": "review",
+      "note": ""
+    },
+    {
+      "section": "achievements",
+      "id": "achievement-no_era_fase-exists",
+      "label": "Logro no_era_fase: existe",
+      "ok": true,
+      "source": "No era una fase financiera",
+      "core": "No era una fase financiera",
+      "severity": "review",
+      "note": ""
+    },
+    {
+      "section": "achievements",
+      "id": "achievement-no_era_fase-unlocked",
+      "label": "Logro no_era_fase: desbloqueo coincide",
+      "ok": true,
+      "source": "false",
+      "core": "false",
+      "severity": "review",
+      "note": ""
+    },
+    {
+      "section": "achievements",
+      "id": "achievement-jefe_barra_vida-exists",
+      "label": "Logro jefe_barra_vida: existe",
+      "ok": true,
+      "source": "El jefe tiene barra de vida",
+      "core": "El jefe tiene barra de vida",
+      "severity": "review",
+      "note": ""
+    },
+    {
+      "section": "achievements",
+      "id": "achievement-jefe_barra_vida-unlocked",
+      "label": "Logro jefe_barra_vida: desbloqueo coincide",
+      "ok": true,
+      "source": "false",
+      "core": "false",
+      "severity": "review",
+      "note": ""
+    },
+    {
+      "section": "achievements",
+      "id": "achievement-mitad_dragon-exists",
+      "label": "Logro mitad_dragon: existe",
+      "ok": true,
+      "source": "Mitad del dragón",
+      "core": "Mitad del dragón",
+      "severity": "review",
+      "note": ""
+    },
+    {
+      "section": "achievements",
+      "id": "achievement-mitad_dragon-unlocked",
+      "label": "Logro mitad_dragon: desbloqueo coincide",
+      "ok": true,
+      "source": "false",
+      "core": "false",
+      "severity": "review",
+      "note": ""
+    },
+    {
+      "section": "achievements",
+      "id": "achievement-puerta_se_abre-exists",
+      "label": "Logro puerta_se_abre: existe",
+      "ok": true,
+      "source": "La puerta se empieza a abrir",
+      "core": "La puerta se empieza a abrir",
+      "severity": "review",
+      "note": ""
+    },
+    {
+      "section": "achievements",
+      "id": "achievement-puerta_se_abre-unlocked",
+      "label": "Logro puerta_se_abre: desbloqueo coincide",
+      "ok": true,
+      "source": "false",
+      "core": "false",
+      "severity": "review",
+      "note": ""
+    },
+    {
+      "section": "achievements",
+      "id": "achievement-deuda_derrotada-exists",
+      "label": "Logro deuda_derrotada: existe",
+      "ok": true,
+      "source": "Deuda derrotada",
+      "core": "Deuda derrotada",
+      "severity": "review",
+      "note": ""
+    },
+    {
+      "section": "achievements",
+      "id": "achievement-deuda_derrotada-unlocked",
+      "label": "Logro deuda_derrotada: desbloqueo coincide",
+      "ok": true,
+      "source": "false",
+      "core": "false",
+      "severity": "review",
+      "note": ""
+    },
+    {
+      "section": "achievements",
+      "id": "achievement-compra_sin_culpa-exists",
+      "label": "Logro compra_sin_culpa: existe",
+      "ok": true,
+      "source": "Compra sin culpa",
+      "core": "Compra sin culpa",
+      "severity": "review",
+      "note": ""
+    },
+    {
+      "section": "achievements",
+      "id": "achievement-compra_sin_culpa-unlocked",
+      "label": "Logro compra_sin_culpa: desbloqueo coincide",
+      "ok": true,
+      "source": "false",
+      "core": "false",
+      "severity": "review",
+      "note": ""
+    },
+    {
+      "section": "achievements",
+      "id": "achievement-modo_resistencia-exists",
+      "label": "Logro modo_resistencia: existe",
+      "ok": true,
+      "source": "Modo Resistencia financiero",
+      "core": "Modo Resistencia financiero",
+      "severity": "review",
+      "note": ""
+    },
+    {
+      "section": "achievements",
+      "id": "achievement-modo_resistencia-unlocked",
+      "label": "Logro modo_resistencia: desbloqueo coincide",
+      "ok": true,
+      "source": "false",
+      "core": "false",
+      "severity": "review",
+      "note": ""
+    },
+    {
+      "section": "achievements",
+      "id": "achievement-mes_no_te_gano-exists",
+      "label": "Logro mes_no_te_gano: existe",
+      "ok": true,
+      "source": "El mes no te ganó",
+      "core": "El mes no te ganó",
+      "severity": "review",
+      "note": ""
+    },
+    {
+      "section": "achievements",
+      "id": "achievement-mes_no_te_gano-unlocked",
+      "label": "Logro mes_no_te_gano: desbloqueo coincide",
+      "ok": true,
+      "source": "false",
+      "core": "false",
+      "severity": "review",
+      "note": ""
+    },
+    {
+      "section": "achievements",
+      "id": "achievement-contraataque-exists",
+      "label": "Logro contraataque: existe",
+      "ok": true,
+      "source": "Contraataque presupuestario",
+      "core": "Contraataque presupuestario",
+      "severity": "review",
+      "note": ""
+    },
+    {
+      "section": "achievements",
+      "id": "achievement-contraataque-unlocked",
+      "label": "Logro contraataque: desbloqueo coincide",
+      "ok": true,
+      "source": "false",
+      "core": "false",
+      "severity": "review",
+      "note": ""
+    },
+    {
+      "section": "achievements",
+      "id": "achievement-otro_lado-exists",
+      "label": "Logro otro_lado: existe",
+      "ok": true,
+      "source": "Primer paso del otro lado",
+      "core": "Primer paso del otro lado",
+      "severity": "review",
+      "note": ""
+    },
+    {
+      "section": "achievements",
+      "id": "achievement-otro_lado-unlocked",
+      "label": "Logro otro_lado: desbloqueo coincide",
+      "ok": true,
+      "source": "false",
+      "core": "false",
+      "severity": "review",
+      "note": ""
+    },
+    {
+      "section": "backup",
+      "id": "export-shape",
+      "label": "Datos financieros exportables en paquete autocontenido",
+      "ok": true,
+      "source": "settings/items/payments/achievements",
+      "core": "ok",
+      "severity": "review",
+      "note": ""
+    },
+    {
+      "section": "dates",
+      "id": "no-utc-warning",
+      "label": "Revisión manual: fechas deben verse como America/Santiago",
+      "ok": true,
+      "source": "America/Santiago",
+      "core": "America/Santiago",
+      "severity": "review",
+      "note": "Validar visualmente casos 29/30/31 en pruebas M1."
+    }
+  ]
+}

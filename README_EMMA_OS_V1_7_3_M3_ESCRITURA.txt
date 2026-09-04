@@ -1,4 +1,4 @@
-Emma OS v1.7.4 — Finanzas M3 escritura controlada
+Emma OS v1.8.0 — Finanzas M3 escritura controlada
 
 Esta versión continúa la migración nativa del Control Financiero Personal v1.0.
 

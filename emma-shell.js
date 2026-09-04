@@ -1,17 +1,17 @@
-/* Emma OS v1.7.4 · 2026-09-03 · OpenAI/ChatGPT (GPT-5.5 Thinking)
-   Cambio: Finanzas avanza a M4 paridad antes del corte. */
+/* Emma OS v1.8.0 · 2026-09-03 · OpenAI/ChatGPT (GPT-5.5 Thinking)
+   Cambio: Finanzas entra en M5 corte controlado como interfaz principal. */
 (function(){
   const script = document.currentScript;
   const base = script?.dataset?.base || './';
   const current = script?.dataset?.current || 'inicio';
-  const version = script?.dataset?.version || 'v1.7.4';
+  const version = script?.dataset?.version || 'v1.8.0';
   const apps = [
     {id:'inicio', icon:'⌂', name:'Inicio', desc:'Dashboard general', href: base + 'index.html', accent:'cyan'},
     {id:'pendientes', icon:'✓', name:'Pendientes diarios', desc:'Prioridad, esfuerzo y tareas recurrentes', href: base + 'apps/pendientes/', accent:'green'},
     {id:'arrowverse', icon:'⚡', name:'Arrowverso', desc:'Checklist cronológico', href: base + 'apps/arrowverse/', accent:'violet'},
     {id:'rutina', icon:'🌱', name:'Rutina atómica', desc:'Hábitos mínimos diarios', href: base + 'apps/rutina-atomica/', accent:'lime'},
     {id:'oportunidad', icon:'✦', name:'Dale una oportunidad', desc:'Contadores por repetición', href: base + 'apps/dale-una-oportunidad/', accent:'rose'},
-    {id:'finanzas', icon:'$', name:'Finanzas', desc:'Control financiero M4 paridad', href: base + 'apps/finanzas/', accent:'gold'},
+    {id:'finanzas', icon:'$', name:'Finanzas', desc:'Control financiero principal', href: base + 'apps/finanzas/', accent:'gold'},
     {id:'botiquin', icon:'🧰', name:'Botiquín', desc:'Inventario, compras y alertas', href: base + 'apps/botiquin/', accent:'amber'},
     {id:'respaldo', icon:'☁', name:'Respaldos', desc:'Respaldos externos y Drive', href: base + 'apps/respaldo/', accent:'blue'},
     {id:'sheets', icon:'▦', name:'Sync Sheets', desc:'Google Sheets experimental', href: base + 'apps/sheets-sync/', accent:'violet'}

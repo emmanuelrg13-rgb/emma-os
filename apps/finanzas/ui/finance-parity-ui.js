@@ -1,4 +1,4 @@
-/* Emma OS v1.7.4 — Control Financiero Personal M4 paridad
+/* Emma OS v1.8.0 — Control Financiero Personal M4 paridad
    Archivo: finance-parity-ui.js
    Autoría: OpenAI/ChatGPT (GPT-5.5 Thinking) para Emmanuel Rojas.
    Propósito: generar un reporte de paridad entre el estado fuente de Apps Script v10.1-auditoria
@@ -175,7 +175,7 @@ export function buildParityReport(normalized = {}){
   return {
     module: 'control-financiero',
     schemaVersion: 'finance-parity-report-v1',
-    emmaVersion: 'v1.7.4',
+    emmaVersion: 'v1.8.0',
     phase: 'M4 Paridad',
     generatedAt: new Date().toISOString(),
     repository: normalized.repository || {},

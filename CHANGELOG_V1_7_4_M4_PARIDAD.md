@@ -1,4 +1,4 @@
-# Emma OS v1.7.4 — Finanzas M4 Paridad
+# Emma OS v1.8.0 — Finanzas M4 Paridad
 
 ## Cambios
 

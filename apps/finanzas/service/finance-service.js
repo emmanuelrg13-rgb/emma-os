@@ -1,9 +1,9 @@
-/* Emma OS v1.7.4 — Control Financiero Personal M3 escritura controlada
+/* Emma OS v1.8.0 — Control Financiero Personal M3 escritura controlada
    Archivo: finance-service.js
    Propósito: capa de aplicación entre FinanceUI, FinanceCore y FinanceRepository. M3 escritura controlada habilita mutaciones sólo con adaptadores allowWrites.
 */
 
-import { buildAppState, previewMonthlyAmount as corePreviewMonthlyAmount, simulateAmount as coreSimulateAmount, validateImportData } from '../core/finance-core.js';
+import { buildAppState, previewMonthlyAmount as corePreviewMonthlyAmount, simulateAmount as coreSimulateAmount, validateImportData, exportData as coreExportData } from '../core/finance-core.js';
 import { FINANCE_APP } from '../core/finance-schema.js';
 import { MemoryFinanceRepository, validateRepositoryContract } from '../repository/finance-repository.js';
 import { GoogleSheetsFinanceAdapter } from '../repository/google-sheets-finance-adapter.js';
@@ -11,7 +11,8 @@ import { GoogleSheetsFinanceAdapter } from '../repository/google-sheets-finance-
 export const FINANCE_STORAGE_KEYS = Object.freeze({
   connection: 'emmaos_finanzas_google_sheets_config_v1',
   lastRead: 'emmaos_finanzas_last_read_v1',
-  lastRepositoryTest: 'emmaos_finanzas_repo_test_v1'
+  lastRepositoryTest: 'emmaos_finanzas_repo_test_v1',
+  snapshot: 'emmaos_finanzas_snapshot_v1'
 });
 
 function hasLocalStorage() {
@@ -56,7 +57,24 @@ export class FinanceService {
   async getAppState() {
     const raw = await this.repository.getAppState();
     const normalized = this.normalizeState(raw);
-    if (hasLocalStorage()) localStorage.setItem(FINANCE_STORAGE_KEYS.lastRead, JSON.stringify({ at: new Date().toISOString(), sourceVersion: raw.version || '', totals: normalized.coreState?.totals || raw.totals || null }));
+    if (hasLocalStorage()) {
+      const at = new Date().toISOString();
+      localStorage.setItem(FINANCE_STORAGE_KEYS.lastRead, JSON.stringify({ at, sourceVersion: raw.version || '', totals: normalized.coreState?.totals || raw.totals || null }));
+      // M5: deja un snapshot autocontenido sin secretos para que el Centro de respaldos global
+      // pueda incluir Finanzas sin conocer la estructura interna ni consultar Google Sheets.
+      const snapshot = coreExportData({
+        settings: normalized.coreState?.settings || {},
+        items: normalized.coreState?.items || [],
+        payments: normalized.coreState?.payments || [],
+        achievements: normalized.coreState?.achievements || []
+      });
+      localStorage.setItem(FINANCE_STORAGE_KEYS.snapshot, JSON.stringify({
+        ...snapshot,
+        exportKind: 'emma-os-finance-snapshot',
+        sourceRepository: normalized.repository || null,
+        snapshotSavedAt: at
+      }));
+    }
     return normalized;
   }
 

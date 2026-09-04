@@ -1,4 +1,4 @@
-/* Emma OS v1.7.4 — Control Financiero Personal M3 escritura controlada
+/* Emma OS v1.8.0 — Control Financiero Personal M3 escritura controlada
    Archivo: finance-write-ui.js
    Autoría: OpenAI/ChatGPT (GPT-5.5 Thinking) para Emmanuel Rojas.
    Propósito: renderizar formularios nativos de escritura controlada sin copiar la UI antigua.

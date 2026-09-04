@@ -1,4 +1,4 @@
-Emma OS v1.7.4 — Finanzas M4 Paridad
+Emma OS v1.8.0 — Finanzas M4 Paridad
 
 Objetivo:
 Validar que Finanzas nativo en Emma OS mantiene paridad con Control Financiero Personal v1.0 / snapshot v10.1-auditoria.
@@ -6,7 +6,7 @@ Validar que Finanzas nativo en Emma OS mantiene paridad con Control Financiero P
 Instalación:
 1. Exportar respaldo global desde Emma OS.
 2. Subir el contenido del ZIP a la raíz del repositorio GitHub Pages.
-3. Commit sugerido: Actualizar Emma OS a v1.7.4 Finanzas M4 paridad.
+3. Commit sugerido: Actualizar Emma OS a v1.8.0 Finanzas M4 paridad.
 4. Abrir con ?v=1.7.4.
 5. Entrar a Finanzas.
 

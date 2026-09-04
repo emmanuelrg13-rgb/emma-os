@@ -1,4 +1,4 @@
-/* Emma OS v1.7.4 — Control Financiero Personal M3 escritura controlada
+/* Emma OS v1.8.0 — Control Financiero Personal M3 escritura controlada
    Archivo: google-sheets-finance-adapter.js
    Propósito: adaptador de persistencia hacia una Web App de Google Apps Script.
    Nota de seguridad: las escrituras siguen detrás del contrato, requieren allowWrites en cliente y allowWrite=1 en backend.

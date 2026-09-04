@@ -1,6 +1,6 @@
 # Checklist M4 — Paridad Finanzas
 
-- [ ] Emma OS abre como v1.7.4.
+- [ ] Emma OS abre como v1.8.0.
 - [ ] Finanzas muestra fase M4 paridad.
 - [ ] Pruebas M1 en verde.
 - [ ] Pruebas M2 en verde.

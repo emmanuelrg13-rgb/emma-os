@@ -1,4 +1,4 @@
-Emma OS v1.7.4 — Finanzas M3 parcial lectura
+Emma OS v1.8.0 — Finanzas M3 parcial lectura
 
 Base: Emma OS v1.7.1 M2 validada.
 
@@ -11,7 +11,7 @@ Subida a GitHub Pages:
 1. Exporta respaldo global desde Emma OS actual.
 2. Descomprime este ZIP.
 3. Sube el contenido a la raíz del repositorio.
-4. Commit sugerido: Actualizar Emma OS a v1.7.4 Finanzas M3 lectura.
+4. Commit sugerido: Actualizar Emma OS a v1.8.0 Finanzas M3 lectura.
 5. Abre la página con ?v=1.7.2.
 6. Entra a Finanzas y prueba: demo local, conexión, lectura desde Sheets.
 

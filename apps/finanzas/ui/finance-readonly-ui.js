@@ -1,4 +1,4 @@
-/* Emma OS v1.7.4 — Control Financiero Personal M3 lectura + escritura controlada
+/* Emma OS v1.8.0 — Control Financiero Personal M3 lectura + escritura controlada
    Archivo: finance-readonly-ui.js
    Autoría: OpenAI/ChatGPT (GPT-5.5 Thinking) para Emmanuel Rojas.
    Propósito: renderizar la UI nativa de lectura del dominio financiero dentro de Emma OS.

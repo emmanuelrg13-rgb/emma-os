@@ -1,4 +1,4 @@
-# Emma OS v1.7.4 — Finanzas M4 Paridad
+# Emma OS v1.8.0 — Finanzas M4 Paridad
 
 ## Objetivo
 
@@ -22,7 +22,7 @@ La fase no cambia almacenamiento ni redefine reglas de negocio. La Web App estab
 
 ## Flujo de validación
 
-1. Abrir Emma OS Finanzas v1.7.4.
+1. Abrir Emma OS Finanzas v1.8.0.
 2. Leer estado desde Google Sheets.
 3. Ejecutar pruebas M1, M2 y M3.
 4. Ejecutar Pruebas M4.
