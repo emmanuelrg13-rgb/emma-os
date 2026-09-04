@@ -1,4 +1,4 @@
-/* Emma OS v1.7.1 — Control Financiero Personal M2
+/* Emma OS v1.7.2 — Control Financiero Personal M2/M3 lectura
    Archivo: google-sheets-finance-adapter.js
    Propósito: adaptador de persistencia hacia una Web App de Google Apps Script.
    Nota de seguridad: en M2 la UI usa este adaptador para lectura/pruebas. Las escrituras quedan detrás

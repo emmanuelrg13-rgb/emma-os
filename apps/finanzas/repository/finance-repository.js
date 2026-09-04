@@ -1,4 +1,4 @@
-/* Emma OS v1.7.1 — Control Financiero Personal M2
+/* Emma OS v1.7.2 — Control Financiero Personal M2/M3 lectura
    Archivo: finance-repository.js
    Autoría: OpenAI/ChatGPT (GPT-5.5 Thinking) para Emmanuel Rojas.
    Propósito: definir el contrato FinanceRepository y un adaptador local/memoria para pruebas.

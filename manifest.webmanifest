@@ -1,7 +1,7 @@
 {
-  "name": "Emma OS v1.7.1",
+  "name": "Emma OS v1.7.2",
   "short_name": "Emma OS",
-  "description": "Centro de control personal con navegación lateral, pendientes, Arrowverso, rutina atómica, Dale una oportunidad, botiquín, respaldos externos, Sync Sheets y laboratorio Finanzas M0/M1/M2.",
+  "description": "Centro de control personal con Finanzas M3 parcial: UI nativa de lectura conectada al dominio financiero y Google Sheets, sin escrituras reales todavía.",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",

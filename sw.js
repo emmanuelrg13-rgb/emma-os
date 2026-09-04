@@ -1,5 +1,5 @@
-/* Emma OS v1.7.1 · 2026-09-03 · OpenAI/ChatGPT · M0/M1/M2 Finanzas + cache network-first. */
-const CACHE_NAME = 'emma-os-v1-7-1-cache-001';
+/* Emma OS v1.7.2 · 2026-09-04 · OpenAI/ChatGPT · M3 parcial Finanzas lectura + cache network-first. */
+const CACHE_NAME = 'emma-os-v1-7-2-cache-001';
 const FALLBACK_URL = './index.html';
 const ASSETS = [
   './',
@@ -17,6 +17,7 @@ const ASSETS = [
   './apps/dale-una-oportunidad/index.html',
   './apps/finanzas/',
   './apps/finanzas/index.html',
+  './apps/finanzas/ui/finance-readonly-ui.js',
   './apps/finanzas/core/finance-schema.js',
   './apps/finanzas/core/finance-dates.js',
   './apps/finanzas/core/finance-strategies.js',

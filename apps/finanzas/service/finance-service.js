@@ -1,4 +1,4 @@
-/* Emma OS v1.7.1 — Control Financiero Personal M2
+/* Emma OS v1.7.2 — Control Financiero Personal M2/M3 lectura
    Archivo: finance-service.js
    Propósito: capa de aplicación entre FinanceUI, FinanceCore y FinanceRepository.
 */
