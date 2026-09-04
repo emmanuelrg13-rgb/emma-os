@@ -1,0 +1,95 @@
+<!doctype html>
+<!-- Emma OS v1.7.0 · FinanceCore tests M1 · 2026-09-03 · OpenAI/ChatGPT -->
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Emma OS · FinanceCore tests M1</title>
+  <link rel="stylesheet" href="../../../emma-theme.css">
+  <style>
+    body{margin:0;font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:var(--emma-bg);color:var(--emma-text)}
+    .wrap{width:min(100% - 28px,1000px);margin:0 auto;padding:28px 0 42px}.hero,.panel{border:1px solid var(--emma-line);border-radius:24px;background:linear-gradient(135deg,rgba(18,26,47,.96),rgba(23,34,61,.78));padding:20px;margin-bottom:14px}.btn{border:1px solid var(--emma-line);border-radius:999px;padding:10px 14px;background:linear-gradient(135deg,var(--emma-cyan),var(--emma-green));font-weight:900;color:#06111f;cursor:pointer}.test{display:flex;gap:10px;align-items:flex-start;border:1px solid var(--emma-line);border-radius:16px;background:rgba(15,23,42,.68);padding:12px;margin:8px 0}.ok{color:var(--emma-green)}.fail{color:var(--emma-rose)}code{color:#c4b5fd}pre{white-space:pre-wrap;overflow:auto;background:rgba(15,23,42,.8);border:1px solid var(--emma-line);border-radius:16px;padding:12px;color:var(--emma-muted)}
+  </style>
+  <script src="../../../emma-shell.js" data-base="../../../" data-current="finanzas" data-version="v1.7.0" defer></script>
+</head>
+<body class="emma-module emma-module-finanzas">
+  <main class="wrap">
+    <section class="hero">
+      <p class="eyebrow">M1 · pruebas locales</p>
+      <h1>FinanceCore tests</h1>
+      <p class="subtitle">Pruebas no destructivas con datos de ejemplo. No leen ni escriben Google Sheets.</p>
+      <button class="btn" id="run">Ejecutar pruebas</button>
+      <a class="btn" href="../">Volver a Finanzas</a>
+    </section>
+    <section class="panel"><div id="results">Pulsa ejecutar pruebas.</div></section>
+    <section class="panel"><h2>Salida de estado</h2><pre id="dump">—</pre></section>
+  </main>
+  <script type="module">
+    import * as Core from '../core/finance-core.js';
+    import { settings, items, payments } from './finance-fixtures.js';
+
+    const tests = [];
+    function test(name, fn){ tests.push({name, fn}); }
+    function assert(cond, msg){ if(!cond) throw new Error(msg || 'Assertion failed'); }
+
+    test('Saldo ignora pagos Anulados y conserva sólo Confirmados', () => {
+      const state = Core.buildAppState({settings, items, payments});
+      const item = state.items.find(x => x.id === 1);
+      assert(item.pagadoLog === 20000, 'pagadoLog esperado 20000');
+      assert(item.saldoPendiente === 70000, 'saldo esperado 70000');
+    });
+
+    test('Archivado se excluye de totales', () => {
+      const state = Core.buildAppState({settings, items, payments});
+      assert(state.totals.General.original < 1600000, 'el ítem archivado no debe inflar el total');
+    });
+
+    test('Pausado conserva saldo pero sale de la ruta automática', () => {
+      const hydrated = Core.hydrateItemsWithPayments(items, payments);
+      const paused = hydrated.find(x => x.id === 3);
+      const plan = Core.buildMonthPlan(hydrated, 500000, 1, settings);
+      assert(paused.saldoPendiente === 50000, 'pausado conserva saldo');
+      assert(!plan.payments.some(p => p.itemId === 3), 'pausado no recibe asignación automática');
+    });
+
+    test('Inversiones bloqueadas antes de umbral de deuda', () => {
+      const state = Core.buildAppState({settings, items, payments});
+      assert(state.investmentGate.unlocked === false, 'gate debe estar bloqueado');
+      const validation = Core.validatePaymentBatch({fecha:'2026-01-20',payments:[{itemId:5,monto:1000}]}, state.items, settings);
+      assert(validation.ok === false && validation.errors.join(' ').includes('inversiones'), 'debe rechazar pago de inversión');
+    });
+
+    test('Estrategia urgentes_primero prioriza estado Urgente', () => {
+      const state = Core.buildAppState({settings:{...settings,strategy:'urgentes_primero'}, items, payments});
+      assert(state.currentPlan.payments[0].itemId === 2, 'debe partir por deuda urgente');
+    });
+
+    test('Clamp de fecha 31 al sumar un mes', () => {
+      assert(Core.addMonthsText('2026-01-31', 1) === '2026-02-28', '2026-01-31 + 1 mes debe ser 2026-02-28');
+      assert(Core.addMonthsText('2028-01-31', 1) === '2028-02-29', 'bisiesto debe llegar a 2028-02-29');
+    });
+
+    test('Export financiero incluye schemaVersion estable', () => {
+      const exp = Core.exportData({settings, items, payments, achievements:[]});
+      assert(exp.module === 'control-financiero', 'módulo inválido');
+      assert(exp.schemaVersion === 'finance-schema-v1', 'schema inválido');
+    });
+
+    function run(){
+      const resultBox = document.getElementById('results');
+      resultBox.innerHTML = '';
+      let passed = 0;
+      for(const t of tests){
+        const row = document.createElement('div'); row.className = 'test';
+        try{ t.fn(); passed++; row.innerHTML = `<b class="ok">✓</b><span><strong>${t.name}</strong><br><small>OK</small></span>`; }
+        catch(err){ row.innerHTML = `<b class="fail">✕</b><span><strong>${t.name}</strong><br><small>${err.message}</small></span>`; }
+        resultBox.appendChild(row);
+      }
+      const state = Core.buildAppState({settings, items, payments});
+      document.getElementById('dump').textContent = JSON.stringify({passed,total:tests.length,totals:state.totals,currentPlan:state.currentPlan,investmentGate:state.investmentGate,projection: { totalMonths: state.projection.totalMonths, finishDate: state.projection.finishDate, message: state.projection.message }}, null, 2);
+    }
+    document.getElementById('run').addEventListener('click', run);
+    run();
+  </script>
+</body>
+</html>

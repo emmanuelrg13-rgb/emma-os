@@ -1,0 +1,9 @@
+{
+  "product": "Control Financiero Personal",
+  "release": "1.0-stable",
+  "sourceSnapshot": "10.1-auditoria",
+  "closedOn": "2026-08-31",
+  "status": "stable",
+  "sourceModifiedAfterFinalTest": false,
+  "notes": "La etiqueta v1.0 congela el snapshot probado v10.1-auditoria; no requiere nuevo despliegue."
+}

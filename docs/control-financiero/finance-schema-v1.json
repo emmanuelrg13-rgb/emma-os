@@ -1,0 +1,99 @@
+{
+  "module": "control-financiero",
+  "release": "1.0-stable",
+  "sourceSnapshot": "10.1-auditoria",
+  "timezone": "America/Santiago",
+  "schemaVersion": "finance-schema-v1",
+  "sheets": {
+    "Config": [
+      "clave",
+      "valor",
+      "descripcion"
+    ],
+    "Items": [
+      "id",
+      "nombre",
+      "tipo",
+      "montoTotal",
+      "pagadoPrevio",
+      "saldoPendiente",
+      "prioridad",
+      "estado",
+      "notas",
+      "createdAt",
+      "updatedAt"
+    ],
+    "Pagos": [
+      "pagoId",
+      "fecha",
+      "itemId",
+      "nombreItem",
+      "tipo",
+      "monto",
+      "mesPlan",
+      "nota",
+      "createdAt",
+      "estado"
+    ],
+    "Logros": [
+      "achievementId",
+      "nombre",
+      "condicion",
+      "leyenda",
+      "unlockedAt",
+      "createdAt"
+    ],
+    "Readme": [
+      "Seccion",
+      "Detalle"
+    ]
+  },
+  "enums": {
+    "itemType": [
+      "Deuda",
+      "Compra",
+      "Inversion"
+    ],
+    "itemStatus": [
+      "Activo",
+      "Urgente",
+      "Pausado",
+      "Pagado",
+      "Archivado"
+    ],
+    "paymentStatus": [
+      "Confirmado",
+      "Anulado"
+    ],
+    "strategy": [
+      "prioridad_manual",
+      "menor_monto_primero",
+      "deudas_primero",
+      "urgentes_primero"
+    ]
+  },
+  "serviceContract": [
+    "getAppState",
+    "previewMonthlyAmount",
+    "simulateAmount",
+    "saveSettings",
+    "saveItem",
+    "archiveItem",
+    "registerPaymentBatch",
+    "voidPayment"
+  ],
+  "achievementIds": [
+    "primer_golpe",
+    "piedra_pequena",
+    "no_era_fase",
+    "jefe_barra_vida",
+    "mitad_dragon",
+    "puerta_se_abre",
+    "deuda_derrotada",
+    "compra_sin_culpa",
+    "modo_resistencia",
+    "mes_no_te_gano",
+    "contraataque",
+    "otro_lado"
+  ]
+}

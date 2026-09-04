@@ -1,5 +1,5 @@
-/* Emma OS v1.6.1 · 2026-08-29 · OpenAI/ChatGPT · cache estable + actualización network-first. */
-const CACHE_NAME = 'emma-os-v1-6-1-cache-001';
+/* Emma OS v1.7.0 · 2026-09-03 · OpenAI/ChatGPT · M0/M1 Finanzas + cache network-first. */
+const CACHE_NAME = 'emma-os-v1-7-0-cache-001';
 const FALLBACK_URL = './index.html';
 const ASSETS = [
   './',
@@ -15,6 +15,15 @@ const ASSETS = [
   './apps/rutina-atomica/index.html',
   './apps/dale-una-oportunidad/',
   './apps/dale-una-oportunidad/index.html',
+  './apps/finanzas/',
+  './apps/finanzas/index.html',
+  './apps/finanzas/core/finance-schema.js',
+  './apps/finanzas/core/finance-dates.js',
+  './apps/finanzas/core/finance-strategies.js',
+  './apps/finanzas/core/finance-achievements.js',
+  './apps/finanzas/core/finance-core.js',
+  './apps/finanzas/tests/finance-fixtures.js',
+  './apps/finanzas/tests/finance-core-tests.html',
   './apps/botiquin/',
   './apps/botiquin/index.html',
   './apps/respaldo/',
@@ -27,28 +36,18 @@ const ASSETS = [
 ];
 
 self.addEventListener('install', event => {
-  event.waitUntil(
-    caches.open(CACHE_NAME)
-      .then(cache => cache.addAll(ASSETS))
-      .then(() => self.skipWaiting())
-  );
+  event.waitUntil(caches.open(CACHE_NAME).then(cache => cache.addAll(ASSETS)).then(() => self.skipWaiting()));
 });
 
 self.addEventListener('activate', event => {
-  event.waitUntil(
-    caches.keys()
-      .then(keys => Promise.all(keys.filter(key => key !== CACHE_NAME).map(key => caches.delete(key))))
-      .then(() => self.clients.claim())
-  );
+  event.waitUntil(caches.keys().then(keys => Promise.all(keys.filter(key => key !== CACHE_NAME).map(key => caches.delete(key)))).then(() => self.clients.claim()));
 });
 
 async function networkFirst(request) {
   const cache = await caches.open(CACHE_NAME);
   try {
     const response = await fetch(request, { cache: 'no-store' });
-    if (response && response.ok) {
-      cache.put(request, response.clone()).catch(() => {});
-    }
+    if (response && response.ok) cache.put(request, response.clone()).catch(() => {});
     return response;
   } catch (error) {
     const cached = await caches.match(request, { ignoreSearch: true });
