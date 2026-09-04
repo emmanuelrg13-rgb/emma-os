@@ -1,5 +1,5 @@
-/* Emma OS v1.7.3 · 2026-09-04 · OpenAI/ChatGPT · M3 Finanzas escritura controlada + cache network-first. */
-const CACHE_NAME = 'emma-os-v1-7-3-cache-001';
+/* Emma OS v1.7.4 · 2026-09-04 · OpenAI/ChatGPT · M4 Finanzas paridad + cache network-first. */
+const CACHE_NAME = 'emma-os-v1-7-4-cache-001';
 const FALLBACK_URL = './index.html';
 const ASSETS = [
   './',
@@ -19,6 +19,7 @@ const ASSETS = [
   './apps/finanzas/index.html',
   './apps/finanzas/ui/finance-readonly-ui.js',
   './apps/finanzas/ui/finance-write-ui.js',
+  './apps/finanzas/ui/finance-parity-ui.js',
   './apps/finanzas/core/finance-schema.js',
   './apps/finanzas/core/finance-dates.js',
   './apps/finanzas/core/finance-strategies.js',
@@ -33,6 +34,7 @@ const ASSETS = [
   './apps/finanzas/tests/finance-core-tests.html',
   './apps/finanzas/tests/finance-repository-tests.html',
   './apps/finanzas/tests/finance-write-tests.html',
+  './apps/finanzas/tests/finance-parity-tests.html',
   './apps/botiquin/',
   './apps/botiquin/index.html',
   './apps/respaldo/',

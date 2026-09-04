@@ -1,0 +1,25 @@
+# Checklist M4 — Paridad Finanzas
+
+- [ ] Emma OS abre como v1.7.4.
+- [ ] Finanzas muestra fase M4 paridad.
+- [ ] Pruebas M1 en verde.
+- [ ] Pruebas M2 en verde.
+- [ ] Pruebas M3 en verde.
+- [ ] Pruebas M4 en verde.
+- [ ] Conexión Sheets OK.
+- [ ] Estado leído desde Google Sheets.
+- [ ] Reporte M4 generado.
+- [ ] Checks no negociables aprobados.
+- [ ] Saldo general coincide.
+- [ ] Saldo por tipo coincide.
+- [ ] Saldo por ítem coincide.
+- [ ] Pagos anulados se conservan.
+- [ ] UUIDs de pagos sin duplicados.
+- [ ] IDs de ítems sin duplicados.
+- [ ] Primera asignación coincide.
+- [ ] Ruta del mes coincide o queda documentada como observación no crítica.
+- [ ] Proyección y fechas coinciden o quedan documentadas.
+- [ ] Gate de inversiones coincide.
+- [ ] Logros y unlockedAt se conservan.
+- [ ] Se exportó JSON del reporte M4.
+- [ ] Se guardó evidencia antes de M5.

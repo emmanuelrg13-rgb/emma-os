@@ -1,4 +1,4 @@
-/* Emma OS v1.7.3 — Control Financiero Personal M1/M2/M3 lectura
+/* Emma OS v1.7.4 — Control Financiero Personal M1/M2/M3 lectura
    Archivo: finance-core.js
    Autoría: OpenAI/ChatGPT (GPT-5.5 Thinking) para Emmanuel Rojas.
    Propósito: portar el dominio financiero a funciones puras reutilizables.

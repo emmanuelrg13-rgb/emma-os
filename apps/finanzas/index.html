@@ -1,10 +1,10 @@
 <!doctype html>
-<!-- Emma OS v1.7.3 · Finanzas M3 escritura controlada · 2026-09-04 · OpenAI/ChatGPT (GPT-5.5 Thinking) -->
+<!-- Emma OS v1.7.4 · Finanzas M4 paridad · 2026-09-04 · OpenAI/ChatGPT (GPT-5.5 Thinking) -->
 <html lang="es">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Emma OS · Finanzas M3 escritura</title>
+  <title>Emma OS · Finanzas M4 paridad</title>
   <link rel="manifest" href="../../manifest.webmanifest">
   <meta name="theme-color" content="#0d1324">
   <link rel="stylesheet" href="../../emma-theme.css">
@@ -27,14 +27,14 @@
     .finance-row,.finance-month,.finance-item-card,.finance-achievement,.finance-empty{border:1px solid var(--emma-line);border-radius:20px;background:rgba(15,23,42,.60);padding:14px}.finance-row{display:flex;justify-content:space-between;gap:14px;align-items:center}.finance-row-main{display:flex;gap:12px;align-items:center}.finance-step{width:34px;height:34px;border-radius:12px;display:grid;place-items:center;background:rgba(251,191,36,.12);border:1px solid rgba(251,191,36,.25);font-weight:900}.finance-amount{font-weight:950;font-size:1.12rem;text-align:right}.finance-month-head,.finance-item-top{display:flex;justify-content:space-between;gap:12px;align-items:start}.finance-month-payments{display:flex;gap:8px;flex-wrap:wrap;margin:8px 0}.finance-month-payments span{border:1px solid var(--emma-line);border-radius:999px;padding:6px 9px;color:var(--emma-muted);font-size:.82rem}.finance-item-card.debt{border-color:rgba(248,113,113,.30)}.finance-item-card.buy{border-color:rgba(59,130,246,.28)}.finance-item-card.invest{border-color:rgba(167,139,250,.30)}.finance-money-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:10px;color:var(--emma-muted)}.finance-money-grid b{color:var(--emma-text)}.finance-note{font-size:.9rem}.finance-note.compact{margin:.7rem 0 0}.finance-note.warning{color:#fde68a}.finance-empty{color:var(--emma-muted);text-align:center}.finance-achievement{display:flex;gap:12px}.finance-achievement.unlocked{border-color:rgba(52,211,153,.36)}.finance-ach-icon{width:44px;height:44px;border-radius:16px;display:grid;place-items:center;background:rgba(255,255,255,.07);border:1px solid var(--emma-line);font-weight:900}.finance-achievement em{display:block;color:#a7f3d0;font-style:normal;font-size:.82rem;margin:.25rem 0}.is-void{opacity:.72}.readonly-lock{border:1px solid rgba(251,191,36,.38);border-radius:20px;padding:12px;background:rgba(251,191,36,.08);margin-top:12px}.checkline{display:flex;grid-template-columns:auto 1fr;align-items:center;gap:10px}.checkline input{width:auto}.write-form-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.write-select-row input[type="checkbox"]{width:22px;height:22px}.amount-inline{min-width:150px}.write-audit{border:1px solid rgba(52,211,153,.36);background:rgba(52,211,153,.08);border-radius:18px;padding:12px;margin-top:12px}.write-danger{border-color:rgba(248,113,113,.45);background:rgba(248,113,113,.08)}
     @media(max-width:980px){.grid,.cols,.formGrid,.finance-kpi-grid,.finance-kpi-grid.compact,.finance-goals,.toolbar{grid-template-columns:1fr}.hero,.card,.panel{padding:18px}.finance-section-head,.finance-row,.finance-month-head,.finance-item-top{flex-direction:column}.finance-big-number{width:100%}.finance-money-grid{grid-template-columns:1fr}.finance-row{align-items:stretch}.finance-amount{text-align:left}}
   </style>
-  <script src="../../emma-shell.js" data-base="../../" data-current="finanzas" data-version="v1.7.3" defer></script>
+  <script src="../../emma-shell.js" data-base="../../" data-current="finanzas" data-version="v1.7.4" defer></script>
 </head>
 <body class="emma-module emma-module-finanzas">
   <main class="wrap">
     <section class="hero">
-      <div class="eyebrow">Emma OS v1.7.3 · Finanzas M3 escritura</div>
+      <div class="eyebrow">Emma OS v1.7.4 · Finanzas M4 paridad</div>
       <h1>Control Financiero Personal</h1>
-      <p class="subtitle">M3 escritura controlada conserva la UI nativa de lectura y habilita acciones reales una por una, con armado manual, confirmación visible y validación del backend antes de tocar Google Sheets.</p>
+      <p class="subtitle">M4 compara la salida del backend estable v10.1-auditoria contra el FinanceCore nativo de Emma OS. Las escrituras siguen disponibles en modo controlado, pero esta fase prioriza paridad y evidencia antes del corte.</p>
       <div class="actions">
         <button class="btn primary" id="readSheets" type="button">Leer estado desde Sheets</button>
         <button class="btn" id="testSheets" type="button">Probar conexión</button>
@@ -42,21 +42,24 @@
         <a class="btn" href="tests/finance-core-tests.html">Pruebas M1</a>
         <a class="btn" href="tests/finance-repository-tests.html">Pruebas M2</a>
         <a class="btn" href="tests/finance-write-tests.html">Pruebas M3</a>
+        <a class="btn" href="tests/finance-parity-tests.html">Pruebas M4</a>
+        <button class="btn" id="runParityM4" type="button">Generar reporte M4</button>
+        <button class="btn" id="downloadParityM4" type="button">Exportar reporte M4</button>
         <a class="btn" href="backend/finance-google-sheets-api-v1-7-3.gs.txt">Apps Script M3</a>
       </div>
-      <div class="status" id="statusBox">M3 escritura controlada lista. Carga Sheets antes de registrar cualquier acción real.</div>
+      <div class="status" id="statusBox">M4 lista. Carga estado desde Sheets y genera reporte de paridad antes del corte M5.</div>
     </section>
 
     <section class="grid">
-      <div class="card"><small>Estado migración</small><strong>M3 escritura</strong><span>controlada</span></div>
+      <div class="card"><small>Estado migración</small><strong>M4</strong><span>paridad</span></div>
       <div class="card"><small>Fuente funcional</small><strong>v10.1</strong><span>auditoría estable</span></div>
-      <div class="card"><small>Sheet real</small><strong>Lectura/escritura</strong><span>con confirmación</span></div>
-      <div class="card"><small>Paridad</small><strong id="parityBadge">—</strong><span>ligera M2/M3</span></div>
+      <div class="card"><small>Sheet real</small><strong>Paridad</strong><span>sin cambios automáticos</span></div>
+      <div class="card"><small>Paridad M4</small><strong id="parityBadge">—</strong><span>reporte completo</span></div>
     </section>
 
     <section class="panel warnPanel">
       <h2>Configurar adaptador Google Sheets</h2>
-      <p>Usa la implementación Apps Script M3 o la M2 ya validada si conserva el mismo contrato. Esta configuración queda sólo en tu dispositivo y no se sube al repositorio público.</p>
+      <p>Usa la implementación Apps Script M3 ya validada o la M2 si conserva el mismo contrato. Esta configuración queda sólo en tu dispositivo y no se sube al repositorio público.</p>
       <div class="formGrid">
         <label>URL Apps Script /exec
           <input id="scriptUrl" placeholder="https://script.google.com/macros/s/.../exec" autocomplete="off">
@@ -137,9 +140,17 @@
       <section class="view" id="view-escritura"><article class="finance-empty">Carga datos desde Sheets antes de usar escritura controlada.</article></section>
       <section class="view" id="view-paridad">
         <div class="cols">
-          <div class="panel" style="box-shadow:none"><h2>Paridad ligera M3</h2><div class="list" id="parity"><div class="row">Carga datos para comparar.</div></div></div>
-          <div class="panel" style="box-shadow:none"><h2>Salida técnica</h2><pre id="dump">—</pre></div>
+          <div class="panel" style="box-shadow:none">
+            <h2>Checklist M4</h2>
+            <div id="m4Checklist"></div>
+          </div>
+          <div class="panel" style="box-shadow:none">
+            <h2>Salida técnica</h2>
+            <pre id="dump">—</pre>
+          </div>
         </div>
+        <div id="parityReport"><article class="finance-empty">Carga datos desde Sheets y pulsa “Generar reporte M4”.</article></div>
+        <div class="panel" style="box-shadow:none"><h2>Paridad ligera heredada</h2><div class="list" id="parity"><div class="row">Carga datos para comparar.</div></div></div>
       </section>
     </section>
   </main>
@@ -149,12 +160,14 @@
     import { settings, items, payments } from './tests/finance-fixtures.js';
     import { buildKpis, renderKpi, renderThisMonth, renderRoute, renderItems, renderSimulator, renderAchievements, renderHistory, renderSettings, money, escapeHtml } from './ui/finance-readonly-ui.js';
     import { renderWritePanel, itemToFormMap } from './ui/finance-write-ui.js';
+    import { buildParityReport, renderParityReport, downloadParityReport, renderParityChecklist } from './ui/finance-parity-ui.js';
 
     const $ = id => document.getElementById(id);
     let lastNormalizedState = null;
     let lastService = null;
     let activeTab = 'mes';
     let writesArmed = false;
+    let lastParityReport = null;
 
     function setStatus(message, kind=''){
       const box = $('statusBox');
@@ -166,8 +179,26 @@
 
     function updateParity(normalized){
       const checks = normalized.parityLite?.checks || [];
-      $('parityBadge').textContent = checks.length ? `${normalized.parityLite.passed}/${normalized.parityLite.total}` : '—';
+      if(!lastParityReport) $('parityBadge').textContent = checks.length ? `${normalized.parityLite.passed}/${normalized.parityLite.total}` : '—';
       $('parity').innerHTML = checks.length ? checks.map(c => `<div class="row ${c.ok?'ok':'warn'}"><strong>${c.ok?'✓':'⚠'} ${c.label}</strong><small>Fuente: ${c.source ?? '—'} · Core: ${c.core ?? '—'}</small></div>`).join('') : '<div class="row warn">Sin totales de fuente para comparar. Normal en demo local.</div>';
+    }
+
+    function generateParityM4(){
+      try{
+        if(!lastNormalizedState){ setStatus('Primero carga estado desde Sheets o demo local.', 'warn'); return; }
+        lastParityReport = buildParityReport(lastNormalizedState);
+        renderParityReport($('parityReport'), lastParityReport);
+        $('parityBadge').textContent = `${lastParityReport.summary.passed}/${lastParityReport.summary.total}`;
+        $('dump').textContent = JSON.stringify(lastParityReport, null, 2);
+        selectTab('paridad');
+        const status = lastParityReport.summary.status;
+        setStatus(`Reporte M4 generado: ${status} · ${lastParityReport.summary.passed}/${lastParityReport.summary.total} checks.`, status === 'bloqueado' ? 'err' : 'ok');
+      }catch(error){ setStatus('No se pudo generar reporte M4: ' + error.message, 'err'); }
+    }
+
+    function downloadParityM4(){
+      try{ downloadParityReport(lastParityReport); setStatus('Reporte M4 exportado en JSON.', 'ok'); }
+      catch(error){ setStatus(error.message, 'warn'); }
     }
 
     function renderAll(normalized, service){
@@ -184,6 +215,8 @@
       renderSettings($('view-ajustes'), state, normalized.repository || {});
       renderWritePanel($('view-escritura'), state, { writesArmed });
       bindWriteControls();
+      lastParityReport = null;
+      renderParityReport($('parityReport'), null);
       updateParity(normalized);
       $('dump').textContent = JSON.stringify({ repository: normalized.repository, parityLite: normalized.parityLite, settings: state.settings, totals: state.totals, investmentGate: state.investmentGate, projection: { totalMonths: state.projection.totalMonths, finishDate: state.projection.finishDate, routeComplete: state.projection.routeComplete, message: state.projection.message } }, null, 2);
     }
@@ -215,7 +248,7 @@
         const service = createGoogleSheetsFinanceService(readConfig());
         const normalized = await service.getAppState();
         renderAll(normalized, service);
-        setStatus('Estado leído desde Google Sheets. UI nativa M3 lista; escrituras disponibles sólo desde pestaña Escritura.', 'ok');
+        setStatus('Estado leído desde Google Sheets. UI nativa M4 lista; genera reporte de paridad o usa escritura controlada si corresponde.', 'ok');
       }catch(error){ setStatus('No se pudo leer Sheets: ' + error.message, 'err'); }
     }
 
@@ -384,6 +417,8 @@
     $('runDemo').addEventListener('click', runLocal);
     $('testSheets').addEventListener('click', testSheets);
     $('readSheets').addEventListener('click', readSheets);
+    $('runParityM4').addEventListener('click', generateParityM4);
+    $('downloadParityM4').addEventListener('click', downloadParityM4);
     $('simulate').addEventListener('click', simulate);
     $('saveConfig').addEventListener('click', () => { saveFinanceConnection(readConfig()); setStatus('Configuración financiera guardada localmente.', 'ok'); });
     $('clearConfig').addEventListener('click', () => { clearFinanceConnection(); $('scriptUrl').value=''; $('secret').value=''; setStatus('Configuración financiera borrada de este dispositivo.', 'warn'); });
@@ -393,6 +428,7 @@
     $('resetPaymentFilters').addEventListener('click', () => { $('paymentQuery').value=''; $('paymentStatus').value='todos'; refreshPayments(); });
 
     hydrateConfig();
+    renderParityChecklist($('m4Checklist'));
     runLocal();
   </script>
 </body>

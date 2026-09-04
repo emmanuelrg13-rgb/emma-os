@@ -1,4 +1,4 @@
-/* Emma OS v1.7.3 — Control Financiero Personal M1/M2/M3 lectura
+/* Emma OS v1.7.4 — Control Financiero Personal M1/M2/M3 lectura
    Archivo: finance-achievements.js
    Propósito: conservar IDs, nombres, condiciones y leyendas de los 12 logros estables. */
 

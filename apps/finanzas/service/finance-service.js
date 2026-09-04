@@ -1,4 +1,4 @@
-/* Emma OS v1.7.3 — Control Financiero Personal M3 escritura controlada
+/* Emma OS v1.7.4 — Control Financiero Personal M3 escritura controlada
    Archivo: finance-service.js
    Propósito: capa de aplicación entre FinanceUI, FinanceCore y FinanceRepository. M3 escritura controlada habilita mutaciones sólo con adaptadores allowWrites.
 */
