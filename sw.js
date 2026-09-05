@@ -1,5 +1,5 @@
-/* Emma OS v1.8.0 · 2026-09-04 · OpenAI/ChatGPT · M5 Finanzas corte controlado + cache network-first. */
-const CACHE_NAME = 'emma-os-v1-8-0-cache-001';
+/* Emma OS v1.8.1 · 2026-09-04 · OpenAI/ChatGPT · M6 ajustes visuales web + cache network-first. */
+const CACHE_NAME = 'emma-os-v1-8-1-cache-001';
 const FALLBACK_URL = './index.html';
 const ASSETS = [
   './',

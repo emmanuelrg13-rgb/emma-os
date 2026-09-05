@@ -1,4 +1,4 @@
-/* Emma OS v1.8.0 — Control Financiero Personal M3 lectura + escritura controlada
+/* Emma OS v1.8.1 — Control Financiero Personal M6 ajustes visuales web
    Archivo: finance-readonly-ui.js
    Autoría: OpenAI/ChatGPT (GPT-5.5 Thinking) para Emmanuel Rojas.
    Propósito: renderizar la UI nativa de lectura del dominio financiero dentro de Emma OS.
@@ -106,7 +106,7 @@ export function renderThisMonth(target, state) {
         <article class="finance-row">
           <div class="finance-row-main">
             <span class="finance-step">${index + 1}</span>
-            <div><strong>${escapeHtml(payment.nombre)}</strong><small>${escapeHtml(payment.tipo)} · item #${escapeHtml(payment.itemId)}</small></div>
+            <div><strong>${escapeHtml(payment.nombre)}</strong><small>${escapeHtml(payment.tipo)} - ítem #${escapeHtml(payment.itemId)}</small></div>
           </div>
           <div class="finance-amount">${money(payment.monto)}</div>
         </article>`).join('') : '<article class="finance-empty">No hay pagos sugeridos para este mes.</article>'}
@@ -158,7 +158,7 @@ export function renderItems(target, state, filters = {}) {
         const progress = Number(item.montoTotal) > 0 ? (Number(item.pagadoTotal || 0) / Number(item.montoTotal)) * 100 : 100;
         return `<article class="finance-item-card ${typeClass(item.tipo)}">
           <div class="finance-item-top">
-            <div><strong>${escapeHtml(item.nombre)}</strong><small>#${escapeHtml(item.id)} · prioridad ${escapeHtml(item.prioridad)}</small></div>
+            <div><strong>${escapeHtml(item.nombre)}</strong><small>Ítem #${escapeHtml(item.id)} - prioridad ${escapeHtml(item.prioridad)}</small></div>
             <div><span class="pill ${typeClass(item.tipo)}">${escapeHtml(item.tipo)}</span><span class="pill ${statusClass(item.estado)}">${escapeHtml(item.estado)}</span></div>
           </div>
           ${bar(progress, item.nombre)}

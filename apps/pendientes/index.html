@@ -42,7 +42,7 @@
       color: var(--text);
     }
     button, input, select { font: inherit; }
-    .app { width: min(100% - 28px, 1240px); margin: 0 auto; padding: 18px 0 34px; }
+    .app { width: min(100% - 28px, 1360px); margin: 0 auto; padding: 18px 0 34px; }
     .hero {
       background: linear-gradient(135deg, rgba(17,24,39,.96), rgba(31,41,55,.88));
       border: 1px solid var(--line);
@@ -128,13 +128,13 @@
     .next-box { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
     .next-text { color: var(--muted); line-height: 1.4; }
     .next-text strong { color: var(--text); }
-    .focus-strip { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+    .focus-strip { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
     .focus-card { background: rgba(15,23,42,.65); border: 1px solid var(--line); border-radius: 16px; padding: 12px; min-height: 78px; }
     .focus-card .kicker { color: var(--muted); font-size: .76rem; text-transform: uppercase; letter-spacing: .07em; margin-bottom: 6px; }
     .focus-card .focus-title { font-weight: 850; line-height: 1.3; }
     .focus-card .focus-meta { color: var(--muted); font-size: .86rem; margin-top: 6px; }
-    .board { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; margin-top: 14px; align-items: start; }
-    .column { background: rgba(17,24,39,.72); border: 1px solid var(--line); border-radius: 22px; padding: 12px; min-height: 240px; }
+    .board { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; margin-top: 14px; align-items: start; }
+    .column { background: rgba(17,24,39,.72); border: 1px solid var(--line); border-radius: 22px; padding: 14px; min-height: 240px; }
     .column-header { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 10px; padding: 4px 4px 8px; border-bottom: 1px solid var(--line); }
     .column-title { font-weight: 850; display: flex; align-items: center; gap: 8px; }
     .dot { width: 10px; height: 10px; border-radius: 999px; display: inline-block; }
@@ -142,7 +142,7 @@
     .dot.medium { background: var(--warn); }
     .dot.low { background: var(--good); }
     .count-pill { color: var(--muted); border: 1px solid var(--line); border-radius: 999px; padding: 4px 9px; font-size: .82rem; }
-    .task-list { display: grid; gap: 10px; }
+    .task-list { display: grid; gap: 12px; }
     .task {
       background: rgba(15,23,42,.92);
       border: 1px solid var(--line);
@@ -166,7 +166,13 @@
     .tag.daily { color: #ddd6fe; border-color: rgba(167,139,250,.48); }
     .tag.deferred { color: #bfdbfe; border-color: rgba(56,189,248,.52); }
     .notes { color: var(--muted); font-size: .88rem; margin-top: 8px; line-height: 1.35; }
-    .task-actions { display: grid; grid-template-columns: auto auto auto auto 1fr 1fr 1fr auto auto; gap: 7px; margin-top: 11px; align-items: center; }
+    .task-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; align-items: center; }
+    .task-actions > * { flex: 0 0 auto; }
+    .task-actions select { flex: 1 1 130px; min-width: 116px; }
+    .task-actions .complete-task,
+    .task-actions .postpone-task { flex: 1 1 168px; }
+    .task-actions .edit-task,
+    .task-actions .delete-task { flex: 0 0 auto; }
     .empty { color: var(--muted); border: 1px dashed var(--line); border-radius: 16px; padding: 18px; text-align: center; }
     .footer-tools { display: flex; align-items: center; justify-content: space-between; gap: 12px; color: var(--muted); }
     .tool-buttons { display: flex; flex-wrap: wrap; gap: 8px; justify-content: flex-end; }
@@ -174,17 +180,21 @@
     @media (max-width: 1120px) {
       .toolbar { grid-template-columns: 1fr 1fr; }
       .quick-add { grid-template-columns: 1fr 1fr; }
-      .board, .focus-strip { grid-template-columns: 1fr; }
+      .focus-strip { grid-template-columns: 1fr; }
       .stats { grid-template-columns: repeat(2, 1fr); }
       .hero-top, .next-box, .footer-tools { flex-direction: column; align-items: stretch; }
       .date-box { min-width: 0; }
+    }
+    @media (max-width: 980px) {
+      .board { grid-template-columns: 1fr; }
     }
     @media (max-width: 620px) {
       .app { width: min(100% - 18px, 1220px); padding-top: 10px; }
       .hero { padding: 18px; border-radius: 22px; position: static; }
       .toolbar, .quick-add, .stats { grid-template-columns: 1fr; }
       .progress-meta { flex-direction: column; }
-      .task-actions { grid-template-columns: 1fr 1fr; }
+      .task-actions { display: grid; grid-template-columns: 1fr 1fr; }
+      .task-actions > * { min-width: 0; }
       .task-actions select, .task-actions .edit-task, .task-actions .delete-task, .task-actions .complete-task, .task-actions .postpone-task { grid-column: span 2; }
     }
   
@@ -192,17 +202,17 @@
     .emmaos-back:hover{filter:brightness(1.12)}
   </style>
 <link rel="stylesheet" href="../../emma-theme.css">
-<script src="../../emma-shell.js" data-base="../../" data-current="pendientes" data-version="v1.8.0" defer></script>
+<script src="../../emma-shell.js" data-base="../../" data-current="pendientes" data-version="v1.8.1" defer></script>
 </head>
 <body class="emma-module emma-module-pendientes">
 <header class="emma-system-bar" role="banner">
   <a class="emma-system-brand" href="../../index.html" aria-label="Volver a Emma OS">
     <span class="emma-mark">E</span>
-    <span><b>Emma OS</b><small>v1.8.0 · Pendientes diarios</small></span>
+    <span><b>Emma OS</b><small>v1.8.1 · Pendientes diarios</small></span>
   </a>
   <nav class="emma-system-nav" aria-label="Navegación principal Emma OS"><a href="../../index.html" class="">Inicio</a><a href="../pendientes/" class="active">Pendientes</a><a href="../arrowverse/" class="">Arrowverso</a><a href="../rutina-atomica/" class="">Rutina</a><a href="../botiquin/" class="">Botiquín</a><a href="../respaldo/" class="">Respaldos</a></nav>
 </header>
-<div class="emma-module-note">Estándar visual Emma OS v1.8.0 · datos locales separados por módulo.</div>
+<div class="emma-module-note">Estándar visual Emma OS v1.8.1 · ajustes M6 web en la vista de pendientes.</div>
 
   <a class="emmaos-back" href="../../index.html">← Emma OS</a>
   <div class="app">
