@@ -89,7 +89,9 @@
     .lock-text { color: var(--muted); line-height: 1.45; margin: 0; }
     .lock-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
     .toolbar { display: grid; grid-template-columns: 1.4fr .8fr .9fr .8fr .9fr auto; gap: 10px; }
-    .quick-add { display: grid; grid-template-columns: 1.45fr .62fr .7fr .72fr .72fr auto; gap: 10px; }
+    .quick-add { display: grid; grid-template-columns: minmax(220px, 1.6fr) repeat(6, minmax(120px, .85fr)) auto; gap: 10px; align-items: center; }
+    .quick-add .span-wide { grid-column: span 2; }
+    .hidden-control { display: none !important; }
     .settings-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
     .switchline { display: inline-flex; gap: 8px; align-items: center; color: var(--muted); }
     .switchline input { width: 18px; height: 18px; accent-color: var(--accent); }
@@ -202,17 +204,17 @@
     .emmaos-back:hover{filter:brightness(1.12)}
   </style>
 <link rel="stylesheet" href="../../emma-theme.css">
-<script src="../../emma-shell.js" data-base="../../" data-current="pendientes" data-version="v1.8.1" defer></script>
+<script src="../../emma-shell.js" data-base="../../" data-current="pendientes" data-version="v1.8.2" defer></script>
 </head>
 <body class="emma-module emma-module-pendientes">
 <header class="emma-system-bar" role="banner">
   <a class="emma-system-brand" href="../../index.html" aria-label="Volver a Emma OS">
     <span class="emma-mark">E</span>
-    <span><b>Emma OS</b><small>v1.8.1 · Pendientes diarios</small></span>
+    <span><b>Emma OS</b><small>v1.8.2 · Pendientes diarios</small></span>
   </a>
   <nav class="emma-system-nav" aria-label="Navegación principal Emma OS"><a href="../../index.html" class="">Inicio</a><a href="../pendientes/" class="active">Pendientes</a><a href="../arrowverse/" class="">Arrowverso</a><a href="../rutina-atomica/" class="">Rutina</a><a href="../botiquin/" class="">Botiquín</a><a href="../respaldo/" class="">Respaldos</a></nav>
 </header>
-<div class="emma-module-note">Estándar visual Emma OS v1.8.1 · ajustes M6 web en la vista de pendientes.</div>
+<div class="emma-module-note">Estándar visual Emma OS v1.8.2 · M7 con grupos reutilizables y fecha objetivo.</div>
 
   <a class="emmaos-back" href="../../index.html">← Emma OS</a>
   <div class="app">
@@ -288,22 +290,29 @@
     </div>
 
     <form class="quick-add" id="addForm">
-      <input id="newTitle" type="text" placeholder="Añadir nueva tarea..." autocomplete="off" required />
-      <select id="newPriority">
+      <input id="newTitle" class="span-wide" type="text" placeholder="Añadir nueva tarea..." autocomplete="off" required />
+      <select id="newPriority" aria-label="Prioridad">
         <option value="high">Alta</option>
         <option value="medium" selected>Media</option>
         <option value="low">Baja</option>
       </select>
-      <select id="newEffort">
+      <select id="newEffort" aria-label="Esfuerzo">
         <option value="quick">Corta / liviana</option>
         <option value="medium" selected>Media</option>
         <option value="deep">Larga / pesada</option>
       </select>
-      <select id="newRecurrence">
+      <select id="newRecurrence" aria-label="Recurrencia">
         <option value="none" selected>Sólo hoy</option>
         <option value="daily">Diaria</option>
       </select>
-      <input id="newCategory" type="text" placeholder="Categoría" value="General" />
+      <select id="newDueMode" aria-label="Cuándo hacerla">
+        <option value="today" selected>Para hoy</option>
+        <option value="tomorrow">Para mañana</option>
+        <option value="custom">Elegir fecha</option>
+      </select>
+      <input id="newDueDate" class="hidden-control" type="date" aria-label="Fecha objetivo" />
+      <select id="newCategorySelect" aria-label="Grupo"></select>
+      <input id="newCategoryCustom" class="hidden-control" type="text" placeholder="Nuevo grupo" autocomplete="off" />
       <button class="btn good" type="submit">Añadir</button>
     </form>
 
@@ -362,6 +371,7 @@
     { id: 'none', label: 'Sólo hoy', short: 'No recurrente' },
     { id: 'daily', label: 'Diaria', short: 'Diaria' },
   ];
+  const DEFAULT_GROUPS = ['General','Casa','Aseo','Iglesia','Trabajo','Comida','Mascotas','Compras','Personal'];
 
   const initialTasks = [
     { title: 'Dar comida a Jack', priority: 'high', effort: 'quick', recurrence: 'daily', category: 'Mascotas', completed: false, notes: 'Tarea diaria: se vuelve a desmarcar al abrir un nuevo día.' },
@@ -393,7 +403,7 @@
     board: document.getElementById('board'), dayInput: document.getElementById('dayInput'), dateHint: document.getElementById('dateHint'),
     lockPanel: document.getElementById('lockPanel'), lockText: document.getElementById('lockText'), openTodayBtn: document.getElementById('openTodayBtn'), openTodayBtn2: document.getElementById('openTodayBtn2'), goNextLockedBtn: document.getElementById('goNextLockedBtn'), strictLockToggle: document.getElementById('strictLockToggle'),
     searchInput: document.getElementById('searchInput'), statusFilter: document.getElementById('statusFilter'), categoryFilter: document.getElementById('categoryFilter'), effortFilter: document.getElementById('effortFilter'), recurrenceFilter: document.getElementById('recurrenceFilter'),
-    addForm: document.getElementById('addForm'), newTitle: document.getElementById('newTitle'), newPriority: document.getElementById('newPriority'), newEffort: document.getElementById('newEffort'), newRecurrence: document.getElementById('newRecurrence'), newCategory: document.getElementById('newCategory'),
+    addForm: document.getElementById('addForm'), newTitle: document.getElementById('newTitle'), newPriority: document.getElementById('newPriority'), newEffort: document.getElementById('newEffort'), newRecurrence: document.getElementById('newRecurrence'), newDueMode: document.getElementById('newDueMode'), newDueDate: document.getElementById('newDueDate'), newCategorySelect: document.getElementById('newCategorySelect'), newCategoryCustom: document.getElementById('newCategoryCustom'),
     statPercent: document.getElementById('statPercent'), statEffortPercent: document.getElementById('statEffortPercent'), statDone: document.getElementById('statDone'), statPending: document.getElementById('statPending'), statDailyPending: document.getElementById('statDailyPending'), statLoad: document.getElementById('statLoad'),
     progressFill: document.getElementById('progressFill'), progressPhrase: document.getElementById('progressPhrase'), storageNote: document.getElementById('storageNote'),
     nextTaskText: document.getElementById('nextTaskText'), nextBtn: document.getElementById('nextBtn'), completeNextBtn: document.getElementById('completeNextBtn'),
@@ -458,7 +468,13 @@
     const local = new Date(d.getTime() - d.getTimezoneOffset() * 60000);
     return local.toISOString().slice(0, 10);
   }
-  function isDeferred(task) { return Boolean(task.deferredUntil && task.deferredUntil > state.date); }
+  function taskFutureDate(task) {
+    if (isValidDate(task.deferredUntil) && task.deferredUntil > state.date) return task.deferredUntil;
+    if (isValidDate(task.targetDate) && task.targetDate > state.date) return task.targetDate;
+    return null;
+  }
+  function isDeferred(task) { return Boolean(taskFutureDate(task)); }
+  function isOverdue(task) { return Boolean(isValidDate(task.targetDate) && task.targetDate < state.date && !task.completed); }
   function activeTasks(tasks = state.tasks) { return tasks.filter(t => !isDeferred(t)); }
   function deferredTasks(tasks = state.tasks) { return tasks.filter(t => isDeferred(t)); }
   function hasPending() { return activeTasks().some(t => !t.completed); }
@@ -492,6 +508,7 @@
         createdAt: task.createdAt || nowISO(),
         completedAt: task.completedAt || (task.completed ? nowISO() : null),
         lastResetDate: task.lastResetDate || null,
+        targetDate: isValidDate(task.targetDate) ? task.targetDate : null,
         deferredUntil: isValidDate(task.deferredUntil) ? task.deferredUntil : null,
         deferredAt: task.deferredAt || null,
       };
@@ -502,7 +519,7 @@
     if (!hasJack) {
       tasks.unshift({
         id: cryptoRandomId(), title: 'Dar comida a Jack', priority: 'high', effort: 'quick', recurrence: 'daily', category: 'Mascotas', completed: false,
-        notes: 'Tarea diaria: se vuelve a desmarcar al abrir un nuevo día.', order: -1, createdAt: nowISO(), completedAt: null, lastResetDate: null,
+        notes: 'Tarea diaria: se vuelve a desmarcar al abrir un nuevo día.', order: -1, createdAt: nowISO(), completedAt: null, lastResetDate: null, targetDate: null,
       });
       tasks.forEach((task, index) => { task.order = index; });
     }
@@ -517,19 +534,20 @@
           if (legacy) { raw = legacy; localStorage.setItem(STORAGE_KEY, legacy); break; }
         }
       }
-      if (!raw) return { version: 7, date: todayISO(), strictLock: true, tasks: initialTasks };
+      if (!raw) return { version: 8, date: todayISO(), strictLock: true, groups: DEFAULT_GROUPS, tasks: initialTasks };
       const parsed = JSON.parse(raw);
       if (!parsed.tasks || !Array.isArray(parsed.tasks)) throw new Error('Formato inválido');
       const normalized = normalizeTasks(parsed.tasks);
       return {
-        version: 7,
+        version: 8,
         date: isValidDate(parsed.date) ? parsed.date : todayISO(),
         strictLock: typeof parsed.strictLock === 'boolean' ? parsed.strictLock : true,
+        groups: normalizeGroups([...(parsed.groups || []), ...normalized.map(t => t.category)]),
         tasks: ensureDailyJackTask(normalized),
       };
     } catch (error) {
       console.warn('No se pudo leer el progreso guardado. Se cargará la lista inicial.', error);
-      return { version: 7, date: todayISO(), strictLock: true, tasks: initialTasks };
+      return { version: 8, date: todayISO(), strictLock: true, groups: DEFAULT_GROUPS, tasks: initialTasks };
     }
   }
   function saveState() { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); }
@@ -610,11 +628,65 @@
       return [task.title, task.category, task.notes, priorityLabel(task.priority), effortLabel(task.effort), recurrenceLabel(task.recurrence)].join(' ').toLowerCase().includes(q);
     });
   }
+  function normalizeGroups(groups = []) {
+    return [...new Set([...DEFAULT_GROUPS, ...(groups || [])]
+      .map(g => String(g || '').trim())
+      .filter(Boolean))]
+      .sort((a, b) => a.localeCompare(b, 'es'));
+  }
+  function availableGroups() {
+    return normalizeGroups([...(state.groups || []), ...state.tasks.map(t => t.category || 'General')]);
+  }
+  function rememberGroup(group) {
+    const clean = String(group || '').trim() || 'General';
+    state.groups = normalizeGroups([...(state.groups || []), clean]);
+    return clean;
+  }
+  function updateNewCategorySelect() {
+    if (!els.newCategorySelect) return;
+    const current = els.newCategorySelect.value || 'General';
+    const groups = availableGroups();
+    els.newCategorySelect.innerHTML = groups.map(cat => `<option value="${escapeAttr(cat)}">${escapeHtml(cat)}</option>`).join('') + '<option value="__new__">+ Nuevo grupo…</option>';
+    els.newCategorySelect.value = groups.includes(current) ? current : 'General';
+    updateNewGroupUI();
+  }
+  function updateNewGroupUI() {
+    const custom = els.newCategorySelect?.value === '__new__';
+    if (els.newCategoryCustom) {
+      els.newCategoryCustom.classList.toggle('hidden-control', !custom);
+      els.newCategoryCustom.required = custom;
+      if (custom) setTimeout(() => els.newCategoryCustom.focus(), 30);
+    }
+  }
+  function updateDueDateUI() {
+    if (!els.newDueDate) return;
+    const custom = els.newDueMode?.value === 'custom';
+    els.newDueDate.classList.toggle('hidden-control', !custom);
+    els.newDueDate.min = state.date;
+    if (custom && !els.newDueDate.value) els.newDueDate.value = state.date;
+  }
+  function selectedNewCategory() {
+    if (els.newCategorySelect.value === '__new__') {
+      const created = rememberGroup(els.newCategoryCustom.value);
+      els.newCategoryCustom.value = '';
+      return created;
+    }
+    return rememberGroup(els.newCategorySelect.value || 'General');
+  }
+  function selectedTargetDate() {
+    const mode = els.newDueMode?.value || 'today';
+    if (mode === 'tomorrow') return tomorrowISO(state.date);
+    if (mode === 'custom' && isValidDate(els.newDueDate.value)) return els.newDueDate.value;
+    return state.date;
+  }
+
   function updateCategoryFilter() {
     const current = els.categoryFilter.value;
-    const categories = [...new Set(state.tasks.map(t => t.category || 'Sin categoría'))].sort((a,b) => a.localeCompare(b, 'es'));
+    const categories = availableGroups();
     els.categoryFilter.innerHTML = '<option value="all">Todas las categorías</option>' + categories.map(cat => `<option value="${escapeAttr(cat)}">${escapeHtml(cat)}</option>`).join('');
     els.categoryFilter.value = categories.includes(current) ? current : 'all';
+    updateNewCategorySelect();
+    updateDueDateUI();
   }
   function updateStats() {
     const active = activeTasks();
@@ -635,7 +707,7 @@
     els.statDailyPending.textContent = dailyPending;
     els.statLoad.textContent = pendingEffort + ' pts';
     els.progressFill.style.width = percent + '%';
-    const deferredText = deferredCount ? ` · ${deferredCount} movida(s) a mañana` : '';
+    const deferredText = deferredCount ? ` · ${deferredCount} tarea(s) programada(s) para después` : '';
     if (!total) els.progressPhrase.textContent = 'Aún no hay tareas activas para este día.' + deferredText;
     else if (pending === 0) els.progressPhrase.textContent = `Día cerrado: ${done}/${total} tareas activas completas${deferredText}.`;
     else els.progressPhrase.textContent = `${done}/${total} tareas activas completas · ${pending} pendientes · ${pendingEffort} puntos de carga${deferredText}.`;
@@ -671,7 +743,7 @@
   function setFocus(titleEl, metaEl, task, emptyText) {
     if (!task) { titleEl.textContent = emptyText; metaEl.textContent = '—'; return; }
     titleEl.textContent = task.title;
-    metaEl.textContent = `${priorityLabel(task.priority)} · ${effortLabel(task.effort)} · ${task.category}`;
+    metaEl.textContent = `${priorityLabel(task.priority)} · ${effortLabel(task.effort)} · ${task.category}${isOverdue(task) ? ' · atrasada' : ''}`;
   }
   function getNextPendingTask() { return sortedTasks(activeTasks()).find(t => !t.completed) || null; }
   function updateNextBox() {
@@ -683,7 +755,7 @@
       els.goNextLockedBtn.disabled = true;
       return;
     }
-    els.nextTaskText.innerHTML = `Siguiente sugerida: <strong>${escapeHtml(task.title)}</strong><br>${priorityLabel(task.priority)} prioridad · ${effortLabel(task.effort)} · ${recurrenceLabel(task.recurrence)} · ${escapeHtml(task.category)}`;
+    els.nextTaskText.innerHTML = `Siguiente sugerida: <strong>${escapeHtml(task.title)}</strong><br>${priorityLabel(task.priority)} prioridad · ${effortLabel(task.effort)} · ${recurrenceLabel(task.recurrence)} · ${escapeHtml(task.category)}${isOverdue(task) ? ' · atrasada' : ''}`;
     els.completeNextBtn.disabled = false;
     els.nextBtn.disabled = false;
     els.goNextLockedBtn.disabled = false;
@@ -707,7 +779,8 @@
     const effortClass = task.effort === 'quick' ? 'effort-quick' : task.effort === 'deep' ? 'effort-deep' : 'effort-medium';
     const recurringTag = task.recurrence === 'daily' ? '<span class="tag daily">🔁 Diaria</span>' : '<span class="tag">Sólo hoy</span>';
     const deferred = isDeferred(task);
-    const deferredTag = deferred ? `<span class="tag deferred">↪ Mañana: ${escapeHtml(dateLabel(task.deferredUntil))}</span>` : '';
+    const futureDate = taskFutureDate(task);
+    const deferredTag = deferred ? `<span class="tag deferred">${task.deferredUntil ? '↪ Movida' : '📅 Programada'}: ${escapeHtml(dateLabel(futureDate))}</span>` : (isOverdue(task) ? '<span class="tag deferred">⚠ Atrasada</span>' : '');
     const postponeButton = deferred
       ? `<button class="btn small restore-one postpone-task" type="button" data-action="restoreToday" data-id="${task.id}">Traer hoy</button>`
       : `<button class="btn small postpone-one postpone-task" type="button" data-action="postpone" data-id="${task.id}" ${task.completed ? 'disabled' : ''}>Mover a mañana</button>`;
@@ -762,18 +835,26 @@
       els.effortFilter.addEventListener(evt, renderBoard);
       els.recurrenceFilter.addEventListener(evt, renderBoard);
     });
+    els.newCategorySelect.addEventListener('change', updateNewGroupUI);
+    els.newDueMode.addEventListener('change', updateDueDateUI);
     els.addForm.addEventListener('submit', event => {
       event.preventDefault();
       const title = els.newTitle.value.trim();
       if (!title) return;
       const maxOrder = state.tasks.reduce((max, task) => Math.max(max, task.order ?? 0), 0);
+      const category = selectedNewCategory();
+      const targetDate = selectedTargetDate();
       state.tasks.push({
         id: cryptoRandomId(), title, priority: els.newPriority.value, effort: els.newEffort.value, recurrence: els.newRecurrence.value,
-        category: els.newCategory.value.trim() || 'General', completed: false, notes: '', order: maxOrder + 1, createdAt: nowISO(), completedAt: null, lastResetDate: null,
+        category, targetDate, completed: false, notes: '', order: maxOrder + 1, createdAt: nowISO(), completedAt: null, lastResetDate: null,
+        deferredUntil: null, deferredAt: null,
       });
       els.newTitle.value = '';
+      els.newDueMode.value = 'today';
+      els.newDueDate.value = '';
+      updateDueDateUI();
       saveState();
-      flashStorage('Tarea añadida.');
+      flashStorage(targetDate > state.date ? `Tarea añadida para ${dateLabel(targetDate)}.` : 'Tarea añadida.');
       render();
     });
     els.board.addEventListener('click', event => {
@@ -813,7 +894,7 @@
     els.importFile.addEventListener('change', importJson);
     els.resetBtn.addEventListener('click', () => {
       if (!confirm('¿Seguro que quieres reiniciar el checklist? Esto borrará el progreso guardado de esta app.')) return;
-      state = { version: 7, date: todayISO(), strictLock: true, tasks: initialTasks.map((t, index) => ({ ...t, id: cryptoRandomId(), order: index })) };
+      state = { version: 8, date: todayISO(), strictLock: true, groups: DEFAULT_GROUPS, tasks: initialTasks.map((t, index) => ({ ...t, id: cryptoRandomId(), order: index })) };
       hideDoneTemp = false;
       saveState();
       flashStorage('Checklist reiniciado.');
@@ -853,6 +934,7 @@
     const target = tomorrowISO(state.date);
     const ok = confirm(`¿Mover “${task.title}” a ${dateLabel(target)}? No contará como pendiente para cerrar el día actual.`);
     if (!ok) return;
+    task.targetDate = target;
     task.deferredUntil = target;
     task.deferredAt = nowISO();
     task.completed = false;
@@ -860,6 +942,7 @@
     flashStorage('Tarea movida a mañana.');
   }
   function restoreTaskToday(task) {
+    task.targetDate = state.date;
     task.deferredUntil = null;
     task.deferredAt = null;
     task.completed = false;
@@ -873,10 +956,15 @@
     if (!trimmed) return;
     const category = prompt('Categoría:', task.category || 'General');
     if (category === null) return;
+    const targetDate = prompt('Fecha objetivo (AAAA-MM-DD). Deja vacío para hoy:', task.targetDate || state.date);
+    if (targetDate === null) return;
     const notes = prompt('Notas:', task.notes || '');
     if (notes === null) return;
     task.title = trimmed;
-    task.category = category.trim() || 'General';
+    task.category = rememberGroup(category.trim() || 'General');
+    task.targetDate = isValidDate(targetDate) ? targetDate : state.date;
+    task.deferredUntil = task.targetDate > state.date ? task.targetDate : null;
+    task.deferredAt = task.deferredUntil ? (task.deferredAt || nowISO()) : null;
     task.notes = notes.trim();
   }
   function moveTask(task, direction) {
@@ -915,11 +1003,13 @@
       try {
         const parsed = JSON.parse(reader.result);
         if (!Array.isArray(parsed.tasks)) throw new Error('El archivo no contiene tareas.');
+        const normalized = normalizeTasks(parsed.tasks);
         state = {
-          version: 7,
+          version: 8,
           date: isValidDate(parsed.date) ? parsed.date : todayISO(),
           strictLock: typeof parsed.strictLock === 'boolean' ? parsed.strictLock : true,
-          tasks: ensureDailyJackTask(normalizeTasks(parsed.tasks)),
+          groups: normalizeGroups([...(parsed.groups || []), ...normalized.map(t => t.category)]),
+          tasks: ensureDailyJackTask(normalized),
         };
         maybeHandleDateRollover();
         flashStorage('JSON importado.');
