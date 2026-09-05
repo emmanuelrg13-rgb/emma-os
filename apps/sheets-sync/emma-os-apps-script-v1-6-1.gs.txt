@@ -1,11 +1,11 @@
-// Emma OS v1.8.2 · M7 Sync Sheets
+// Emma OS v1.8.3 · M7 Sync Sheets
 // Apps Script para respaldos globales de Emma OS vía Google Sheets.
 // Pegar en Extensiones > Apps Script de la planilla de respaldo.
 // Cambia SECRET y publica como Aplicación web: ejecutar como tú mismo, acceso cualquier usuario con enlace.
 const SHEET_NAME = 'EmmaOS_Backups';
 const UPLOAD_SHEET_NAME = 'EmmaOS_UploadChunks';
 const SECRET = 'CAMBIA_ESTA_CLAVE';
-const API_VERSION = 'emma-os-sheets-sync-v1.8.2-m7';
+const API_VERSION = 'emma-os-sheets-sync-v1.8.3-m7';
 
 function doGet(e) {
   const callback = e && e.parameter ? e.parameter.callback : '';
@@ -245,7 +245,7 @@ function loadLatest_() {
     modules[moduleId] = { id: moduleId, name: row[4] || moduleId, key: row[5] || '', raw: row[6] || '', data: null };
   }
   if (!Object.keys(modules).length) return { ok: false, apiVersion: API_VERSION, error: 'No se encontraron módulos para el último respaldo.' };
-  return { ok: true, apiVersion: API_VERSION, backupId: backupId, backup: { app: 'Emma OS', backupType: 'emma-os-sheets-latest', schemaVersion: 2, emmaOsVersion: version || 'v1.8.2', exportedAt: exportedAt, modules: modules } };
+  return { ok: true, apiVersion: API_VERSION, backupId: backupId, backup: { app: 'Emma OS', backupType: 'emma-os-sheets-latest', schemaVersion: 2, emmaOsVersion: version || 'v1.8.3', exportedAt: exportedAt, modules: modules } };
 }
 
 function json_(obj) {

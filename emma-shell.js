@@ -1,10 +1,10 @@
-/* Emma OS v1.8.2 · 2026-09-04 · OpenAI/ChatGPT (GPT-5.5 Thinking)
+/* Emma OS v1.8.3 · 2026-09-04 · OpenAI/ChatGPT (GPT-5.5 Thinking)
    Cambio: M7 incorpora contraste de Rutina, grupos/fecha objetivo en Pendientes y reparación de Sync Sheets. */
 (function(){
   const script = document.currentScript;
   const base = script?.dataset?.base || './';
   const current = script?.dataset?.current || 'inicio';
-  const version = script?.dataset?.version || 'v1.8.2';
+  const version = script?.dataset?.version || 'v1.8.3';
   const apps = [
     {id:'inicio', icon:'⌂', name:'Inicio', desc:'Dashboard general', href: base + 'index.html', accent:'cyan'},
     {id:'pendientes', icon:'✓', name:'Pendientes diarios', desc:'Prioridad, esfuerzo y tareas recurrentes', href: base + 'apps/pendientes/', accent:'green'},

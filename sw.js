@@ -1,5 +1,5 @@
-/* Emma OS v1.8.2 · 2026-09-04 · OpenAI/ChatGPT · M7 ajustes funcionales + cache network-first. */
-const CACHE_NAME = 'emma-os-v1-8-2-cache-001';
+/* Emma OS v1.8.3 · 2026-09-04 · OpenAI/ChatGPT · M7.1 hotfix Sync Sheets + cache network-first. */
+const CACHE_NAME = 'emma-os-v1-8-3-cache-001';
 const FALLBACK_URL = './index.html';
 const ASSETS = [
   './',
@@ -44,7 +44,7 @@ const ASSETS = [
   './apps/sheets-sync/',
   './apps/sheets-sync/index.html',
   './apps/sheets-sync/emma-os-apps-script-v1-6-1.gs.txt',
-  './apps/sheets-sync/emma-os-apps-script-v1-8-2.gs.txt',
+  './apps/sheets-sync/emma-os-apps-script-v1-8-3.gs.txt',
   './icons/icon-192.png',
   './icons/icon-512.png'
 ];

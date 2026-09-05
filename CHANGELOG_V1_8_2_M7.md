@@ -1,4 +1,4 @@
-# Emma OS v1.8.2 — M7 ajustes funcionales
+# Emma OS v1.8.3 — M7.1 hotfix Sync Sheets
 
 Fecha: 2026-09-05
 
@@ -29,13 +29,13 @@ Aplicar mejoras posteriores a M6, combinando correcciones visuales, mejoras de f
 - Las tareas atrasadas quedan visibles como pendientes activas.
 
 ### Sync Sheets / Respaldos globales
-- Se incorpora Apps Script v1.8.2 para respaldos globales.
+- Se incorpora Apps Script v1.8.3 para respaldos globales.
 - Se agregó botón **Diagnóstico Sheets**.
 - Antes de subir respaldo, la app verifica que Apps Script pueda recibir una parte temporal.
 - La subida por partes ahora muestra confirmación de partes recibidas por Sheets.
 - Se agregan parámetros anti-caché a cada llamada JSONP.
 - Se reduce el tamaño de cada parte para mejorar compatibilidad en navegador móvil.
-- El mensaje de error ahora apunta al Apps Script v1.8.2 y a la necesidad de publicar una nueva versión.
+- El mensaje de error ahora apunta al Apps Script v1.8.3 y a la necesidad de publicar una nueva versión.
 
 ## Nota
-Para que la reparación de Sync Sheets funcione, hay que copiar el nuevo Apps Script v1.8.2, guardar y publicar una nueva versión de la implementación `/exec`.
+Para que la reparación de Sync Sheets funcione, hay que copiar el nuevo Apps Script v1.8.3, guardar y publicar una nueva versión de la implementación `/exec`.
