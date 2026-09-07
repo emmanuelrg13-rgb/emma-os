@@ -1,7 +1,7 @@
 {
-  "name": "Emma OS v1.8.5",
+  "name": "Emma OS v1.8.6",
   "short_name": "Emma OS",
-  "description": "Centro de control personal con Finanzas M5 estable, Despensa simple, respaldos y Sync Sheets.",
+  "description": "Centro de control personal con Finanzas M5 estable, Despensa con compra desde lista, respaldos y Sync Sheets.",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
