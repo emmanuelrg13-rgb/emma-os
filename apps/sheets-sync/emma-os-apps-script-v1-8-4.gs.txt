@@ -1,0 +1,272 @@
+// Emma OS v1.8.4 · M8 Sync Sheets
+// Apps Script para respaldos globales de Emma OS vía Google Sheets.
+// Pegar en Extensiones > Apps Script de la planilla de respaldo.
+// Cambia SECRET y publica como Aplicación web: ejecutar como tú mismo, acceso cualquier usuario con enlace.
+const SHEET_NAME = 'EmmaOS_Backups';
+const UPLOAD_SHEET_NAME = 'EmmaOS_UploadChunks';
+const SECRET = 'CAMBIA_ESTA_CLAVE';
+const API_VERSION = 'emma-os-sheets-sync-v1.8.4-m8';
+
+function doGet(e) {
+  const callback = e && e.parameter ? e.parameter.callback : '';
+  try {
+    const req = Object.assign({}, e.parameter || {});
+    delete req.callback;
+    const out = handle_(req);
+    return jsonp_(out, callback);
+  } catch (err) {
+    return jsonp_({ ok: false, apiVersion: API_VERSION, error: String(err && err.message ? err.message : err) }, callback);
+  }
+}
+
+function doPost(e) {
+  try {
+    const req = parsePost_(e);
+    return json_(handle_(req));
+  } catch (err) {
+    return json_({ ok: false, apiVersion: API_VERSION, error: String(err && err.message ? err.message : err) });
+  }
+}
+
+function parsePost_(e) {
+  const params = e && e.parameter ? e.parameter : {};
+  if (params.payload) return JSON.parse(params.payload);
+  if (params.action) {
+    const req = Object.assign({}, params);
+    if (typeof req.backup === 'string') req.backup = JSON.parse(req.backup);
+    return req;
+  }
+  const body = e && e.postData && e.postData.contents ? e.postData.contents : '';
+  return body ? JSON.parse(body) : {};
+}
+
+function handle_(req) {
+  if (SECRET && req.secret !== SECRET) {
+    return { ok: false, apiVersion: API_VERSION, error: 'Clave de sincronización inválida.' };
+  }
+  if (req.action === 'test') {
+    getSheet_();
+    getUploadSheet_();
+    return { ok: true, apiVersion: API_VERSION, message: 'Conexión OK con Emma OS Sync Sheets M7.1', now: new Date().toISOString(), sheets: [SHEET_NAME, UPLOAD_SHEET_NAME] };
+  }
+  if (req.action === 'diagnoseUpload') return diagnoseUpload_(req);
+  if (req.action === 'saveBackup') return saveBackup_(req.backup);
+  if (req.action === 'saveBackupStart') return startUpload_(req);
+  if (req.action === 'saveBackupChunk') return saveChunk_(req);
+  if (req.action === 'saveBackupFinish') return finishUpload_(req);
+  if (req.action === 'loadLatest') return loadLatest_();
+  return { ok: false, apiVersion: API_VERSION, error: 'Acción no reconocida: ' + String(req.action || '') };
+}
+
+function getSheet_() {
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  let sh = ss.getSheetByName(SHEET_NAME);
+  if (!sh) {
+    sh = ss.insertSheet(SHEET_NAME);
+    sh.appendRow(['backupId','exportedAt','emmaOsVersion','moduleId','moduleName','key','rawJson']);
+    SpreadsheetApp.flush();
+  }
+  return sh;
+}
+
+function getUploadSheet_() {
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  let sh = ss.getSheetByName(UPLOAD_SHEET_NAME);
+  if (!sh) {
+    sh = ss.insertSheet(UPLOAD_SHEET_NAME);
+    sh.appendRow(['uploadId','partIndex','totalChunks','totalChars','payload','createdAt']);
+    SpreadsheetApp.flush();
+  }
+  return sh;
+}
+
+function diagnoseUpload_(req) {
+  const uploadId = 'diag_' + Utilities.getUuid();
+  const lock = LockService.getDocumentLock();
+  lock.waitLock(20000);
+  try {
+    cleanupUpload_(uploadId);
+    const sh = getUploadSheet_();
+    sh.appendRow([uploadId, '__meta__', 1, 4, req.version || API_VERSION, new Date().toISOString()]);
+    sh.appendRow([uploadId, 0, 1, '', 'DIAG', new Date().toISOString()]);
+    SpreadsheetApp.flush();
+    const rows = rowsForUpload_(uploadId);
+    const received = rows.filter(function(row){ return row[1] !== '__meta__'; }).length;
+    cleanupUpload_(uploadId);
+    return { ok: received === 1, apiVersion: API_VERSION, message: received === 1 ? 'Diagnóstico OK: Apps Script puede recibir partes.' : 'Diagnóstico falló: no se guardó la parte de prueba.', received: received };
+  } finally {
+    lock.releaseLock();
+  }
+}
+
+function startUpload_(req) {
+  const uploadId = String(req.uploadId || '');
+  if (!uploadId) return { ok: false, apiVersion: API_VERSION, error: 'Falta uploadId.' };
+  const totalChunks = Number(req.totalChunks || 0);
+  if (!totalChunks || totalChunks < 1) return { ok: false, apiVersion: API_VERSION, error: 'totalChunks inválido.' };
+  const lock = LockService.getDocumentLock();
+  lock.waitLock(20000);
+  try {
+    cleanupUpload_(uploadId);
+    PropertiesService.getDocumentProperties().deleteProperty('finishedUpload_' + uploadId);
+    const sh = getUploadSheet_();
+    sh.appendRow([uploadId, '__meta__', totalChunks, req.totalChars || '', req.version || '', new Date().toISOString()]);
+    SpreadsheetApp.flush();
+    return { ok: true, apiVersion: API_VERSION, uploadId: uploadId, totalChunks: totalChunks, totalChars: Number(req.totalChars || 0) };
+  } finally {
+    lock.releaseLock();
+  }
+}
+
+function saveChunk_(req) {
+  const uploadId = String(req.uploadId || '');
+  const index = Number(req.index);
+  const totalChunks = Number(req.totalChunks || 0);
+  if (!uploadId) return { ok: false, apiVersion: API_VERSION, error: 'Falta uploadId.' };
+  if (isNaN(index) || index < 0) return { ok: false, apiVersion: API_VERSION, error: 'Índice de parte inválido.' };
+  if (!totalChunks || totalChunks < 1) return { ok: false, apiVersion: API_VERSION, error: 'totalChunks inválido.' };
+  const chunk = String(req.chunk || '');
+  const lock = LockService.getDocumentLock();
+  lock.waitLock(20000);
+  try {
+    const sh = getUploadSheet_();
+    deleteChunkRow_(sh, uploadId, index);
+    sh.appendRow([uploadId, index, totalChunks, '', chunk, new Date().toISOString()]);
+    SpreadsheetApp.flush();
+    const received = countReceivedChunks_(uploadId);
+    return { ok: true, apiVersion: API_VERSION, uploadId: uploadId, index: index, receivedChars: chunk.length, receivedChunks: received };
+  } finally {
+    lock.releaseLock();
+  }
+}
+
+function finishUpload_(req) {
+  const uploadId = String(req.uploadId || '');
+  if (!uploadId) return { ok: false, apiVersion: API_VERSION, error: 'Falta uploadId.' };
+  const lock = LockService.getDocumentLock();
+  lock.waitLock(30000);
+  try {
+    const props = PropertiesService.getDocumentProperties();
+    const finishedKey = 'finishedUpload_' + uploadId;
+    const previous = props.getProperty(finishedKey);
+    if (previous) {
+      const cached = JSON.parse(previous);
+      cached.apiVersion = API_VERSION;
+      cached.idempotentReplay = true;
+      return cached;
+    }
+    const rows = rowsForUpload_(uploadId);
+    let expected = Number(req.totalChunks || 0);
+    const chunks = {};
+    rows.forEach(function(row) {
+      if (row[1] === '__meta__') {
+        expected = Number(row[2] || expected || 0);
+      } else {
+        const idx = Number(row[1]);
+        if (!isNaN(idx)) chunks[idx] = String(row[4] || '');
+      }
+    });
+    if (!expected) return { ok: false, apiVersion: API_VERSION, error: 'No se encontró metadata de la subida.' };
+    const received = Object.keys(chunks).length;
+    if (received !== expected) {
+      return { ok: false, apiVersion: API_VERSION, error: 'Subida incompleta: llegaron ' + received + ' de ' + expected + ' partes.', received: received, expected: expected };
+    }
+    let raw = '';
+    for (let i = 0; i < expected; i++) {
+      if (!(i in chunks)) return { ok: false, apiVersion: API_VERSION, error: 'Falta la parte ' + (i + 1) + ' de ' + expected + '.' };
+      raw += chunks[i];
+    }
+    const backup = JSON.parse(raw);
+    const result = saveBackup_(backup);
+    result.apiVersion = API_VERSION;
+    result.uploadId = uploadId;
+    result.chunkCount = expected;
+    props.setProperty(finishedKey, JSON.stringify(result));
+    cleanupUpload_(uploadId);
+    return result;
+  } finally {
+    lock.releaseLock();
+  }
+}
+
+function rowsForUpload_(uploadId) {
+  const sh = getUploadSheet_();
+  const values = sh.getDataRange().getValues();
+  return values.slice(1).filter(function(row){ return row[0] === uploadId; });
+}
+
+function countReceivedChunks_(uploadId) {
+  return rowsForUpload_(uploadId).filter(function(row){ return row[1] !== '__meta__'; }).length;
+}
+
+function deleteChunkRow_(sh, uploadId, index) {
+  const values = sh.getDataRange().getValues();
+  for (let i = values.length - 1; i >= 1; i--) {
+    if (values[i][0] === uploadId && Number(values[i][1]) === Number(index)) {
+      sh.deleteRow(i + 1);
+    }
+  }
+}
+
+function cleanupUpload_(uploadId) {
+  const sh = getUploadSheet_();
+  const values = sh.getDataRange().getValues();
+  for (let i = values.length - 1; i >= 1; i--) {
+    if (values[i][0] === uploadId) sh.deleteRow(i + 1);
+  }
+  SpreadsheetApp.flush();
+}
+
+function saveBackup_(backup) {
+  if (!backup || !backup.modules) return { ok: false, apiVersion: API_VERSION, error: 'Respaldo vacío o inválido.' };
+  const sh = getSheet_();
+  const backupId = Utilities.getUuid();
+  const exportedAt = backup.exportedAt || new Date().toISOString();
+  const version = backup.emmaOsVersion || '';
+  let count = 0;
+  Object.keys(backup.modules).forEach(function(moduleId) {
+    const m = backup.modules[moduleId];
+    if (!m) return;
+    const raw = m.raw || (m.data !== undefined && m.data !== null ? JSON.stringify(m.data) : '');
+    if (!raw) return;
+    sh.appendRow([backupId, exportedAt, version, moduleId, m.name || '', m.key || '', raw]);
+    count++;
+  });
+  SpreadsheetApp.flush();
+  if (!count) return { ok: false, apiVersion: API_VERSION, error: 'No había módulos con datos para guardar.' };
+  PropertiesService.getDocumentProperties().setProperty('latestBackupId', backupId);
+  return { ok: true, apiVersion: API_VERSION, backupId: backupId, moduleCount: count, exportedAt: exportedAt, version: version };
+}
+
+function loadLatest_() {
+  const sh = getSheet_();
+  const values = sh.getDataRange().getValues();
+  if (values.length < 2) return { ok: false, apiVersion: API_VERSION, error: 'No hay respaldos guardados todavía.' };
+  const latestFromProps = PropertiesService.getDocumentProperties().getProperty('latestBackupId');
+  const backupId = latestFromProps || values[values.length - 1][0];
+  const modules = {};
+  let exportedAt = '';
+  let version = '';
+  for (let i = 1; i < values.length; i++) {
+    const row = values[i];
+    if (row[0] !== backupId) continue;
+    const moduleId = row[3];
+    exportedAt = row[1] || exportedAt;
+    version = row[2] || version;
+    modules[moduleId] = { id: moduleId, name: row[4] || moduleId, key: row[5] || '', raw: row[6] || '', data: null };
+  }
+  if (!Object.keys(modules).length) return { ok: false, apiVersion: API_VERSION, error: 'No se encontraron módulos para el último respaldo.' };
+  return { ok: true, apiVersion: API_VERSION, backupId: backupId, backup: { app: 'Emma OS', backupType: 'emma-os-sheets-latest', schemaVersion: 2, emmaOsVersion: version || 'v1.8.4', exportedAt: exportedAt, modules: modules } };
+}
+
+function json_(obj) {
+  return ContentService.createTextOutput(JSON.stringify(obj)).setMimeType(ContentService.MimeType.JSON);
+}
+
+function jsonp_(obj, callback) {
+  const payload = JSON.stringify(obj);
+  if (callback && /^[A-Za-z_$][0-9A-Za-z_$]*$/.test(callback)) {
+    return ContentService.createTextOutput(callback + '(' + payload + ');').setMimeType(ContentService.MimeType.JAVASCRIPT);
+  }
+  return json_(obj);
+}

@@ -1,4 +1,4 @@
-/* Emma OS v1.8.0 · 2026-09-03 · OpenAI/ChatGPT · nuevo acento para Dale una oportunidad. */
+/* Emma OS v1.8.4 · 2026-09-05 · OpenAI/ChatGPT · acentos globales + Despensa. */
 /* Emma OS v1.5.3 — estándar visual global + navegación lateral */
 :root{
   color-scheme: dark;
@@ -50,6 +50,7 @@ body.emma-module-arrowverse{--module-accent:var(--emma-violet);--module-accent-2
 body.emma-module-rutina{--module-accent:var(--emma-green);--module-accent-2:var(--emma-yellow);--accent:var(--emma-green);--accent2:var(--emma-yellow)}
 body.emma-module-oportunidad{--module-accent:var(--emma-rose);--module-accent-2:var(--emma-yellow);--accent:var(--emma-rose);--accent2:var(--emma-yellow)}
 body.emma-module-finanzas{--module-accent:var(--emma-green);--module-accent-2:var(--emma-yellow);--accent:var(--emma-green);--accent2:var(--emma-yellow)}
+body.emma-module-despensa{--module-accent:var(--emma-green);--module-accent-2:var(--emma-cyan);--accent:var(--emma-green);--accent2:var(--emma-cyan)}
 body.emma-module-respaldo{--module-accent:var(--emma-yellow);--module-accent-2:var(--emma-cyan);--accent:var(--emma-yellow);--accent2:var(--emma-cyan)}
 
 body.emma-home .emma-system-bar{margin:0 auto 16px;width:min(100% - 28px,1180px)}

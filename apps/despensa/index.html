@@ -1,0 +1,227 @@
+<!doctype html>
+<!-- Emma OS v1.8.4 · M8 Despensa simple · 2026-09-05 · OpenAI/ChatGPT (GPT-5.5 Thinking) -->
+<html lang="es">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Emma OS · Despensa</title>
+<link rel="manifest" href="../../manifest.webmanifest">
+<meta name="theme-color" content="#0d1324">
+<link rel="icon" type="image/png" sizes="192x192" href="../../icons/icon-192.png">
+<link rel="apple-touch-icon" href="../../icons/icon-192.png">
+<style>
+:root{--bg:#0d1324;--panel:#121a2f;--panel2:#17223d;--card:#0f172a;--text:#e5e7eb;--muted:#9ca3af;--line:rgba(148,163,184,.24);--accent:#34d399;--accent2:#38bdf8;--warn:#fbbf24;--danger:#fb7185;--ok:#22c55e;--shadow:0 24px 70px rgba(0,0,0,.36);--radius:22px}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;min-height:100vh;font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:radial-gradient(circle at top left,rgba(52,211,153,.20),transparent 34rem),radial-gradient(circle at bottom right,rgba(56,189,248,.14),transparent 32rem),var(--bg);color:var(--text)}button,input,select,textarea{font:inherit}button{cursor:pointer}.wrap{width:min(100% - 28px,1220px);margin:0 auto;padding:22px 0 42px}.hero,.card,.panel{background:linear-gradient(135deg,rgba(18,26,47,.96),rgba(23,34,61,.76));border:1px solid var(--line);border-radius:30px;box-shadow:var(--shadow)}.hero{padding:26px;position:relative;overflow:hidden}.hero:after{content:"";position:absolute;inset:auto -90px -120px auto;width:320px;height:320px;background:radial-gradient(circle,rgba(52,211,153,.20),transparent 70%);pointer-events:none}.eyebrow{color:var(--accent);font-weight:900;text-transform:uppercase;letter-spacing:.16em;font-size:.76rem}h1{margin:.35rem 0 .5rem;font-size:clamp(2rem,7vw,4rem);letter-spacing:-.06em}.subtitle{max-width:900px;color:var(--muted);font-size:1.02rem;line-height:1.55;margin:0}.actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;text-decoration:none;border:1px solid var(--line);background:rgba(23,34,61,.92);color:var(--text);border-radius:999px;padding:11px 14px;font-weight:900}.btn.primary{background:linear-gradient(135deg,var(--accent),var(--accent2));color:#04111e;border:0}.btn.warn{background:rgba(251,191,36,.14);border-color:rgba(251,191,36,.50);color:#fde68a}.btn.danger{background:rgba(251,113,133,.16);border-color:rgba(251,113,133,.54);color:#fecdd3}.btn.small{padding:8px 10px;font-size:.86rem}.btn:disabled{opacity:.45;cursor:not-allowed}.status{margin-top:14px;border:1px solid var(--line);border-radius:16px;background:rgba(15,23,42,.72);padding:12px 14px;color:var(--muted)}.status.ok{border-color:rgba(52,211,153,.45);color:#bbf7d0;background:rgba(6,78,59,.24)}.status.warn{border-color:rgba(251,191,36,.45);color:#fde68a;background:rgba(113,63,18,.22)}.status.bad{border-color:rgba(251,113,133,.45);color:#fecdd3;background:rgba(76,5,25,.24)}.grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px;margin-top:14px}.card{padding:18px}.card small{display:block;color:var(--muted);font-size:.78rem}.card strong{display:block;font-size:1.7rem;letter-spacing:-.04em;margin-top:6px}.card span{display:block;color:var(--muted);margin-top:2px}.tabs{display:flex;gap:8px;flex-wrap:wrap;margin:18px 0 12px}.tab{border:1px solid var(--line);border-radius:999px;padding:10px 14px;background:rgba(23,34,61,.85);color:var(--text);font-weight:900}.tab.active{background:linear-gradient(135deg,var(--accent),var(--accent2));color:#06111f;border:0}.view{display:none}.view.active{display:block}.panel{padding:18px;margin-top:14px}.panel h2{margin:0 0 10px}.panel p{color:var(--muted);line-height:1.55}.filters,.form-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin:12px 0}.field label{display:block;color:var(--muted);font-size:.82rem;font-weight:800;margin:0 0 6px}.field input,.field select,.field textarea{width:100%;border:1px solid var(--line);border-radius:14px;background:rgba(15,23,42,.72);color:var(--text);padding:11px 12px;outline:none}.field textarea{min-height:92px;resize:vertical}.field.full{grid-column:1/-1}.inventory-list,.missing-list,.shopping-list{display:grid;gap:10px;margin-top:12px}.product-card,.missing-card,.shop-store{border:1px solid var(--line);border-radius:20px;background:rgba(15,23,42,.62);padding:14px}.product-top,.missing-top,.shop-head{display:flex;justify-content:space-between;gap:12px;align-items:flex-start}.product-title{min-width:0}.product-title strong,.missing-top strong,.shop-head strong{display:block;font-size:1.05rem}.meta{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}.chip{display:inline-flex;align-items:center;border:1px solid var(--line);border-radius:999px;padding:5px 8px;color:var(--muted);font-size:.78rem;font-weight:800}.chip.ok{color:#bbf7d0;border-color:rgba(52,211,153,.38);background:rgba(6,78,59,.20)}.chip.warn{color:#fde68a;border-color:rgba(251,191,36,.40);background:rgba(113,63,18,.20)}.chip.bad{color:#fecdd3;border-color:rgba(251,113,133,.42);background:rgba(76,5,25,.22)}.product-stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin:12px 0}.mini{border:1px solid var(--line);border-radius:14px;background:rgba(23,34,61,.54);padding:9px}.mini small{display:block;color:var(--muted);font-size:.75rem}.mini strong{display:block;margin-top:2px}.row-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}.empty{border:1px dashed rgba(148,163,184,.32);border-radius:20px;padding:18px;color:var(--muted);text-align:center}.store-items{display:grid;gap:8px;margin-top:12px}.store-item{display:grid;grid-template-columns:1fr auto;gap:10px;align-items:start;border-top:1px solid rgba(148,163,184,.18);padding-top:10px}.store-item:first-child{border-top:0;padding-top:0}.money{font-weight:950}.summary-strip{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}.copy-box{white-space:pre-wrap;border:1px solid var(--line);border-radius:18px;background:rgba(15,23,42,.70);padding:14px;color:#dbeafe;margin-top:12px;max-height:360px;overflow:auto}.hidden{display:none!important}.emmaos-back{position:fixed;left:14px;bottom:14px;z-index:80;display:inline-flex;text-decoration:none;background:rgba(15,23,42,.92);color:var(--text);border:1px solid var(--line);border-radius:999px;padding:10px 13px;font-weight:850;box-shadow:0 14px 34px rgba(0,0,0,.28);backdrop-filter:blur(10px)}
+@media(max-width:1000px){.grid{grid-template-columns:repeat(2,minmax(0,1fr))}.filters,.form-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.product-stats{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:650px){.wrap{width:min(100% - 18px,1220px);padding-top:12px}.hero,.panel,.card{border-radius:22px;padding:18px}.grid,.filters,.form-grid,.product-stats{grid-template-columns:1fr}.product-top,.missing-top,.shop-head,.store-item{grid-template-columns:1fr;display:grid}.actions,.row-actions{flex-direction:column;align-items:stretch}.btn{width:100%}}
+</style>
+<link rel="stylesheet" href="../../emma-theme.css">
+<script src="../../emma-shell.js" data-base="../../" data-current="despensa" data-version="v1.8.4" defer></script>
+</head>
+<body class="emma-module emma-module-despensa">
+<header class="emma-system-bar" role="banner">
+  <a class="emma-system-brand" href="../../index.html" aria-label="Volver a Emma OS">
+    <span class="emma-mark">E</span>
+    <span><b>Emma OS</b><small>v1.8.4 · Despensa</small></span>
+  </a>
+  <nav class="emma-system-nav" aria-label="Navegación principal Emma OS"><a href="../../index.html">Inicio</a><a href="../pendientes/">Pendientes</a><a href="../finanzas/">Finanzas</a><a href="../despensa/" class="active">Despensa</a><a href="../botiquin/">Botiquín</a><a href="../respaldo/">Respaldos</a></nav>
+</header>
+<div class="emma-module-note">Emma OS v1.8.4 · M8 Despensa simple: inventario, faltantes y lista de supermercado.</div>
+<a class="emmaos-back" href="../../index.html">← Emma OS</a>
+<div class="wrap">
+  <section class="hero">
+    <div class="eyebrow">Emma OS v1.8.4 · M8 Despensa simple</div>
+    <h1>Despensa</h1>
+    <p class="subtitle">Inventario doméstico liviano: registra productos, ajusta stock actual, valida faltantes y genera una lista de supermercado agrupada por tienda. Sin planificación semanal, presupuesto ni compras formales.</p>
+    <div class="actions">
+      <button class="btn primary" id="addProductBtn" type="button">Añadir producto</button>
+      <button class="btn" id="validateMissingBtn" type="button">Validar faltantes</button>
+      <button class="btn" id="generateListBtn" type="button">Generar lista</button>
+      <button class="btn" id="exportBtn" type="button">Exportar JSON</button>
+      <button class="btn" id="importBtn" type="button">Importar JSON</button>
+      <button class="btn warn" id="sampleBtn" type="button">Cargar ejemplo</button>
+      <input id="importFile" type="file" accept="application/json,.json" class="hidden">
+    </div>
+    <div class="status" id="statusBox">Listo. Usa “Añadir producto” o carga el ejemplo parcial del handoff para probar.</div>
+  </section>
+
+  <section class="grid">
+    <div class="card"><small>Productos activos</small><strong id="statProducts">0</strong><span>en inventario</span></div>
+    <div class="card"><small>Agotados</small><strong id="statOut">0</strong><span>requieren compra</span></div>
+    <div class="card"><small>Bajo mínimo</small><strong id="statLow">0</strong><span>revisar pronto</span></div>
+    <div class="card"><small>Lista estimada</small><strong id="statTotal">$0</strong><span id="statListCount">0 productos</span></div>
+  </section>
+
+  <div class="tabs" role="tablist" aria-label="Vistas de despensa">
+    <button class="tab active" type="button" data-tab="inventario">Inventario</button>
+    <button class="tab" type="button" data-tab="faltantes">Faltantes</button>
+    <button class="tab" type="button" data-tab="lista">Lista supermercado</button>
+    <button class="tab" type="button" data-tab="producto">Producto</button>
+  </div>
+
+  <section class="view active" id="view-inventario">
+    <div class="panel">
+      <h2>Inventario actual</h2>
+      <p>Filtra tus productos activos/inactivos y edita stock cuando cambie algo en casa.</p>
+      <div class="filters">
+        <div class="field"><label>Buscar</label><input id="filterText" placeholder="Producto, nota, categoría..."></div>
+        <div class="field"><label>Categoría</label><select id="filterCategory"></select></div>
+        <div class="field"><label>Estado</label><select id="filterStatus"><option value="todos">Todos</option><option>Agotado</option><option>Bajo mínimo</option><option>Suficiente</option></select></div>
+        <div class="field"><label>Supermercado</label><select id="filterStore"></select></div>
+      </div>
+      <div class="inventory-list" id="inventoryList"></div>
+    </div>
+  </section>
+
+  <section class="view" id="view-faltantes">
+    <div class="panel">
+      <h2>Validar faltantes</h2>
+      <p>Calcula qué falta comparando stock actual contra stock ideal. Sólo considera productos activos.</p>
+      <div class="summary-strip" id="missingSummary"></div>
+      <div class="missing-list" id="missingList"></div>
+    </div>
+  </section>
+
+  <section class="view" id="view-lista">
+    <div class="panel">
+      <h2>Lista de supermercado</h2>
+      <p>La lista se genera desde los faltantes actuales y queda guardada en este módulo hasta que vuelvas a generarla.</p>
+      <div class="actions">
+        <button class="btn primary" id="generateListBtn2" type="button">Generar/actualizar lista</button>
+        <button class="btn" id="copyListBtn" type="button">Copiar lista</button>
+        <button class="btn danger" id="clearListBtn" type="button">Vaciar lista</button>
+      </div>
+      <div class="shopping-list" id="shoppingList"></div>
+      <div class="copy-box hidden" id="copyPreview"></div>
+    </div>
+  </section>
+
+  <section class="view" id="view-producto">
+    <div class="panel" id="productFormPanel">
+      <h2 id="formTitle">Añadir producto</h2>
+      <p>Campos mínimos de la despensa simple. Si un producto no tiene tienda preferida, caerá en “Sin tienda” al generar la lista.</p>
+      <form id="productForm">
+        <input type="hidden" id="productId">
+        <div class="form-grid">
+          <div class="field"><label>Nombre</label><input id="name" required placeholder="Ej.: Aceite"></div>
+          <div class="field"><label>Categoría</label><input id="category" list="categoryOptions" placeholder="Alimentos"></div>
+          <div class="field"><label>Subcategoría</label><input id="subcategory" placeholder="Proteínas, limpieza..."></div>
+          <div class="field"><label>Supermercado preferido</label><input id="preferredSupermarket" list="storeOptions" placeholder="Unimarc, Líder..."></div>
+          <div class="field"><label>Unidad base</label><input id="baseUnit" list="baseUnitOptions" placeholder="Unidad"></div>
+          <div class="field"><label>Unidad compra</label><input id="purchaseUnit" list="purchaseUnitOptions" placeholder="Paquete"></div>
+          <div class="field"><label>Tamaño envase</label><input id="packSize" type="number" step="0.01" min="0.01" value="1"></div>
+          <div class="field"><label>Precio referencial</label><input id="referencePrice" type="number" step="1" min="0" value="0"></div>
+          <div class="field"><label>Stock actual</label><input id="currentStock" type="number" step="0.01" value="0"></div>
+          <div class="field"><label>Stock mínimo</label><input id="minStock" type="number" step="0.01" min="0" value="1"></div>
+          <div class="field"><label>Stock ideal</label><input id="idealStock" type="number" step="0.01" min="0" value="1"></div>
+          <div class="field"><label>Reserva opcional</label><input id="reserveStock" type="number" step="0.01" min="0" value="0"></div>
+          <div class="field full"><label>Notas</label><textarea id="notes" placeholder="Marca, tamaño, lugar donde se guarda, etc."></textarea></div>
+          <div class="field"><label>Estado</label><select id="active"><option value="true">Activo</option><option value="false">Inactivo</option></select></div>
+        </div>
+        <datalist id="categoryOptions"></datalist>
+        <datalist id="storeOptions"></datalist>
+        <datalist id="baseUnitOptions"></datalist>
+        <datalist id="purchaseUnitOptions"></datalist>
+        <div class="actions">
+          <button class="btn primary" type="submit">Guardar producto</button>
+          <button class="btn" id="newCleanBtn" type="button">Limpiar formulario</button>
+          <button class="btn danger" id="deleteBtn" type="button" disabled>Eliminar producto</button>
+        </div>
+      </form>
+    </div>
+  </section>
+</div>
+
+<script>
+const VERSION='v1.8.4';
+const STORAGE_KEY='emma_os_despensa_v1';
+const DEFAULT_SETTINGS={
+  categories:['Alimentos','Limpieza','Higiene personal','Botiquín','Hogar','Mascotas','Otros'],
+  baseUnits:['Unidad','kg','g','L','ml','Porción','Paquete'],
+  purchaseUnits:['Unidad','Bandeja','Bolsa','Botella','Caja','Paquete','Lata','Frasco','Kilo','Malla','Sobre'],
+  supermarkets:['Líder','Unimarc','Jumbo','Santa Isabel','Mayorista 10','Sin tienda','Otro']
+};
+const SAMPLE_PRODUCTS=[
+  {id:'PRD-0004',name:'Aceite',category:'Alimentos',subcategory:'',baseUnit:'L',purchaseUnit:'Unidad',packSize:1,minStock:2,idealStock:9,reserveStock:1,referencePrice:1890,preferredSupermarket:'Unimarc',currentStock:5,active:true,notes:''},
+  {id:'PRD-0006',name:'Huevos',category:'Alimentos',subcategory:'Proteínas',baseUnit:'Unidad',purchaseUnit:'Bandeja',packSize:30,minStock:6,idealStock:20,reserveStock:4,referencePrice:8990,preferredSupermarket:'Líder',currentStock:30,active:true,notes:'Bandeja de 30 unidades'},
+  {id:'PRD-0007',name:'Trutro de pollo deshuesado',category:'Alimentos',subcategory:'Proteínas',baseUnit:'kg',purchaseUnit:'Bandeja',packSize:0.75,minStock:0.25,idealStock:0.75,reserveStock:0,referencePrice:4690,preferredSupermarket:'Líder',currentStock:0,active:true,notes:'Bandeja de 0,75 kg'},
+  {id:'PRD-0008',name:'Atún al agua',category:'Alimentos',subcategory:'Proteínas',baseUnit:'Unidad',purchaseUnit:'Lata',packSize:1,minStock:2,idealStock:4,reserveStock:1,referencePrice:990,preferredSupermarket:'Unimarc',currentStock:9,active:true,notes:'Lata de 140 g'},
+  {id:'PRD-0022',name:'Jugo en polvo',category:'Alimentos',subcategory:'',baseUnit:'Unidad',purchaseUnit:'Unidad',packSize:1,minStock:5,idealStock:10,reserveStock:0,referencePrice:250,preferredSupermarket:'Unimarc',currentStock:1,active:true,notes:''}
+];
+function $(id){return document.getElementById(id)}
+function safeParse(raw){try{return raw?JSON.parse(raw):null}catch{return null}}
+function now(){return new Date().toISOString()}
+function money(n){return new Intl.NumberFormat('es-CL',{style:'currency',currency:'CLP',maximumFractionDigits:0}).format(Number(n)||0)}
+function num(n){return new Intl.NumberFormat('es-CL',{maximumFractionDigits:2}).format(Number(n)||0)}
+function escapeHtml(value){return String(value??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]))}
+function emptyState(){return {version:1,products:[],shoppingList:[],settings:{...DEFAULT_SETTINGS},updatedAt:now()}}
+function normalizeProduct(product){return {id:String(product.id||''),name:String(product.name||'Sin nombre').trim(),category:String(product.category||'Otros').trim()||'Otros',subcategory:String(product.subcategory||'').trim(),baseUnit:String(product.baseUnit||'Unidad').trim()||'Unidad',purchaseUnit:String(product.purchaseUnit||'Unidad').trim()||'Unidad',packSize:Math.max(0.01,Number(product.packSize)||1),currentStock:Number(product.currentStock)||0,minStock:Math.max(0,Number(product.minStock)||0),idealStock:Math.max(0,Number(product.idealStock)||0),reserveStock:Math.max(0,Number(product.reserveStock)||0),referencePrice:Math.max(0,Math.round(Number(product.referencePrice)||0)),preferredSupermarket:String(product.preferredSupermarket||'Sin tienda').trim()||'Sin tienda',active:product.active!==false,notes:String(product.notes||''),updatedAt:product.updatedAt||now()};}
+function normalizeState(data){const base=emptyState();const state={...base,...(data||{})};state.settings={...DEFAULT_SETTINGS,...(data?.settings||{})};state.products=Array.isArray(data?.products)?data.products.map(normalizeProduct):[];state.shoppingList=Array.isArray(data?.shoppingList)?data.shoppingList:[];state.updatedAt=data?.updatedAt||now();return state;}
+function load(){return normalizeState(safeParse(localStorage.getItem(STORAGE_KEY)))}
+let state=load();
+function save(){state.updatedAt=now();localStorage.setItem(STORAGE_KEY,JSON.stringify(state));}
+function addOption(arr,value){const v=String(value||'').trim();if(v && !arr.includes(v)) arr.push(v);}
+function refreshSettingsFromProducts(){for(const p of state.products){addOption(state.settings.categories,p.category);addOption(state.settings.baseUnits,p.baseUnit);addOption(state.settings.purchaseUnits,p.purchaseUnit);addOption(state.settings.supermarkets,p.preferredSupermarket||'Sin tienda');}}
+function nextId(){let max=0;for(const p of state.products){const m=String(p.id).match(/PRD-(\d+)/i);if(m) max=Math.max(max,Number(m[1]));}return `PRD-${String(max+1).padStart(4,'0')}`;}
+function stockStatus(product){if(Number(product.currentStock)<=0)return 'Agotado';if(Number(product.currentStock)<Number(product.minStock))return 'Bajo mínimo';return 'Suficiente';}
+function missingFor(product){const target=Math.max(0,Number(product.idealStock)||0);const current=Number(product.currentStock)||0;const missingBase=Math.max(0,target-current);const packSize=Math.max(0.01,Number(product.packSize)||1);const packages=Math.ceil(missingBase/packSize);const resultQuantity=packages*packSize;const subtotal=packages*(Number(product.referencePrice)||0);const status=stockStatus(product);return {id:`SHOP-${product.id}`,productId:product.id,name:product.name,category:product.category,currentStock:current,targetStock:target,missingBase,packages,resultQuantity,baseUnit:product.baseUnit,purchaseUnit:product.purchaseUnit,unitPrice:Number(product.referencePrice)||0,subtotal,preferredSupermarket:product.preferredSupermarket||'Sin tienda',priority:status==='Agotado'||status==='Bajo mínimo'?'Urgente':'Normal',reason:status==='Agotado'?'Agotado':status==='Bajo mínimo'?'Bajo mínimo':'Bajo stock ideal',generatedAt:now(),status:'Pendiente'};}
+function missingItems(){return state.products.filter(p=>p.active!==false).map(missingFor).filter(item=>item.missingBase>0);}
+function groupedShopping(list){return list.reduce((acc,item)=>{const store=item.preferredSupermarket||'Sin tienda';(acc[store]||(acc[store]=[])).push(item);return acc;},{});}
+function setStatus(text,type=''){const box=$('statusBox');box.textContent=text;box.className='status '+type;}
+function selectTab(tab){document.querySelectorAll('.tab').forEach(btn=>btn.classList.toggle('active',btn.dataset.tab===tab));document.querySelectorAll('.view').forEach(view=>view.classList.toggle('active',view.id===`view-${tab}`));}
+function fillSelect(id,values,allLabel='Todos'){const el=$(id);if(!el)return;const current=el.value;el.innerHTML=`<option value="todos">${allLabel}</option>`+[...new Set(values.filter(Boolean))].sort((a,b)=>a.localeCompare(b,'es')).map(v=>`<option value="${escapeHtml(v)}">${escapeHtml(v)}</option>`).join('');if([...el.options].some(o=>o.value===current))el.value=current;}
+function fillDatalist(id,values){const el=$(id);if(!el)return;el.innerHTML=[...new Set(values.filter(Boolean))].sort((a,b)=>a.localeCompare(b,'es')).map(v=>`<option value="${escapeHtml(v)}"></option>`).join('');}
+function renderOptions(){refreshSettingsFromProducts();fillSelect('filterCategory',state.settings.categories,'Todas');fillSelect('filterStore',state.settings.supermarkets,'Todos');fillDatalist('categoryOptions',state.settings.categories);fillDatalist('storeOptions',state.settings.supermarkets);fillDatalist('baseUnitOptions',state.settings.baseUnits);fillDatalist('purchaseUnitOptions',state.settings.purchaseUnits);}
+function productCard(product){const status=stockStatus(product);const chipClass=status==='Agotado'?'bad':status==='Bajo mínimo'?'warn':'ok';return `<article class="product-card">
+  <div class="product-top">
+    <div class="product-title"><strong>${escapeHtml(product.name)}</strong><div class="meta"><span class="chip">${escapeHtml(product.id)}</span><span class="chip">${escapeHtml(product.category)}</span>${product.subcategory?`<span class="chip">${escapeHtml(product.subcategory)}</span>`:''}<span class="chip ${chipClass}">${status}</span>${product.active===false?'<span class="chip bad">Inactivo</span>':''}</div></div>
+    <div class="money">${money(product.referencePrice)}</div>
+  </div>
+  <div class="product-stats">
+    <div class="mini"><small>Stock actual</small><strong>${num(product.currentStock)} ${escapeHtml(product.baseUnit)}</strong></div>
+    <div class="mini"><small>Mínimo</small><strong>${num(product.minStock)} ${escapeHtml(product.baseUnit)}</strong></div>
+    <div class="mini"><small>Ideal</small><strong>${num(product.idealStock)} ${escapeHtml(product.baseUnit)}</strong></div>
+    <div class="mini"><small>Compra</small><strong>${num(product.packSize)} ${escapeHtml(product.baseUnit)} / ${escapeHtml(product.purchaseUnit)}</strong></div>
+  </div>
+  <div class="meta"><span class="chip">Tienda: ${escapeHtml(product.preferredSupermarket||'Sin tienda')}</span>${product.notes?`<span class="chip">Nota: ${escapeHtml(product.notes)}</span>`:''}</div>
+  <div class="row-actions"><button class="btn small" data-edit="${escapeHtml(product.id)}" type="button">Editar</button><button class="btn small warn" data-stock="${escapeHtml(product.id)}" type="button">Ajustar stock</button><button class="btn small danger" data-delete="${escapeHtml(product.id)}" type="button">Eliminar</button></div>
+</article>`;}
+function filteredProducts(){const q=($('filterText')?.value||'').trim().toLowerCase();const cat=$('filterCategory')?.value||'todos';const st=$('filterStatus')?.value||'todos';const store=$('filterStore')?.value||'todos';return state.products.filter(p=>{if(q && ![p.name,p.category,p.subcategory,p.notes,p.preferredSupermarket].join(' ').toLowerCase().includes(q))return false;if(cat!=='todos'&&p.category!==cat)return false;if(st!=='todos'&&stockStatus(p)!==st)return false;if(store!=='todos'&&(p.preferredSupermarket||'Sin tienda')!==store)return false;return true;}).sort((a,b)=>Number(b.active)-Number(a.active)||a.name.localeCompare(b.name,'es'));}
+function renderInventory(){const list=filteredProducts();$('inventoryList').innerHTML=list.length?list.map(productCard).join(''):'<div class="empty">No hay productos con esos filtros.</div>';bindProductButtons();}
+function renderMissing(){const missing=missingItems();const total=missing.reduce((sum,item)=>sum+item.subtotal,0);$('missingSummary').innerHTML=`<span class="chip ${missing.length?'warn':'ok'}">${missing.length} faltantes</span><span class="chip">Estimado: ${money(total)}</span><span class="chip">Productos activos: ${state.products.filter(p=>p.active!==false).length}</span>`;$('missingList').innerHTML=missing.length?missing.map(item=>`<article class="missing-card"><div class="missing-top"><div><strong>${escapeHtml(item.name)}</strong><div class="meta"><span class="chip ${item.priority==='Urgente'?'warn':''}">${item.priority}</span><span class="chip">${escapeHtml(item.reason)}</span><span class="chip">${escapeHtml(item.preferredSupermarket)}</span></div></div><div class="money">${money(item.subtotal)}</div></div><p>Faltan <strong>${num(item.missingBase)} ${escapeHtml(item.baseUnit)}</strong>. Comprar <strong>${num(item.packages)} ${escapeHtml(item.purchaseUnit)}</strong> para quedar en ${num(item.resultQuantity)} ${escapeHtml(item.baseUnit)} aprox.</p></article>`).join(''):'<div class="empty">No hay faltantes. Tu despensa está sobre el stock ideal de los productos activos.</div>';}
+function renderShopping(){const list=state.shoppingList||[];if(!list.length){$('shoppingList').innerHTML='<div class="empty">Aún no hay lista generada. Pulsa “Generar/actualizar lista”.</div>';$('copyPreview').classList.add('hidden');return;}const groups=groupedShopping(list);$('shoppingList').innerHTML=Object.entries(groups).sort((a,b)=>a[0].localeCompare(b[0],'es')).map(([store,items])=>{const total=items.reduce((s,i)=>s+i.subtotal,0);return `<section class="shop-store"><div class="shop-head"><strong>${escapeHtml(store)}</strong><span class="money">${money(total)}</span></div><div class="store-items">${items.map(item=>`<div class="store-item"><div><strong>${escapeHtml(item.name)}</strong><div class="meta"><span class="chip">${num(item.packages)} ${escapeHtml(item.purchaseUnit)}</span><span class="chip">faltan ${num(item.missingBase)} ${escapeHtml(item.baseUnit)}</span><span class="chip ${item.priority==='Urgente'?'warn':''}">${escapeHtml(item.priority)}</span></div></div><span class="money">${money(item.subtotal)}</span></div>`).join('')}</div></section>`;}).join('');$('copyPreview').classList.add('hidden');}
+function renderStats(){const active=state.products.filter(p=>p.active!==false);const out=active.filter(p=>stockStatus(p)==='Agotado').length;const low=active.filter(p=>stockStatus(p)==='Bajo mínimo').length;const list=state.shoppingList||[];const total=list.reduce((s,i)=>s+i.subtotal,0);$('statProducts').textContent=active.length;$('statOut').textContent=out;$('statLow').textContent=low;$('statTotal').textContent=money(total);$('statListCount').textContent=`${list.length} producto${list.length===1?'':'s'}`;}
+function render(){renderOptions();renderStats();renderInventory();renderMissing();renderShopping();}
+function clearForm(){$('productId').value='';$('formTitle').textContent='Añadir producto';$('name').value='';$('category').value='Alimentos';$('subcategory').value='';$('preferredSupermarket').value='Sin tienda';$('baseUnit').value='Unidad';$('purchaseUnit').value='Unidad';$('packSize').value='1';$('referencePrice').value='0';$('currentStock').value='0';$('minStock').value='1';$('idealStock').value='1';$('reserveStock').value='0';$('notes').value='';$('active').value='true';$('deleteBtn').disabled=true;}
+function fillForm(id){const p=state.products.find(x=>x.id===id);if(!p)return;selectTab('producto');$('productId').value=p.id;$('formTitle').textContent=`Editar producto · ${p.id}`;$('name').value=p.name;$('category').value=p.category;$('subcategory').value=p.subcategory;$('preferredSupermarket').value=p.preferredSupermarket;$('baseUnit').value=p.baseUnit;$('purchaseUnit').value=p.purchaseUnit;$('packSize').value=p.packSize;$('referencePrice').value=p.referencePrice;$('currentStock').value=p.currentStock;$('minStock').value=p.minStock;$('idealStock').value=p.idealStock;$('reserveStock').value=p.reserveStock;$('notes').value=p.notes;$('active').value=String(p.active!==false);$('deleteBtn').disabled=false;$('productFormPanel').scrollIntoView({behavior:'smooth',block:'start'});}
+function productFromForm(){const id=$('productId').value||nextId();return normalizeProduct({id,name:$('name').value,category:$('category').value,subcategory:$('subcategory').value,preferredSupermarket:$('preferredSupermarket').value,baseUnit:$('baseUnit').value,purchaseUnit:$('purchaseUnit').value,packSize:$('packSize').value,referencePrice:$('referencePrice').value,currentStock:$('currentStock').value,minStock:$('minStock').value,idealStock:$('idealStock').value,reserveStock:$('reserveStock').value,notes:$('notes').value,active:$('active').value==='true',updatedAt:now()});}
+function saveProduct(event){event.preventDefault();const p=productFromForm();if(!p.name||p.name==='Sin nombre'){setStatus('Ingresa un nombre para el producto.','warn');return;}const index=state.products.findIndex(x=>x.id===p.id);if(index>=0)state.products[index]=p;else state.products.push(p);addOption(state.settings.categories,p.category);addOption(state.settings.baseUnits,p.baseUnit);addOption(state.settings.purchaseUnits,p.purchaseUnit);addOption(state.settings.supermarkets,p.preferredSupermarket);save();render();clearForm();selectTab('inventario');setStatus(`Producto guardado: ${p.name}.`,'ok');}
+function deleteProduct(id){const p=state.products.find(x=>x.id===id);if(!p)return;if(!confirm(`¿Eliminar “${p.name}” del inventario?`))return;state.products=state.products.filter(x=>x.id!==id);state.shoppingList=(state.shoppingList||[]).filter(item=>item.productId!==id);save();render();clearForm();setStatus(`Producto eliminado: ${p.name}.`,'warn');}
+function adjustStock(id){const p=state.products.find(x=>x.id===id);if(!p)return;const value=prompt(`Stock actual para ${p.name} (${p.baseUnit})`,String(p.currentStock));if(value===null)return;const n=Number(String(value).replace(',','.'));if(Number.isNaN(n)){setStatus('Stock no válido.','warn');return;}p.currentStock=n;p.updatedAt=now();save();render();setStatus(`Stock actualizado: ${p.name} → ${num(n)} ${p.baseUnit}.`,'ok');}
+function bindProductButtons(){document.querySelectorAll('[data-edit]').forEach(btn=>btn.onclick=()=>fillForm(btn.dataset.edit));document.querySelectorAll('[data-delete]').forEach(btn=>btn.onclick=()=>deleteProduct(btn.dataset.delete));document.querySelectorAll('[data-stock]').forEach(btn=>btn.onclick=()=>adjustStock(btn.dataset.stock));}
+function generateList(){const list=missingItems();state.shoppingList=list;save();render();selectTab('lista');setStatus(`Lista generada con ${list.length} producto${list.length===1?'':'s'}.`,'ok');}
+function copyListText(){const list=state.shoppingList||[];if(!list.length)return 'Lista de supermercado vacía.';const groups=groupedShopping(list);let text=`Lista de supermercado — Emma OS Despensa\nGenerada: ${new Date().toLocaleString('es-CL')}\n\n`;for(const [store,items] of Object.entries(groups).sort((a,b)=>a[0].localeCompare(b[0],'es'))){const total=items.reduce((s,i)=>s+i.subtotal,0);text+=`${store} — estimado ${money(total)}\n`;for(const item of items){text+=`- ${item.name}: ${num(item.packages)} ${item.purchaseUnit} · faltan ${num(item.missingBase)} ${item.baseUnit} · ${money(item.subtotal)}\n`;}text+='\n';}text+=`Total estimado: ${money(list.reduce((s,i)=>s+i.subtotal,0))}`;return text;}
+async function copyList(){const text=copyListText();$('copyPreview').textContent=text;$('copyPreview').classList.remove('hidden');try{await navigator.clipboard.writeText(text);setStatus('Lista copiada al portapapeles.','ok');}catch(e){setStatus('No pude copiar automáticamente. Dejé la lista visible para copiarla manualmente.','warn');}}
+function clearList(){if(!state.shoppingList?.length){setStatus('La lista ya está vacía.','warn');return;}if(!confirm('¿Vaciar la lista de supermercado generada?'))return;state.shoppingList=[];save();render();setStatus('Lista de supermercado vaciada.','warn');}
+function exportJson(){const payload={...state,exportKind:'emma-os-despensa-simple',exportedAt:now()};const blob=new Blob([JSON.stringify(payload,null,2)],{type:'application/json'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download=`emma-os-despensa-${new Date().toISOString().slice(0,10)}.json`;document.body.appendChild(a);a.click();a.remove();URL.revokeObjectURL(url);setStatus('JSON de despensa exportado.','ok');}
+function importJsonFile(event){const file=event.target.files?.[0];if(!file)return;const reader=new FileReader();reader.onload=()=>{try{const parsed=JSON.parse(reader.result);let imported=parsed;if(parsed.products && !parsed.version){imported={...emptyState(),products:parsed.products,shoppingList:parsed.shoppingList||[]};}state=normalizeState(imported);save();render();setStatus(`Despensa importada: ${state.products.length} productos.`, 'ok');}catch(e){setStatus('No se pudo importar el JSON. Revisa que sea un respaldo de despensa compatible.','bad');}finally{event.target.value='';}};reader.readAsText(file);}
+function loadSample(){if(state.products.length && !confirm('Esto reemplazará tu despensa actual por el ejemplo parcial del handoff. ¿Continuar?'))return;state=normalizeState({...emptyState(),products:SAMPLE_PRODUCTS,updatedAt:now()});state.shoppingList=missingItems();save();render();setStatus('Ejemplo parcial cargado: 5 productos y lista generada desde faltantes.','ok');}
+document.querySelectorAll('.tab').forEach(btn=>btn.addEventListener('click',()=>selectTab(btn.dataset.tab)));
+['filterText','filterCategory','filterStatus','filterStore'].forEach(id=>$(id).addEventListener('input',renderInventory));
+$('addProductBtn').addEventListener('click',()=>{clearForm();selectTab('producto');$('productFormPanel').scrollIntoView({behavior:'smooth',block:'start'});});
+$('validateMissingBtn').addEventListener('click',()=>{renderMissing();selectTab('faltantes');setStatus('Faltantes validados con el inventario actual.','ok');});
+$('generateListBtn').addEventListener('click',generateList);
+$('generateListBtn2').addEventListener('click',generateList);
+$('copyListBtn').addEventListener('click',copyList);
+$('clearListBtn').addEventListener('click',clearList);
+$('exportBtn').addEventListener('click',exportJson);
+$('importBtn').addEventListener('click',()=>$('importFile').click());
+$('importFile').addEventListener('change',importJsonFile);
+$('sampleBtn').addEventListener('click',loadSample);
+$('productForm').addEventListener('submit',saveProduct);
+$('newCleanBtn').addEventListener('click',clearForm);
+$('deleteBtn').addEventListener('click',()=>{const id=$('productId').value;if(id)deleteProduct(id);});
+render();
+</script>
+</body>
+</html>

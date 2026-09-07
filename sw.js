@@ -1,5 +1,5 @@
-/* Emma OS v1.8.3 · 2026-09-04 · OpenAI/ChatGPT · M7.1 hotfix Sync Sheets + cache network-first. */
-const CACHE_NAME = 'emma-os-v1-8-3-cache-001';
+/* Emma OS v1.8.4 · 2026-09-05 · OpenAI/ChatGPT · M8 Despensa simple + cache network-first. */
+const CACHE_NAME = 'emma-os-v1-8-4-cache-001';
 const FALLBACK_URL = './index.html';
 const ASSETS = [
   './',
@@ -17,6 +17,8 @@ const ASSETS = [
   './apps/dale-una-oportunidad/index.html',
   './apps/finanzas/',
   './apps/finanzas/index.html',
+  './apps/despensa/',
+  './apps/despensa/index.html',
   './apps/finanzas/ui/finance-readonly-ui.js',
   './apps/finanzas/ui/finance-write-ui.js',
   './apps/finanzas/ui/finance-parity-ui.js',
@@ -45,6 +47,7 @@ const ASSETS = [
   './apps/sheets-sync/index.html',
   './apps/sheets-sync/emma-os-apps-script-v1-6-1.gs.txt',
   './apps/sheets-sync/emma-os-apps-script-v1-8-3.gs.txt',
+  './apps/sheets-sync/emma-os-apps-script-v1-8-4.gs.txt',
   './icons/icon-192.png',
   './icons/icon-512.png'
 ];
