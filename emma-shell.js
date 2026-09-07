@@ -1,10 +1,10 @@
-/* Emma OS v1.8.4 · 2026-09-05 · OpenAI/ChatGPT (GPT-5.5 Thinking)
-   Cambio: M8 agrega Despensa simple como módulo nativo de Emma OS. */
+/* Emma OS v1.8.5 · 2026-09-05 · OpenAI/ChatGPT (GPT-5.5 Thinking)
+   Cambio: M8.1 agrega carga del inventario original migrado desde Excel. */
 (function(){
   const script = document.currentScript;
   const base = script?.dataset?.base || './';
   const current = script?.dataset?.current || 'inicio';
-  const version = script?.dataset?.version || 'v1.8.4';
+  const version = script?.dataset?.version || 'v1.8.5';
   const apps = [
     {id:'inicio', icon:'⌂', name:'Inicio', desc:'Dashboard general', href: base + 'index.html', accent:'cyan'},
     {id:'pendientes', icon:'✓', name:'Pendientes diarios', desc:'Prioridad, esfuerzo y tareas recurrentes', href: base + 'apps/pendientes/', accent:'green'},

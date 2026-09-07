@@ -1,5 +1,5 @@
-/* Emma OS v1.8.4 · 2026-09-05 · OpenAI/ChatGPT · M8 Despensa simple + cache network-first. */
-const CACHE_NAME = 'emma-os-v1-8-4-cache-001';
+/* Emma OS v1.8.5 · 2026-09-05 · OpenAI/ChatGPT · M8.1 Despensa migrada + cache network-first. */
+const CACHE_NAME = 'emma-os-v1-8-5-cache-001';
 const FALLBACK_URL = './index.html';
 const ASSETS = [
   './',
@@ -19,6 +19,8 @@ const ASSETS = [
   './apps/finanzas/index.html',
   './apps/despensa/',
   './apps/despensa/index.html',
+  './docs/despensa/REPORTE_MIGRACION_INVENTARIO_ORIGINAL_M8_1.md',
+  './docs/despensa/INVENTARIO_ORIGINAL_MIGRADO_M8_1.json',
   './apps/finanzas/ui/finance-readonly-ui.js',
   './apps/finanzas/ui/finance-write-ui.js',
   './apps/finanzas/ui/finance-parity-ui.js',
